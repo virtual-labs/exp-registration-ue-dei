@@ -1,1 +1,3 @@
-### Aim of the experiment
+# Aim
+
+* Study UE registration with AMF.

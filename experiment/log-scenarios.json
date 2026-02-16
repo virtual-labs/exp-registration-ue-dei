@@ -1,0 +1,1057 @@
+          {
+  "AMF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "AMF-{instance} instance created: AMF-{instance}",
+        "details": {
+          "type": "AMF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.11:8081/namf-comm/v1",
+          "interfaces": ["Namf_Communication", "Namf_EventExposure"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing AMF services...",
+        "details": {
+          "modules": ["Registration", "Mobility", "Authentication"]
+        }
+      },
+      "interface_init": {
+        "delay": 600,
+        "level": "INFO",
+        "message": "Initializing N2 interface toward gNodeB...",
+        "details": {
+          "interface": "N2",
+          "protocol": "NGAP"
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found in topology",
+          "details": {
+            "code": "AMF_ERR_001",
+            "severity": "CRITICAL",
+            "impact": "AMF cannot function without NRF registration",
+            "suggestion": "Add NRF to the topology and create SBI connection",
+            "retry": "Will retry in 30 seconds"
+          }
+        },
+        "exists_not_connected": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "NRF found but not connected - Create SBI connection",
+          "details": {
+            "code": "AMF_ERR_002",
+            "suggestion": "Click 'Select Source' → AMF → 'Select Destination' → NRF → Connect"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "INFO",
+          "message": "Initiating NRF registration...",
+          "details": {
+            "endpoint": "https://192.168.1.10:8080/nnrf-nfm/v1/nf-instances",
+            "method": "PUT"
+          }
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "amf-profile-{random}",
+            "validity": "3600 seconds",
+            "heartbeatInterval": "60 seconds"
+          }
+        }
+      },
+      "AUSF": {
+        "missing": {
+          "delay": 1200,
+          "level": "WARNING",
+          "message": "AUSF not available - UE authentication will fail",
+          "details": {
+            "code": "AMF_WARN_001",
+            "severity": "HIGH",
+            "impact": "Cannot authenticate UEs - Registration requests will be rejected",
+            "workaround": "AMF can run but authentication services disabled"
+          }
+        },
+        "connected": {
+          "delay": 1200,
+          "level": "SUCCESS",
+          "message": "AUSF connection established - Authentication service available",
+          "details": {
+            "interface": "Nausf_UEAuthentication",
+            "methods": ["EAP-AKA'", "5G-AKA"]
+          }
+        }
+      },
+      "UDM": {
+        "missing": {
+          "delay": 1400,
+          "level": "WARNING",
+          "message": "UDM not available - Cannot retrieve subscription data",
+          "details": {
+            "code": "AMF_WARN_002",
+            "severity": "HIGH",
+            "impact": "Cannot fetch UE context - Registration will be incomplete"
+          }
+        },
+        "connected": {
+          "delay": 1400,
+          "level": "SUCCESS",
+          "message": "UDM connection established - Subscription data service available",
+          "details": {
+            "interface": "Nudm_UECM",
+            "services": ["UE Context Management", "Subscription Data"]
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "AMF is fully operational ✓",
+        "details": {
+          "services": ["Registration", "Authentication", "Mobility"]
+        }
+      },
+      "partial": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "AMF is partially operational (some optional services missing)",
+        "details": {
+          "status": "OPERATIONAL",
+          "mode": "LIMITED",
+          "available": ["Registration", "Mobility"],
+          "unavailable": ["Authentication"]
+        }
+      },
+      "failed": {
+        "delay": 2000,
+        "level": "ERROR",
+        "message": "AMF startup failed - Cannot operate without required dependencies",
+        "details": {
+          "status": "NON-OPERATIONAL",
+          "action": "Add NRF and create connection to proceed"
+        }
+      }
+    }
+  },
+  
+  "NRF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "NRF-{instance} instance created: NRF-{instance}",
+        "details": {
+          "type": "NRF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.10:8080/nnrf-nfm/v1",
+          "interfaces": ["Nnrf_NFManagement", "Nnrf_NFDiscovery"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing NF repository...",
+        "details": {
+          "database": "In-memory store",
+          "capacity": "10000 NF profiles"
+        }
+      },
+      "database": {
+        "delay": 600,
+        "level": "SUCCESS",
+        "message": "NF repository initialized successfully",
+        "details": {
+          "profileCount": 0,
+          "status": "Ready to accept registrations"
+        }
+      },
+      "server": {
+        "delay": 900,
+        "level": "INFO",
+        "message": "Starting HTTP/2 server...",
+        "details": {
+          "port": 8080,
+          "protocol": "HTTP/2"
+        }
+      },
+      "ready": {
+        "delay": 1200,
+        "level": "SUCCESS",
+        "message": "NRF HTTP/2 server started successfully",
+        "details": {
+          "address": "192.168.1.10:8080",
+          "endpoints": [
+            "/nnrf-nfm/v1/nf-instances",
+            "/nnrf-disc/v1/nf-instances"
+          ]
+        }
+      }
+    },
+    "dependencies": {},
+    "final_status": {
+      "all_ok": {
+        "delay": 1500,
+        "level": "SUCCESS",
+        "message": "NRF is ready to accept NF registrations ✓",
+        "details": {
+          "status": "OPERATIONAL",
+          "mode": "FULL",
+          "services": ["NFManagement", "NFDiscovery"],
+          "ready": true
+        }
+      }
+    }
+  },
+
+  "SMF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "SMF-{instance} instance created: SMF-{instance}",
+        "details": {
+          "type": "SMF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.12:8082/nsmf-pdusession/v1",
+          "interfaces": ["Nsmf_PDUSession", "Nsmf_EventExposure"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing SMF services..."
+      },
+      "n4_init": {
+        "delay": 600,
+        "level": "INFO",
+        "message": "Initializing N4 interface toward UPF...",
+        "details": {
+          "interface": "N4",
+          "protocol": "PFCP"
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "SMF_ERR_001",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "NRF connection established - Registering SMF..."
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "smf-profile-{random}"
+          }
+        }
+      },
+      "UPF": {
+        "missing": {
+          "delay": 1700,
+          "level": "ERROR",
+          "message": "No UPF instances discovered - Cannot establish PDU sessions",
+          "details": {
+            "code": "SMF_ERR_002",
+            "severity": "CRITICAL",
+            "impact": "Cannot create data sessions for UEs",
+            "suggestion": "Add UPF and connect to SMF via N4"
+          }
+        },
+        "connected": {
+          "delay": 1700,
+          "level": "SUCCESS",
+          "message": "UPF discovered and N4 session established",
+          "details": {
+            "interface": "N4",
+            "upfAddress": "192.168.1.13:8805",
+            "protocol": "PFCP"
+          }
+        }
+      },
+      "PCF": {
+        "missing": {
+          "delay": 1900,
+          "level": "WARNING",
+          "message": "PCF not available - Using default policies",
+          "details": {
+            "code": "SMF_WARN_001",
+            "impact": "Cannot apply dynamic QoS policies"
+          }
+        },
+        "connected": {
+          "delay": 1900,
+          "level": "SUCCESS",
+          "message": "PCF connection established - Dynamic policy control available"
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2200,
+        "level": "SUCCESS",
+        "message": "SMF is fully operational ✓",
+        "details": {
+          "services": ["PDU Session Management", "QoS Control"]
+        }
+      },
+      "partial": {
+        "delay": 2200,
+        "level": "SUCCESS",
+        "message": "SMF is partially operational (default policies active)"
+      },
+      "failed": {
+        "delay": 2200,
+        "level": "ERROR",
+        "message": "SMF startup failed - Cannot operate without NRF and UPF"
+      }
+    }
+  },
+
+  "UPF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "UPF-{instance} instance created: UPF-{instance}",
+        "details": {
+          "type": "UPF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.13:8083/nupf-upf/v1",
+          "interfaces": ["N3", "N4", "N6", "N9"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing UPF packet forwarding engine..."
+      },
+      "interfaces": {
+        "delay": 600,
+        "level": "INFO",
+        "message": "Initializing network interfaces...",
+        "details": {
+          "N3": "Toward gNodeB",
+          "N4": "Toward SMF (PFCP)",
+          "N6": "Toward Data Network (Internet)"
+        }
+      },
+      "resources": {
+        "delay": 900,
+        "level": "SUCCESS",
+        "message": "Packet forwarding resources allocated",
+        "details": {
+          "buffers": "10GB",
+          "throughput": "10Gbps"
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1200,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "UPF_ERR_001",
+            "impact": "UPF cannot be discovered by SMF"
+          }
+        },
+        "connected": {
+          "delay": 1200,
+          "level": "SUCCESS",
+          "message": "Registered with NRF - UPF discoverable by SMF"
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 1500,
+        "level": "SUCCESS",
+        "message": "UPF is fully operational ✓",
+        "details": {
+          "status": "OPERATIONAL"
+        }
+      },
+      "failed": {
+        "delay": 1500,
+        "level": "ERROR",
+        "message": "UPF startup failed - Cannot operate without NRF"
+      }
+    }
+  },
+
+  "AUSF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "AUSF-{instance} instance created: AUSF-{instance}",
+        "details": {
+          "type": "AUSF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.14:8084/nausf-auth/v1",
+          "interfaces": ["Nausf_UEAuthentication", "Nausf_SoRProtection"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing AUSF authentication services...",
+        "details": {
+          "modules": ["UE Authentication", "EAP Authentication", "Key Generation"]
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "AUSF_ERR_001",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "NRF connection established - Registering AUSF..."
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "ausf-profile-{random}"
+          }
+        }
+      },
+      "UDM": {
+        "missing": {
+          "delay": 1200,
+          "level": "ERROR",
+          "message": "UDM not available - Cannot retrieve authentication vectors",
+          "details": {
+            "code": "AUSF_ERR_002",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1200,
+          "level": "SUCCESS",
+          "message": "UDM connection established - Authentication service ready"
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "AUSF is fully operational ✓",
+        "details": {
+          "services": ["UE Authentication", "Key Generation"]
+        }
+      },
+      "failed": {
+        "delay": 2000,
+        "level": "ERROR",
+        "message": "AUSF startup failed - Cannot operate without NRF and UDM"
+      }
+    }
+  },
+
+  "UDM": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "UDM-{instance} instance created: UDM-{instance}",
+        "details": {
+          "type": "UDM",
+          "version": "R16",
+          "endpoint": "https://192.168.1.15:8085/nudm-sdm/v1",
+          "interfaces": ["Nudm_SDM", "Nudm_UECM", "Nudm_Authentication", "Nudm_EventExposure"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing UDM subscription data management...",
+        "details": {
+          "modules": ["Subscription Management", "UE Context Management", "Authentication Credentials"]
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "UDM_ERR_001",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "NRF connection established - Registering UDM..."
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "udm-profile-{random}"
+          }
+        }
+      },
+      "MySQL": {
+        "missing": {
+          "delay": 1200,
+          "level": "WARNING",
+          "message": "MySQL database not available - Using in-memory storage",
+          "details": {
+            "code": "UDM_WARN_001",
+            "impact": "Data will not persist across restarts"
+          }
+        },
+        "connected": {
+          "delay": 1200,
+          "level": "SUCCESS",
+          "message": "MySQL database connected - Persistent storage enabled"
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "UDM is fully operational ✓",
+        "details": {
+
+          "services": ["Subscription Management", "UE Context Management"]
+        }
+      },
+      "partial": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "UDM is operational (using in-memory storage)"
+      },
+      "failed": {
+        "delay": 2000,
+        "level": "ERROR",
+        "message": "UDM startup failed - Cannot operate without NRF"
+      }
+    }
+  },
+
+  "PCF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "PCF-{instance} instance created: PCF-{instance}",
+        "details": {
+          "type": "PCF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.16:8086/npcf-am-policy/v1",
+          "interfaces": ["Npcf_AMPolicyControl", "Npcf_SMPolicyControl", "Npcf_PolicyAuthorization"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing PCF policy control services...",
+        "details": {
+          "modules": ["Policy Authorization", "QoS Policy Control", "Charging Control"]
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "PCF_ERR_001",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "NRF connection established - Registering PCF..."
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "pcf-profile-{random}"
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "PCF is fully operational ✓",
+        "details": {
+          "services": ["Policy Control", "QoS Management", "Charging Control"]
+        }
+      },
+      "failed": {
+        "delay": 2000,
+        "level": "ERROR",
+        "message": "PCF startup failed - Cannot operate without NRF"
+      }
+    }
+  },
+
+  "NSSF": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "NSSF-{instance} instance created: NSSF-{instance}",
+        "details": {
+          "type": "NSSF",
+          "version": "R16",
+          "endpoint": "https://192.168.1.17:8087/nnssf-nsselection/v1",
+          "interfaces": ["Nnssf_NSSelection", "Nnssf_NSSAIAvailability"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing NSSF network slice selection services...",
+        "details": {
+          "modules": ["Network Slice Selection", "NSSAI Management"]
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "NSSF_ERR_001",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "NRF connection established - Registering NSSF..."
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "nssf-profile-{random}"
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "NSSF is fully operational ✓",
+        "details": {
+          "status": "OPERATIONAL",
+          "services": ["Network Slice Selection", "NSSAI Management"]
+        }
+      },
+      "failed": {
+        "delay": 2000,
+        "level": "ERROR",
+        "message": "NSSF startup failed - Cannot operate without NRF"
+      }
+    }
+  },
+
+  "UDR": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "UDR-{instance} instance created: UDR-{instance}",
+        "details": {
+          "type": "UDR",
+          "version": "R16",
+          "endpoint": "https://192.168.1.18:8088/nudr-dr/v1",
+          "interfaces": ["Nudr_EventExposure", "Nudr_TrafficInfluence", "Nudr_ChargeableParty"]
+        }
+      },
+      "initializing": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing UDR data repository services...",
+        "details": {
+          "modules": ["Data Repository", "Event Exposure", "Traffic Influence"]
+        }
+      }
+    },
+    "dependencies": {
+      "NRF": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "Cannot register with NRF - NRF not found",
+          "details": {
+            "code": "UDR_ERR_001",
+            "severity": "CRITICAL"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "NRF connection established - Registering UDR..."
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "Successfully registered with NRF",
+          "details": {
+            "profileId": "udr-profile-{random}"
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "UDR is fully operational ✓",
+        "details": {
+          "status": "OPERATIONAL",
+          "services": ["Data Repository", "Event Exposure"]
+        }
+      },
+      "failed": {
+        "delay": 2000,
+        "level": "ERROR",
+        "message": "UDR startup failed - Cannot operate without NRF"
+      }
+    }
+  },
+
+  "gNB": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "gNB-{instance} instance created: gNB-{instance}",
+        "details": {
+          "type": "gNodeB",
+          "vendor": "Ericsson/Nokia/Huawei",
+          "version": "5G-NR R16",
+          "endpoint": "https://192.168.1.20:8090/gnb-mgmt/v1",
+          "interfaces": ["N1 (toward UE)", "N2 (toward AMF)", "N3 (toward UPF)", "Xn (toward other gNBs)"]
+        }
+      },
+      "hardware": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Initializing radio hardware...",
+        "details": {
+          "frequency": "3.5 GHz (n78)",
+          "bandwidth": "100 MHz",
+          "antennas": "64T64R Massive MIMO"
+        }
+      },
+      "interfaces": {
+        "delay": 600,
+        "level": "INFO",
+        "message": "Configuring network interfaces...",
+        "details": {
+          "N2": "Control plane toward AMF",
+          "N3": "User plane toward UPF",
+          "N1": "Radio interface toward UE"
+        }
+      },
+      "cell": {
+        "delay": 900,
+        "level": "INFO",
+        "message": "Starting cell broadcast...",
+        "details": {
+          "cellId": "0x01A2B3C4",
+          "pci": "150",
+          "tac": "1"
+        }
+      }
+    },
+    "dependencies": {
+      "AMF": {
+        "missing": {
+          "delay": 1200,
+          "level": "ERROR",
+          "message": "Cannot establish N2 connection - AMF not found",
+          "details": {
+            "code": "gNB_ERR_001",
+            "severity": "CRITICAL",
+            "impact": "Cannot handle UE registrations",
+            "resolution": "Add AMF and create N2 connection"
+          }
+        },
+        "connected": {
+          "delay": 1200,
+          "level": "SUCCESS",
+          "message": "N2 connection established with AMF",
+          "details": {
+            "interface": "N2",
+            "protocol": "NGAP",
+            "status": "ACTIVE"
+          }
+        }
+      },
+      "UPF": {
+        "missing": {
+          "delay": 1500,
+          "level": "ERROR",
+          "message": "Cannot establish N3 connection - UPF not found",
+          "details": {
+            "code": "gNB_ERR_002",
+            "severity": "CRITICAL",
+            "impact": "Cannot forward user data",
+            "resolution": "Add UPF and create N3 connection"
+          }
+        },
+        "connected": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "N3 tunnel established with UPF",
+          "details": {
+            "interface": "N3",
+            "protocol": "GTP-U",
+            "teId": "0x12345678"
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "gNB is Ready to serve UEs ✓",
+        "details": {
+          "status": "OPERATIONAL",
+          "cellStatus": "Broadcasting",
+          "connectedUEs": 0,
+          "maxCapacity": 1000
+        }
+      }
+    }
+  },
+
+  "UE": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "UE-{instance} powered on: UE-{instance}",
+        "details": {
+          "device": "Smartphone",
+          "interfaces": ["N1 (toward AMF via gNB)", "Radio Interface (toward gNB)"]
+        }
+      },
+      "search": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Searching for available cells...",
+        "details": {
+          "scanningBands": ["n78 (3.5GHz)", "n1 (2.1GHz)"],
+          "mode": "5G SA"
+        }
+      },
+      "selection": {
+        "delay": 600,
+        "level": "INFO",
+        "message": "Cell selection in progress...",
+        "details": {
+          "criteria": "Best RSRP/RSRQ"
+        }
+      }
+    },
+    "dependencies": {
+      "gNB": {
+        "missing": {
+          "delay": 1000,
+          "level": "ERROR",
+          "message": "No gNB found - Cannot access network",
+          "details": {
+            "code": "UE_ERR_001",
+            "severity": "CRITICAL",
+            "impact": "Device cannot connect to 5G network",
+            "resolution": "Add gNB to coverage area"
+          }
+        },
+        "connected": {
+          "delay": 1000,
+          "level": "SUCCESS",
+          "message": "Cell selected - Establishing RRC connection",
+          "details": {
+            "cellId": "0x01A2B3C4",
+            "rsrp": "-85 dBm",
+            "rsrq": "-10 dB",
+            "sinr": "20 dB"
+          }
+        },
+        "registered": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "RRC connection established - Initiating registration",
+          "details": {
+            "rrcState": "RRC_CONNECTED",
+            "registrationType": "Initial Registration"
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 2000,
+        "level": "SUCCESS",
+        "message": "UE registered successfully - Ready for service ✓",
+        "details": {
+          "status": "REGISTERED",
+          "5gGuti": "5GUTI-{random}",
+          "registrationArea": "TA-001"
+        }
+      },
+      "partial": {
+        "delay": 2000,
+        "level": "WARNING",
+        "message": "Connected to gNB but network registration pending",
+        "details": {
+          "rrcState": "RRC_CONNECTED",
+          "registrationState": "NOT_REGISTERED",
+          "reason": "Core network components missing"
+        }
+    }
+  },
+
+  "MySQL": {
+    "startup": {
+      "initial": {
+        "delay": 0,
+        "level": "INFO",
+        "message": "MySQL-{instance} database instance created",
+        "details": {
+          "version": "MySQL 8.0.35",
+          "engine": "InnoDB",
+          "endpoint": "mysql://192.168.1.40:3306/5g_core_db",
+          "interfaces": ["SQL API", "REST API (toward UDM/UDR)"]
+        }
+      },
+      "config": {
+        "delay": 300,
+        "level": "INFO",
+        "message": "Loading configuration from my.cnf...",
+        "details": {
+          "port": 3306,
+          "dataDir": "/var/lib/mysql",
+          "maxConnections": 1000
+        }
+      },
+      "server": {
+        "delay": 600,
+        "level": "SUCCESS",
+        "message": "MySQL server started successfully",
+        "details": {
+          "address": "127.0.0.1:3306",
+          "status": "Running"
+        }
+      },
+      "schema": {
+        "delay": 900,
+        "level": "INFO",
+        "message": "Initializing 5G subscription database schema...",
+        "details": {
+          "database": "5g_core_db",
+          "tables": ["subscribers", "authentication_credentials", "user_profiles", "policy_data", "session_data"]
+        }
+      },
+      "tables": {
+        "delay": 1200,
+        "level": "SUCCESS",
+        "message": "Database tables created successfully",
+        "details": {
+          "subscriberCount": 0,
+          "storageEngine": "InnoDB",
+          "charset": "utf8mb4"
+        }
+      }
+    },
+    "dependencies": {
+      "UDM": {
+        "missing": {
+          "delay": 1500,
+          "level": "WARNING",
+          "message": "No UDM connected - Database ready but not in use",
+          "details": {
+            "suggestion": "Connect UDM to MySQL to enable subscription data services"
+          }
+        },
+        "connected": {
+          "delay": 1500,
+          "level": "SUCCESS",
+          "message": "UDM connected - Subscription data service active",
+          "details": {
+            "interface": "SQL/REST API",
+            "connection": "TCP/3306",
+            "status": "ACTIVE"
+          }
+        }
+      }
+    },
+    "final_status": {
+      "all_ok": {
+        "delay": 1800,
+        "level": "SUCCESS",
+        "message": "MySQL database is fully operational ✓",
+        "details": {
+          "status": "OPERATIONAL",
+          "connections": 0,
+          "uptime": "0 seconds"
+        }
+      }
+    }
+  }
+}
+          }
