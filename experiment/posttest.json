@@ -2,37 +2,258 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "What is the first NAS message sent from UE to AMF during initial registration?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "NAS Identity Response",
+        "b": "Registration Request",
+        "c": "Authentication Response",
+        "d": "Security Mode Complete"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. Identity Response is only sent when requested by AMF.",
+        "b": "Correct. Registration Request is the first NAS message initiating registration.",
+        "c": "Incorrect. Authentication Response is sent later during authentication.",
+        "d": "Incorrect. Security Mode Complete is part of the security procedure."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which network function decrypts the SUCI to retrieve the SUPI (permanent identity) of the UE?",
+      "answers": {
+        "a": "AMF",
+        "b": "NRF",
+        "c": "UDM",
+        "d": "UPF"
+      },
+      "explanations": {
+        "a": "Incorrect. AMF forwards the SUCI but cannot decrypt it.",
+        "b": "Incorrect. NRF only handles service discovery.",
+        "c": "Correct. UDM decrypts SUCI to derive SUPI.",
+        "d": "Incorrect. UPF handles user-plane traffic."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the primary purpose of the Registration Complete message in the 5G registration process?",
+      "answers": {
+        "a": "To establish a PDU session",
+        "b": "To confirm successful registration and store the 5G-GUTI",
+        "c": "To initiate mobility management",
+        "d": "To start policy association"
+      },
+      "explanations": {
+        "a": "Incorrect. PDU session establishment happens separately.",
+        "b": "Correct. Registration Complete acknowledges success and stores 5G-GUTI.",
+        "c": "Incorrect. Mobility management is handled by AMF.",
+        "d": "Incorrect. Policy association is done by PCF."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which function is responsible for Access and Mobility Policy Control in 5G architecture?",
+      "answers": {
+        "a": "UPF",
+        "b": "AUSF",
+        "c": "PCF",
+        "d": "NRF"
+      },
+      "explanations": {
+        "a": "Incorrect. UPF handles user-plane forwarding.",
+        "b": "Incorrect. AUSF deals with authentication.",
+        "c": "Correct. PCF provides access and mobility policy rules.",
+        "d": "Incorrect. NRF supports service discovery only."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "During the Security Mode Setup, what happens after the UE verifies the selected security algorithms?",
+      "answers": {
+        "a": "It sends NAS Security Mode Complete",
+        "b": "It requests authentication vectors",
+        "c": "It initiates RRC Reconfiguration",
+        "d": "It begins PDU session establishment"
+      },
+      "explanations": {
+        "a": "Correct. UE responds with Security Mode Complete.",
+        "b": "Incorrect. Authentication vectors are used earlier.",
+        "c": "Incorrect. RRC is controlled by gNB, not part of NAS security.",
+        "d": "Incorrect. PDU session establishment happens only after registration."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "Which key is derived to protect signaling messages between UE and AMF after mutual authentication?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "K_RRC",
+        "b": "K_NAS",
+        "c": "K_UPF",
+        "d": "K_SMF"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Incorrect. K_RRC is used for radio signaling.",
+        "b": "Correct. K_NAS is used to protect NAS messages.",
+        "c": "Incorrect. UPF does not use signaling protection keys.",
+        "d": "Incorrect. SMF controls sessions but not NAS security."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does the UE include in its Registration Request message to identify the desired network slice?",
+      "answers": {
+        "a": "NSSAI",
+        "b": "SUCI",
+        "c": "GTP ID",
+        "d": "IMEI"
+      },
+      "explanations": {
+        "a": "Correct. NSSAI identifies requested slices.",
+        "b": "Incorrect. SUCI is used for subscriber identity protection.",
+        "c": "Incorrect. GTP ID is used in user-plane tunneling.",
+        "d": "Incorrect. IMEI identifies device hardware."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In 5G SBA, what type of interface is commonly used between NFs like AMF and UDM?",
+      "answers": {
+        "a": "GTP",
+        "b": "SIP",
+        "c": "REST via HTTP",
+        "d": "IPC"
+      },
+      "explanations": {
+        "a": "Incorrect. GTP is for user-plane transport.",
+        "b": "Incorrect. SIP is used in IMS signaling.",
+        "c": "Correct. SBA uses REST APIs over HTTP.",
+        "d": "Incorrect. IPC refers to local inter-process communication."
       },
       "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What happens if the UE moves to a tracking area outside its TAI List?",
+      "answers": {
+        "a": "It is deregistered immediately",
+        "b": "It triggers a Mobility Registration Update",
+        "c": "It receives a PDU Reject message",
+        "d": "It initiates a complete re-registration"
+      },
+      "explanations": {
+        "a": "Incorrect. Deregistration is not immediate.",
+        "b": "Correct. UE performs Mobility Registration Update.",
+        "c": "Incorrect. PDU Reject is for session issues.",
+        "d": "Incorrect. Full re-registration occurs only if necessary."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the primary use of the Nudm_SDM_Get API during registration?",
+      "answers": {
+        "a": "To generate authentication vectors",
+        "b": "To fetch subscription and slice information",
+        "c": "To deliver policy rules",
+        "d": "To verify IMEI against a blacklist"
+      },
+      "explanations": {
+        "a": "Incorrect. Authentication vectors come from AUSF via UDM.",
+        "b": "Correct. Nudm_SDM_Get retrieves subscription and NSSAI data.",
+        "c": "Incorrect. Policy rules are from PCF.",
+        "d": "Incorrect. IMEI verification uses EIR, not UDM."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What does the AMF do if the UE requests a network slice that it is not subscribed to?",
+      "answers": {
+        "a": "Rejects registration",
+        "b": "Assigns any available slice",
+        "c": "Filters the NSSAI to form Allowed NSSAI",
+        "d": "Redirects UE to a legacy network"
+      },
+      "explanations": {
+        "a": "Incorrect. AMF does not reject immediately.",
+        "b": "Incorrect. Assigning arbitrary slices is not allowed.",
+        "c": "Correct. AMF filters requested NSSAI to Allowed NSSAI.",
+        "d": "Incorrect. Slice mismatch does not trigger RAT fallback."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of the following is exchanged during the NAS Authentication Request message?",
+      "answers": {
+        "a": "RAND and AUTN",
+        "b": "SUCI and SUPI",
+        "c": "IMEI and GUTI",
+        "d": "OPc and K"
+      },
+      "explanations": {
+        "a": "Correct. RAND and AUTN are used for authentication challenge.",
+        "b": "Incorrect. SUCI/SUPI are identity parameters.",
+        "c": "Incorrect. IMEI/GUTI are not part of authentication challenge.",
+        "d": "Incorrect. OPc and K are internal operator keys."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of these components establishes the N2 interface with the gNB?",
+      "answers": {
+        "a": "SMF",
+        "b": "UPF",
+        "c": "AMF",
+        "d": "UDM"
+      },
+      "explanations": {
+        "a": "Incorrect. SMF handles PDU sessions.",
+        "b": "Incorrect. UPF handles user-plane forwarding.",
+        "c": "Correct. AMF connects to gNB over the N2 interface.",
+        "d": "Incorrect. UDM stores subscription data."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the function of the AUSF in the registration procedure?",
+      "answers": {
+        "a": "Validates UE identity using IMEI",
+        "b": "Issues Authentication Vectors and validates RES*",
+        "c": "Applies QoS policies during session setup",
+        "d": "Routes user-plane data"
+      },
+      "explanations": {
+        "a": "Incorrect. IMEI validation is handled by EIR.",
+        "b": "Correct. AUSF handles authentication and RES* validation.",
+        "c": "Incorrect. PCF applies QoS and policy rules.",
+        "d": "Incorrect. UPF routes user-plane data."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which instrument is used in the experiment to measure throughput and RTT of the UE connection?",
+      "answers": {
+        "a": "tcpdump",
+        "b": "iperf",
+        "c": "Wireshark",
+        "d": "ping6"
+      },
+      "explanations": {
+        "a": "Incorrect. tcpdump captures packets but does not measure throughput.",
+        "b": "Correct. iperf measures throughput and RTT.",
+        "c": "Incorrect. Wireshark is a protocol analyzer.",
+        "d": "Incorrect. ping6 measures latency only."
+      },
+      "correctAnswer": "b",
       "difficulty": "beginner"
     }
   ]

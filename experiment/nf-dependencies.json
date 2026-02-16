@@ -1,0 +1,297 @@
+{
+  "NRF": {
+    "name": "Network Repository Function",
+    "required": [],
+    "optional": [],
+    "description": "NRF is the foundation of 5G SBA - no dependencies required",
+    "startupChecks": [
+      "Initialize NF repository database",
+      "Start HTTP/2 server on port 8080",
+      "Verify database connectivity",
+      "Load existing NF profiles"
+    ],
+    "criticalFor": [
+      "All other NFs require NRF for registration and discovery"
+    ]
+  },
+  "AMF": {
+    "name": "Access and Mobility Management Function",
+    "required": ["NRF"],
+    "optional": ["AUSF", "UDM", "PCF", "NSSF"],
+    "description": "AMF requires NRF for registration. AUSF and UDM needed for authentication.",
+    "startupChecks": [
+      "Register with NRF",
+      "Subscribe to NRF notifications",
+      "Initialize N2 interface (toward gNodeB)",
+      "Verify AUSF connectivity for authentication",
+      "Verify UDM connectivity for subscription data",
+      "Initialize connection management module"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "AMF_ERR_001",
+        "message": "Cannot register with NRF - NRF not found in topology",
+        "severity": "CRITICAL",
+        "impact": "AMF cannot function without NRF registration",
+        "resolution": "Add NRF to topology and create connection"
+      },
+      "NO_AUSF": {
+        "code": "AMF_WARN_001",
+        "message": "AUSF not available - UE authentication will fail",
+        "severity": "HIGH",
+        "impact": "Cannot authenticate UEs, registration requests will fail",
+        "resolution": "Add AUSF and connect to AMF"
+      },
+      "NO_UDM": {
+        "code": "AMF_WARN_002",
+        "message": "UDM not available - Cannot retrieve subscription data",
+        "severity": "HIGH",
+        "impact": "Cannot fetch UE context, registration incomplete",
+        "resolution": "Add UDM and connect to AMF"
+      }
+    }
+  },
+  "SMF": {
+    "name": "Session Management Function",
+    "required": ["NRF"],
+    "optional": ["UPF", "PCF", "UDM"],
+    "description": "SMF requires NRF for registration. UPF essential for data sessions.",
+    "startupChecks": [
+      "Register with NRF",
+      "Discover available UPF instances via NRF",
+      "Subscribe to PCF policy updates",
+      "Initialize N4 interface (toward UPF)",
+      "Verify UDM connectivity for subscription data"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "SMF_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "SMF cannot function without NRF",
+        "resolution": "Add NRF to topology"
+      },
+      "NO_UPF": {
+        "code": "SMF_ERR_002",
+        "message": "No UPF instances available - Cannot establish PDU sessions",
+        "severity": "CRITICAL",
+        "impact": "Cannot create data sessions for UEs",
+        "resolution": "Add UPF and connect to SMF"
+      },
+      "NO_PCF": {
+        "code": "SMF_WARN_001",
+        "message": "PCF not available - Using default policies",
+        "severity": "MEDIUM",
+        "impact": "Cannot apply dynamic policies, using defaults",
+        "resolution": "Add PCF for dynamic policy control"
+      }
+    }
+  },
+  "UPF": {
+    "name": "User Plane Function",
+    "required": ["NRF"],
+    "optional": ["SMF"],
+    "description": "UPF requires NRF for registration. SMF controls UPF via N4 interface.",
+    "startupChecks": [
+      "Register with NRF as UPF instance",
+      "Initialize N3 interface (toward gNodeB)",
+      "Initialize N6 interface (toward Data Network)",
+      "Initialize N4 interface (toward SMF)",
+      "Allocate packet forwarding resources",
+      "Setup QoS enforcement engine"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "UPF_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "UPF cannot be discovered by SMF",
+        "resolution": "Add NRF to topology"
+      }
+    }
+  },
+  "AUSF": {
+    "name": "Authentication Server Function",
+    "required": ["NRF", "UDM"],
+    "optional": [],
+    "description": "AUSF requires UDM to retrieve authentication credentials",
+    "startupChecks": [
+      "Register with NRF",
+      "Verify UDM connectivity",
+      "Initialize authentication vector generation",
+      "Setup EAP-AKA' authentication"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "AUSF_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "AUSF cannot function",
+        "resolution": "Add NRF to topology"
+      },
+      "NO_UDM": {
+        "code": "AUSF_ERR_002",
+        "message": "UDM not available - Cannot retrieve authentication data",
+        "severity": "CRITICAL",
+        "impact": "Cannot perform UE authentication",
+        "resolution": "Add UDM and connect to AUSF"
+      }
+    }
+  },
+  "UDM": {
+    "name": "Unified Data Management",
+    "required": ["NRF"],
+    "optional": [],
+    "description": "UDM stores subscription data and authentication credentials",
+    "startupChecks": [
+      "Register with NRF",
+      "Initialize database connection",
+      "Load subscription data repository",
+      "Setup credential management system"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "UDM_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "UDM cannot be discovered by other NFs",
+        "resolution": "Add NRF to topology"
+      }
+    }
+  },
+  "PCF": {
+    "name": "Policy Control Function",
+    "required": ["NRF"],
+    "optional": ["UDM"],
+    "description": "PCF provides policy rules for SMF and AMF",
+    "startupChecks": [
+      "Register with NRF",
+      "Load policy rules database",
+      "Initialize policy decision engine",
+      "Verify UDM connectivity for subscriber policies"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "PCF_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "PCF cannot provide policies",
+        "resolution": "Add NRF to topology"
+      }
+    }
+  },
+  "NSSF": {
+    "name": "Network Slice Selection Function",
+    "required": ["NRF"],
+    "optional": [],
+    "description": "NSSF selects appropriate network slice for UE",
+    "startupChecks": [
+      "Register with NRF",
+      "Load network slice configurations",
+      "Initialize slice selection algorithm",
+      "Verify slice availability"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "NSSF_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "NSSF cannot function",
+        "resolution": "Add NRF to topology"
+      }
+    }
+  },
+  "UDR": {
+    "name": "Unified Data Repository",
+    "required": ["NRF"],
+    "optional": ["SMF"],
+    "description": "UDR exposes network capabilities to external applications",
+    "startupChecks": [
+      "Register with NRF",
+      "Initialize external API gateway",
+      "Setup authentication for external apps",
+      "Configure exposure policies"
+    ],
+    "errors": {
+      "NO_NRF": {
+        "code": "UDR_ERR_001",
+        "message": "Cannot register with NRF",
+        "severity": "CRITICAL",
+        "impact": "UDR cannot expose network capabilities",
+        "resolution": "Add NRF to topology"
+      }
+    }
+  },
+  "gNB": {
+    "name": "Next Generation NodeB",
+    "required": ["AMF", "UPF"],
+    "optional": [],
+    "description": "gNB requires AMF for control plane and UPF for user plane",
+    "startupChecks": [
+      "Initialize radio hardware",
+      "Establish N2 connection to AMF",
+      "Establish N3 connection to UPF",
+      "Configure radio parameters (frequency, bandwidth)",
+      "Start cell broadcast"
+    ],
+    "errors": {
+      "NO_AMF": {
+        "code": "gNB_ERR_001",
+        "message": "Cannot establish N2 connection - AMF not found",
+        "severity": "CRITICAL",
+        "impact": "gNB cannot handle UE registrations without AMF",
+        "resolution": "Add AMF to topology and create N2 connection"
+      },
+      "NO_UPF": {
+        "code": "gNB_ERR_002",
+        "message": "Cannot establish N3 connection - UPF not found",
+        "severity": "CRITICAL",
+        "impact": "gNB cannot forward user data without UPF",
+        "resolution": "Add UPF to topology and create N3 connection"
+      }
+    }
+  },
+  "UE": {
+    "name": "User Equipment",
+    "required": ["gNB"],
+    "optional": [],
+    "description": "UE requires gNB for network access",
+    "startupChecks": [
+      "Power on device",
+      "Search for available cells",
+      "Select best cell (RSRP/RSRQ)",
+      "Establish RRC connection with gNB",
+      "Initiate registration procedure"
+    ],
+    "errors": {
+      "NO_gNB": {
+        "code": "UE_ERR_001",
+        "message": "No gNB found - Cannot access network",
+        "severity": "CRITICAL",
+        "impact": "UE cannot connect to 5G network",
+        "resolution": "Add gNB to topology and create radio connection"
+      },
+      "NO_NETWORK": {
+        "code": "UE_WARN_001",
+        "message": "gNB found but network not ready (AMF/UPF missing)",
+        "severity": "HIGH",
+        "impact": "Registration will fail",
+        "resolution": "Ensure complete 5G core network is deployed"
+      }
+    }
+  },
+  "MySQL": {
+    "name": "MySQL Database",
+    "required": [],
+    "optional": ["UDM"],
+    "description": "MySQL is a standalone database, typically connected to UDM/UDR",
+    "startupChecks": [
+      "Initialize database engine",
+      "Load configuration from my.cnf",
+      "Start MySQL server on port 3306",
+      "Initialize subscription database schema",
+      "Create database tables (subscribers, credentials, profiles)"
+    ],
+    "errors": {}
+  }
+}

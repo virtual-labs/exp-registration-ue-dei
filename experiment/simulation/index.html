@@ -1,13 +1,173 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
-</head>
-<body>
-		<!-- Your code goes here-->
+<html lang="en">
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5G SBA Network Dashboard</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <!-- Main Container -->
+    <div class="dashboard-container">
+
+        <!-- Top Toolbar -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <h1>🌐 Registration of UE’s with the Core Network Dashboard</h1>
+            </div>
+            <div class="toolbar-right">
+                <!-- Main action buttons -->
+                <button id="btn-add-nf" class="btn btn-primary">➕ Add NF</button>
+                <button id="btn-clear" class="btn btn-danger">🗑️ Clears</button>
+                <button id="btn-validate" class="btn btn-info">✓ Validate</button>
+                <button id="btn-terminal-header" class="btn btn-terminal">💻 Terminal</button>
+                <button id="btn-help" class="btn btn-secondary">❓ Help</button>
+            </div>
+        </div>
+
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+            <!-- Left Sidebar - NF Palette -->
+            <div class="sidebar-left">
+                <h3>Network Functions</h3>
+                <div class="nf-palette">
+                    <!-- NF types will be dynamically added here -->
+                </div>
+
+                <div class="connection-controls">
+                    <h3>Create Connection</h3>
+                    <button id="btn-select-source" class="btn btn-block">Select Source</button>
+                    <button id="btn-select-destination" class="btn btn-block" disabled>Select Destination</button>
+                    <button id="btn-cancel-connection" class="btn btn-block btn-cancel"
+                        style="display:none;">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Center Canvas Area -->
+            <div class="canvas-container">
+                <canvas id="main-canvas"></canvas>
+
+                <!-- Canvas overlay messages -->
+                <div id="canvas-message" class="canvas-message"></div>
+            </div>
+
+            <!-- Right Sidebar - Configuration Panel -->
+            <div class="sidebar-right">
+                <div id="config-panel" class="config-panel">
+                    <div class="config-panel-header">
+                        <h3>⚙️ Configuration</h3>
+                        <button id="btn-toggle-config" class="btn-toggle-config" title="Hide/Show Configuration Panel (Ctrl+K)">
+                            <span id="config-toggle-icon">◀</span>
+                        </button>
+                    </div>
+                    <!-- Configuration form will be dynamically inserted here -->
+                    <div id="config-form">
+                        <p class="hint">Select a Network Function type to configure and start it</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Log Panel -->
+        <div class="log-panel" id="log-panel">
+            <div class="log-panel-header">
+                <div class="log-header-left">
+                    <h3>📋 Network Function Logs</h3>
+                    <button id="btn-toggle-logs" class="btn-toggle-logs" title="Hide/Show Logs (Ctrl+L)">
+                        <span id="toggle-icon">▼</span>
+                    </button>
+                </div>
+                <div class="log-controls">
+                    <select id="log-filter-nf">
+                        <option value="all">All NFs</option>
+                    </select>
+                    <select id="log-filter-level">
+                        <option value="all">All Levels</option>
+                        <option value="ERROR">Errors</option>
+                        <option value="WARNING">Warnings</option>
+                        <option value="INFO">Info</option>
+                        <option value="SUCCESS">Success</option>
+                    </select>
+                    <button id="btn-clear-logs" class="btn-small">Clear</button>
+                    <button id="btn-export-logs" class="btn-small">Export</button>
+                </div>
+            </div>
+            <div id="log-content" class="log-content">
+                <!-- Logs will be dynamically added here -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal for Adding NF -->
+    <div id="add-nf-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Select Network Function Type</h2>
+            <div id="nf-grid" class="nf-grid">
+                <!-- NF selection buttons will be added here -->
+            </div>
+            <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal" style="display:none;">
+        <div class="modal-content help-modal-content">
+            <h2>📚 5G Service-Based Architecture Guide</h2>
+            <div class="help-content">
+                <div class="help-section">
+                    <h3>🏗️ Reference Architecture</h3>
+                    <div class="architecture-diagram">
+                        <img id="sba-diagram" src="images/sba/sba.jpg" alt="5G Service-Based Architecture"
+                            style="width: 100%; max-width: 800px; height: auto; background: #1a252f; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>🚀 Quick Start Guide</h3>
+                    <ol class="help-steps">
+                        <li><strong>Create Service Buses:</strong> Click "📊 Add Bus Line" to create Control Plane and
+                            User Plane buses</li>
+                        <li><strong>Add Network Functions:</strong> Click "➕ Add NF" to add AMF, SMF, UPF, etc.</li>
+                        <li><strong>Connect Components:</strong> Use "Select Source" → "Select Destination" to connect
+                            NFs to buses</li>
+                        <li><strong>Validate Topology:</strong> Click "✓ Validate" to check your 5G network design</li>
+                    </ol>
+                </div>
+
+                <div class="help-section">
+                    <h3>🔗 Connection Types</h3>
+                    <ul class="help-list">
+                        <li><span class="connection-type nf-bus">NF → Bus:</span> Connect Network Functions to Service
+                            Buses</li>
+                        <li><span class="connection-type bus-nf">Bus → NF:</span> Connect Service Buses to Network
+                            Functions</li>
+                        <li><span class="connection-type bus-bus">Bus → Bus:</span> Create bridges between different
+                            service buses</li>
+                        <li><span class="connection-type nf-nf">NF → NF:</span> Direct point-to-point connections</li>
+                    </ul>
+                </div>
+            </div>
+            <button id="help-close" class="btn btn-primary btn-block">Close</button>
+        </div>
+    </div>
+
+    <!-- Load all JavaScript files in correct order -->
+    <script src="js/data-store.js"></script>
+    <script src="js/nf-manager.js"></script>
+    <script src="js/connection-manager.js"></script>
+    <script src="js/bus-manager.js"></script>
+    <script src="js/ping-manager.js"></script>
+    <script src="js/log-engine.js"></script>
+    <script src="js/canvas-renderer.js"></script>
+    <script src="js/docker.js"></script>
+    <script src="js/ui-controller.js"></script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
