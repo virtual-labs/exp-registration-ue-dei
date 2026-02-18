@@ -1,3 +1,2 @@
-https://medium.com/5g-nr/5g-service-based-architecture-sba-47900b0ded0a
-
-https://www.wallarm.com/what/what-is-http-2-and-how-is-it-different-from-http-1
+1. Parikh, D., Bhat, A. J., Singh, S. K., & Agrawal, G. (2024). TECHNIQUES TO AVOID UE REGISTRATION LOOPING DUE TO MULTIPLE AMF REDIRECTIONS.
+2. Ma, L., Wen, X., Wang, L., Lu, Z., & Knopp, R. (2018). An SDN/NFV based framework for management and deployment of service based 5G core network. China Communications, 15(10), 86-98.
