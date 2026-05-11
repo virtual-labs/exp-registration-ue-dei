@@ -1,8 +1,11 @@
 {
   "version": 2.0,
+  "filters": {
+    "difficulty": ["beginner", "intermediate"]
+  },
   "questions": [
     {
-      "question": "What is the first NAS message sent from UE to AMF during initial registration?",
+      "question": "Q1. What is the first NAS message sent from UE to AMF during initial registration?",
       "answers": {
         "a": "NAS Identity Response",
         "b": "Registration Request",
@@ -19,7 +22,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which network function decrypts the SUCI to retrieve the SUPI (permanent identity) of the UE?",
+      "question": "Q2. Which network function decrypts the SUCI to retrieve the SUPI (permanent identity) of the UE?",
       "answers": {
         "a": "AMF",
         "b": "NRF",
@@ -33,10 +36,10 @@
         "d": "Incorrect. UPF handles user-plane traffic."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What is the primary purpose of the Registration Complete message in the 5G registration process?",
+      "question": "Q3. What is the primary purpose of the Registration Complete message in the 5G registration process?",
       "answers": {
         "a": "To establish a PDU session",
         "b": "To confirm successful registration and store the 5G-GUTI",
@@ -53,7 +56,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which function is responsible for Access and Mobility Policy Control in 5G architecture?",
+      "question": "Q4. Which function is responsible for Access and Mobility Policy Control in 5G architecture?",
       "answers": {
         "a": "UPF",
         "b": "AUSF",
@@ -70,7 +73,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "During the Security Mode Setup, what happens after the UE verifies the selected security algorithms?",
+      "question": "Q5. During the Security Mode Setup, what happens after the UE verifies the selected security algorithms?",
       "answers": {
         "a": "It sends NAS Security Mode Complete",
         "b": "It requests authentication vectors",
@@ -84,10 +87,10 @@
         "d": "Incorrect. PDU session establishment happens only after registration."
       },
       "correctAnswer": "a",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "Which key is derived to protect signaling messages between UE and AMF after mutual authentication?",
+      "question": "Q6. Which key is derived to protect signaling messages between UE and AMF after mutual authentication?",
       "answers": {
         "a": "K_RRC",
         "b": "K_NAS",
@@ -101,10 +104,10 @@
         "d": "Incorrect. SMF controls sessions but not NAS security."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What does the UE include in its Registration Request message to identify the desired network slice?",
+      "question": "Q7. What does the UE include in its Registration Request message to identify the desired network slice?",
       "answers": {
         "a": "NSSAI",
         "b": "SUCI",
@@ -121,7 +124,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "In 5G SBA, what type of interface is commonly used between NFs like AMF and UDM?",
+      "question": "Q8. In 5G SBA, what type of interface is commonly used between NFs like AMF and UDM?",
       "answers": {
         "a": "GTP",
         "b": "SIP",
@@ -138,7 +141,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What happens if the UE moves to a tracking area outside its TAI List?",
+      "question": "Q9. What happens if the UE moves to a tracking area outside its TAI List?",
       "answers": {
         "a": "It is deregistered immediately",
         "b": "It triggers a Mobility Registration Update",
@@ -152,10 +155,10 @@
         "d": "Incorrect. Full re-registration occurs only if necessary."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What is the primary use of the Nudm_SDM_Get API during registration?",
+      "question": "Q10. What is the primary use of the Nudm_SDM_Get API during registration?",
       "answers": {
         "a": "To generate authentication vectors",
         "b": "To fetch subscription and slice information",
@@ -169,10 +172,10 @@
         "d": "Incorrect. IMEI verification uses EIR, not UDM."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What does the AMF do if the UE requests a network slice that it is not subscribed to?",
+      "question": "Q11. What does the AMF do if the UE requests a network slice that it is not subscribed to?",
       "answers": {
         "a": "Rejects registration",
         "b": "Assigns any available slice",
@@ -186,10 +189,10 @@
         "d": "Incorrect. Slice mismatch does not trigger RAT fallback."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "Which of the following is exchanged during the NAS Authentication Request message?",
+      "question": "Q12. Which of the following is exchanged during the NAS Authentication Request message?",
       "answers": {
         "a": "RAND and AUTN",
         "b": "SUCI and SUPI",
@@ -203,10 +206,10 @@
         "d": "Incorrect. OPc and K are internal operator keys."
       },
       "correctAnswer": "a",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "Which of these components establishes the N2 interface with the gNB?",
+      "question": "Q13. Which of these components establishes the N2 interface with the gNB?",
       "answers": {
         "a": "SMF",
         "b": "UPF",
@@ -223,7 +226,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the function of the AUSF in the registration procedure?",
+      "question": "Q14. What is the function of the AUSF in the registration procedure?",
       "answers": {
         "a": "Validates UE identity using IMEI",
         "b": "Issues Authentication Vectors and validates RES*",
@@ -237,10 +240,10 @@
         "d": "Incorrect. UPF routes user-plane data."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "Which instrument is used in the experiment to measure throughput and RTT of the UE connection?",
+      "question": "Q15.  Which instrument is used in the experiment to measure throughput and RTT of the UE connection?",
       "answers": {
         "a": "tcpdump",
         "b": "iperf",

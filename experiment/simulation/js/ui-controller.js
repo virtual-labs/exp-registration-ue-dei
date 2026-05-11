@@ -19,6 +19,7 @@ class UIController {
         this.selectedSourceNF = null;
         this.selectedDestinationNF = null;
         this.iperf3Servers = new Map(); // Track active iperf3 servers: nfId -> { server, output, intervalId }
+        this.nfTerminalInputs = new Map(); // nfId -> { input, line }
 
         console.log('✅ UIController initialized');
     }
@@ -556,6 +557,8 @@ class UIController {
 
         console.log('✅ Topology cleared');
         alert('Topology cleared successfully!');
+        // Full refresh ensures complete re-initialization of all managers and UI state
+        window.location.reload();
     }
 
     /**
@@ -684,6 +687,26 @@ class UIController {
     showNFConfigurationForNewNF(nfType) {
         const configForm = document.getElementById('config-form');
         if (!configForm) return;
+
+        // Check if NF already exists (except UE which allows 2 instances)
+        const allNFs = window.dataStore?.getAllNFs() || [];
+        
+        if (nfType === 'UE') {
+            // Check UE limit - only allow 2 UEs maximum
+            const existingUEs = allNFs.filter(nf => nf.type === 'UE');
+            if (existingUEs.length >= 2) {
+                const ueNames = existingUEs.map(ue => ue.name).join(', ');
+                alert(`❌ UE Limit Reached!\n\nThis simulation allows a maximum of 2 UE instances.\n\nExisting UEs: ${ueNames}\n\nPlease delete one UE before creating a new one.`);
+                return;
+            }
+        } else {
+            // For all other NF types - only allow ONE instance
+            const existingNF = allNFs.find(nf => nf.type === nfType);
+            if (existingNF) {
+                alert(`❌ Network Function Already Exists!\n\nThis simulation allows only 1 instance of ${nfType}.\n\nExisting: ${existingNF.name} at ${existingNF.config.ipAddress}:${existingNF.config.port}\n\nPlease delete the existing ${nfType} before creating a new one.`);
+                return;
+            }
+        }
 
         // Get NF definition for defaults
         const nfDef = window.nfManager?.getNFDefinition(nfType) || { name: nfType, color: '#95a5a6' };
@@ -929,14 +952,11 @@ class UIController {
                 
                 <button class="btn btn-danger btn-block" id="btn-delete-nf" style="margin-top: 15px;">Delete UE</button>
                 
-                <div class="troubleshoot-section">
-                    <h4>🔧 Troubleshoot</h4>
-                    <p class="config-hint">Open Windows-style terminal for network diagnostics</p>
-                    
-                    <button class="btn btn-terminal btn-block" id="btn-open-terminal">
-                        💻 Open Command Prompt
-                    </button>
-                </div>
+                
+                <button class="btn btn-terminal btn-block" id="btn-open-terminal">
+                    💻 Open Command Prompt
+                </button>
+                
             `;
         } else {
             // Standard configuration for other NF types
@@ -989,14 +1009,11 @@ class UIController {
             </div>
             ` : ''}
             
-            <div class="troubleshoot-section">
-                <h4>🔧 Troubleshoot</h4>
-                <p class="config-hint">Open Windows-style terminal for network diagnostics</p>
-                
-                <button class="btn btn-terminal btn-block" id="btn-open-terminal">
-                    💻 Open Command Prompt
-                </button>
-            </div>
+            
+            <button class="btn btn-terminal btn-block" id="btn-open-terminal">
+                💻 Open Command Prompt
+            </button>
+            
         `;
         }
 
@@ -2125,21 +2142,11 @@ class UIController {
                         Command Prompt - ${nf.name} (${nf.config.ipAddress})
                     </div>
                     <div class="terminal-controls">
-                        <button class="terminal-btn minimize">−</button>
-                        <button class="terminal-btn maximize">□</button>
                         <button class="terminal-btn close" id="terminal-close-${nf.id}">×</button>
                     </div>
                 </div>
                 <div class="windows-terminal-content" id="terminal-content-${nf.id}">
-                    <div class="terminal-header">
-                        Microsoft Windows [Version 10.0.19045.3570]<br>
-                        (c) Microsoft Corporation. All rights reserved.<br><br>
-                    </div>
                     <div class="terminal-output" id="terminal-output-${nf.id}"></div>
-                    <div class="terminal-input-line">
-                        <span class="terminal-prompt">C:\\${nf.name}></span>
-                        <input type="text" id="terminal-input-${nf.id}" class="terminal-input" autocomplete="off" spellcheck="false">
-                    </div>
                 </div>
             </div>
         `;
@@ -2154,11 +2161,7 @@ class UIController {
             terminalModal.classList.add('show');
         }, 10);
 
-        // Focus on input
-        const input = document.getElementById(`terminal-input-${nf.id}`);
-        if (input) {
-            input.focus();
-        }
+        this.focusNfPromptInput(nf.id);
     }
 
     /**
@@ -2168,12 +2171,28 @@ class UIController {
      */
     setupWindowsTerminal(nf, terminalModal) {
         const win = terminalModal.querySelector('.windows-terminal-window');
-        const input = terminalModal.querySelector(`#terminal-input-${nf.id}`);
         const output = terminalModal.querySelector(`#terminal-output-${nf.id}`);
         const closeBtn = terminalModal.querySelector(`#terminal-close-${nf.id}`);
-        
+
         let commandHistory = [];
         let historyIndex = -1;
+
+        // ── Z-index / focus management ──────────────────────────────────────
+        // The stacking context is determined by the position:fixed modal parent,
+        // NOT the inner win div — so we must raise z-index on terminalModal.
+        if (!UIController._nfTerminalZCounter) UIController._nfTerminalZCounter = 3000;
+
+        const bringToFront = () => {
+            UIController._nfTerminalZCounter += 10;
+            terminalModal.style.zIndex = String(UIController._nfTerminalZCounter);
+        };
+
+        // Bring to front on any mousedown inside the terminal window
+        win.addEventListener('mousedown', bringToFront);
+
+        // Bring to front immediately on creation
+        bringToFront();
+        // ────────────────────────────────────────────────────────────────────
 
         // Close button - cleanup iperf3 server if running
         closeBtn.addEventListener('click', () => {
@@ -2181,7 +2200,8 @@ class UIController {
             if (this.iperf3Servers.has(nf.id)) {
                 this.iperf3Servers.delete(nf.id);
             }
-            
+            this.nfTerminalInputs.delete(nf.id);
+
             terminalModal.classList.remove('show');
             setTimeout(() => {
                 terminalModal.remove();
@@ -2199,8 +2219,17 @@ class UIController {
         });
         document.addEventListener('mousemove', (e) => {
             if (!dragging) return;
-            win.style.left = `${e.clientX - dx}px`;
-            win.style.top = `${e.clientY - dy}px`;
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const winW = win.offsetWidth;
+            const winH = win.offsetHeight;
+            const rawX = e.clientX - dx;
+            const rawY = e.clientY - dy;
+            // Clamp so the full window stays inside the viewport on all sides
+            const clampedX = Math.max(0, Math.min(rawX, vw - winW));
+            const clampedY = Math.max(0, Math.min(rawY, vh - winH));
+            win.style.left = `${clampedX}px`;
+            win.style.top  = `${clampedY}px`;
         });
         document.addEventListener('mouseup', () => {
             dragging = false;
@@ -2234,31 +2263,88 @@ class UIController {
             resizing = false;
         });
 
+        // Focus prompt input on click
+        output.addEventListener('click', () => {
+            this.focusNfPromptInput(nf.id);
+        });
+
+        // Initial welcome message
+        this.addTerminalLine(output, `Connected to ${nf.name} (${nf.config.ipAddress})`, 'info');
+        this.addTerminalLine(output, 'Type "help" for available commands.', 'info');
+        this.addTerminalLine(output, '', 'blank');
+        this.createNfPromptLine(nf, output, commandHistory, historyIndex, terminalModal);
+    }
+
+    /**
+     * Create interactive NF terminal prompt in output stream
+     * @param {Object} nf - Network Function
+     * @param {HTMLElement} output - Output element
+     * @param {string[]} commandHistory - Command history array
+     * @param {number} historyIndex - Current history index
+     * @param {HTMLElement} terminalModal - Terminal modal element
+     */
+    createNfPromptLine(nf, output, commandHistory, historyIndex, terminalModal) {
+        const promptLine = document.createElement('div');
+        promptLine.className = 'terminal-line terminal-input-line';
+        promptLine.innerHTML = `
+            <span class="terminal-prompt">C:\\${nf.name}></span>
+            <input type="text" class="terminal-input" autocomplete="off" spellcheck="false">
+        `;
+        output.appendChild(promptLine);
+
+        const input = promptLine.querySelector('.terminal-input');
+        if (!input) return;
+
+        this.nfTerminalInputs.set(nf.id, { input, line: promptLine });
+        input.focus();
+        output.scrollTop = output.scrollHeight;
+
+        // Tab completion state
+        let tabMatches = [];
+        let tabIndex = -1;
+
+        const resetTab = () => { tabMatches = []; tabIndex = -1; };
+
         // Input handling
         input.addEventListener('keydown', async (e) => {
-            // Handle Ctrl+C to stop iperf3 server
-            if (e.ctrlKey && e.key === 'c' && this.iperf3Servers.has(nf.id)) {
+            if (e.key === 'Tab') {
                 e.preventDefault();
-                this.stopIperf3Server(nf, output);
-                input.value = '';
+                const val = input.value;
+
+                if (tabMatches.length === 0) {
+                    tabMatches = this.getNFTabCompletions(nf, val);
+                    tabIndex = -1;
+                }
+
+                if (tabMatches.length === 0) return;
+
+                tabIndex = (tabIndex + 1) % tabMatches.length;
+                input.value = tabMatches[tabIndex];
                 return;
             }
-            
+
+            if (e.key !== 'Tab') resetTab();
+
             if (e.key === 'Enter') {
                 const command = input.value.trim();
+                const active = this.nfTerminalInputs.get(nf.id);
+                if (active?.line) active.line.remove();
                 if (command) {
-                    // Add to history
                     commandHistory.push(command);
                     historyIndex = commandHistory.length;
-
-                    // Display command
+                    // Store history on the map so iperf3 server can restore it on Ctrl+C
+                    this.nfTerminalInputs.set(nf.id, {
+                        ...(this.nfTerminalInputs.get(nf.id) || {}),
+                        commandHistory: [...commandHistory],
+                        historyIndex
+                    });
                     this.addTerminalLine(output, `C:\\${nf.name}>${command}`, 'command');
-                    
-                    // Clear input
-                    input.value = '';
-
-                    // Process command
-                    await this.processWindowsCommand(nf, command, output);
+                    await this.processWindowsCommand(nf, command, output, terminalModal);
+                }
+                // Only create a new prompt if iperf3 server is NOT running
+                // iperf3 server will hide the prompt and restore it on Ctrl+C
+                if (!this.iperf3Servers.has(nf.id)) {
+                    this.createNfPromptLine(nf, output, commandHistory, historyIndex, terminalModal);
                 }
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
@@ -2277,11 +2363,75 @@ class UIController {
                 }
             }
         });
+    }
 
-        // Initial welcome message
-        this.addTerminalLine(output, `Connected to ${nf.name} (${nf.config.ipAddress})`, 'info');
-        this.addTerminalLine(output, 'Type "help" for available commands.', 'info');
-        this.addTerminalLine(output, '', 'blank');
+    /**
+     * Word-by-word Tab completion for NF terminal.
+     * @param {Object} nf - Network Function
+     * @param {string} typed - Current input value
+     * @returns {string[]} Possible completions
+     */
+    getNFTabCompletions(nf, typed) {
+        const commands = [
+            'help',
+            'ifconfig',
+            'ip addr',
+            'ping -I oaitun_ue1 8.8.8.8 -c4',
+            'ping -I oaitun_ue1 10.0.0.1 -c4',
+            'ping -I oaitun_ue1 12.45.0.39 -c4',
+            'ping subnet',
+            'systeminfo',
+            'netstat',
+            'cls',
+            'clear',
+            'exit',
+        ];
+
+        if (nf.type === 'UE') {
+            const ueIP = nf.config?.tunInterface?.ipAddress || nf.config?.ipAddress || '<UE_ip>';
+            commands.push(`iperf3 -B ${ueIP} -c 192.168.70.135`);
+            commands.push(`iperf3 -B ${ueIP} -c 192.168.70.135 -R`);
+        }
+        if (nf.type === 'ext-dn') {
+            commands.push('iperf3 -s');
+        }
+
+        if (!typed) return commands.map(c => c.split(' ')[0]).filter((v, i, a) => a.indexOf(v) === i);
+
+        const lower = typed.toLowerCase();
+
+        // Find all commands that start with what's typed (ignoring trailing space for matching)
+        const matching = commands.filter(c => c.toLowerCase().startsWith(lower.trimEnd()));
+        if (matching.length === 0) return [];
+
+        // Determine word index to complete:
+        // "ping " → typed ends with space → complete next word (idx = number of typed words)
+        // "pin"   → complete current partial word (idx = last word index)
+        const endsWithSpace = typed.endsWith(' ');
+        const typedWords = typed.trimEnd().split(' ');
+        const idx = endsWithSpace ? typedWords.length : typedWords.length - 1;
+
+        const completions = new Set();
+        matching.forEach(cmd => {
+            const cmdWords = cmd.split(' ');
+            if (idx < cmdWords.length) {
+                // Build result: keep all words before idx, add completed word at idx
+                const result = [...typedWords.slice(0, idx), cmdWords[idx]].join(' ');
+                // Only add if it actually advances beyond what's typed
+                if (result.toLowerCase() !== typed.toLowerCase().trimEnd()) {
+                    completions.add(result);
+                }
+            }
+        });
+
+        return [...completions];
+    }
+
+    focusNfPromptInput(nfId) {
+        const active = this.nfTerminalInputs.get(nfId);
+        if (active?.input) {
+            active.input.focus();
+        }
     }
 
     /**
@@ -2289,15 +2439,16 @@ class UIController {
      * @param {Object} nf - Network Function
      * @param {string} command - Command to process
      * @param {HTMLElement} output - Output element
+     * @param {HTMLElement} terminalModal - Terminal modal element
      */
-    async processWindowsCommand(nf, command, output) {
+    async processWindowsCommand(nf, command, output, terminalModal) {
         const cmd = command.toLowerCase().trim();
         const args = command.split(' ');
 
         if (cmd === 'help' || cmd === '?') {
             this.showWindowsHelp(output);
-        } else if (cmd === 'ipconfig') {
-            this.showIPConfig(nf, output);
+        } else if (cmd === 'ifconfig') {
+            this.showifconfig(nf, output);
         } else if (cmd.startsWith('ping ')) {
             // Parse ping command with -I and -c options
             await this.executeLinuxPing(nf, command, output);
@@ -2306,10 +2457,16 @@ class UIController {
         } else if (cmd === 'cls' || cmd === 'clear') {
             output.innerHTML = '';
         } else if (cmd === 'exit') {
-            const closeBtn = document.getElementById('terminal-close');
-            if (closeBtn) closeBtn.click();
-        } else if (cmd === 'dir') {
-            this.showDirectory(output);
+            // Stop iperf3 server if running
+            if (this.iperf3Servers.has(nf.id)) {
+                this.iperf3Servers.delete(nf.id);
+            }
+            this.nfTerminalInputs.delete(nf.id);
+
+            terminalModal.classList.remove('show');
+            setTimeout(() => {
+                terminalModal.remove();
+            }, 300);
         } else if (cmd === 'systeminfo') {
             this.showSystemInfo(nf, output);
         } else if (cmd === 'netstat') {
@@ -2353,7 +2510,7 @@ class UIController {
             'Available commands:',
             '',
             'HELP        - Display this help message',
-            'IPCONFIG    - Display network configuration (Windows style)',
+            'ifconfig    - Display network configuration (Windows style)',
             'IFCONFIG    - Display network interfaces (Linux style)',
             'PING        - Test network connectivity',
             '  Format:   ping -I <interface> <target> [-c<count>]',
@@ -2382,7 +2539,7 @@ class UIController {
      * @param {Object} nf - Network Function
      * @param {HTMLElement} output - Output element
      */
-    showIPConfig(nf, output) {
+    showifconfig(nf, output) {
         const lines = [
             'Windows IP Configuration',
             '',
@@ -3314,22 +3471,77 @@ class UIController {
      * @param {Object} nf - ext-dn Network Function
      * @param {HTMLElement} output - Output element
      */
-    async startIperf3Server(nf, output) {
+    async startIperf3Server(nf, output, commandHistory, historyIndex) {
         this.addTerminalLine(output, '-----------------------------------------------------------', 'info');
         this.addTerminalLine(output, 'Server listening on 5201', 'info');
         this.addTerminalLine(output, '-----------------------------------------------------------', 'info');
         this.addTerminalLine(output, '', 'blank');
-        
-        // Store server state
+
+        // Read saved history from the terminal inputs map
+        const savedState = this.nfTerminalInputs.get(nf.id);
+        const savedHistory = commandHistory || savedState?.commandHistory || [];
+        const savedIndex = historyIndex || savedState?.historyIndex || 0;
+
+        // Store server state including history for restore on Ctrl+C
         this.iperf3Servers.set(nf.id, {
-            nf: nf,
-            output: output,
-            isRunning: true,
-            currentTest: null
+            nf, output, isRunning: true, currentTest: null,
+            commandHistory: savedHistory,
+            historyIndex: savedIndex
         });
-        
-        // Note: Server runs until Ctrl+C (handled separately)
-        // The server will handle incoming connections when client connects
+
+        // Hide the prompt — real terminals don't show a prompt while server is running
+        const active = this.nfTerminalInputs.get(nf.id);
+        if (active?.line) active.line.style.display = 'none';
+
+        // Attach Ctrl+C listener on the terminal content area
+        const terminalContent = document.getElementById(`terminal-content-${nf.id}`);
+        const ctrlCHandler = (e) => {
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                const state = this.iperf3Servers.get(nf.id);
+                this._stopIperf3ServerAndRestorePrompt(nf, output, state?.commandHistory, state?.historyIndex);
+            }
+        };
+        this.iperf3Servers.get(nf.id)._ctrlCHandler = ctrlCHandler;
+        this.iperf3Servers.get(nf.id)._terminalContent = terminalContent;
+
+        if (terminalContent) {
+            terminalContent.setAttribute('tabindex', '0');
+            terminalContent.focus();
+            terminalContent.addEventListener('keydown', ctrlCHandler);
+        }
+    }
+
+    /**
+     * Stop iperf3 server and restore prompt (called by Ctrl+C)
+     */
+    _stopIperf3ServerAndRestorePrompt(nf, output, commandHistory, historyIndex) {
+        if (!this.iperf3Servers.has(nf.id)) return;
+
+        const serverState = this.iperf3Servers.get(nf.id);
+
+        // Remove Ctrl+C listener
+        if (serverState._terminalContent && serverState._ctrlCHandler) {
+            serverState._terminalContent.removeEventListener('keydown', serverState._ctrlCHandler);
+        }
+
+        this.iperf3Servers.delete(nf.id);
+
+        this.addTerminalLine(output, '^C', 'command');
+        this.addTerminalLine(output, '', 'blank');
+        this.addTerminalLine(output, '-----------------------------------------------------------', 'info');
+        this.addTerminalLine(output, 'Server stopped', 'info');
+        this.addTerminalLine(output, '-----------------------------------------------------------', 'info');
+        this.addTerminalLine(output, '', 'blank');
+
+        // Remove old hidden prompt and create a fresh one
+        const active = this.nfTerminalInputs.get(nf.id);
+        if (active?.line) {
+            active.line.remove();
+            this.nfTerminalInputs.delete(nf.id);
+        }
+        this.createNfPromptLine(nf, output, commandHistory || [], historyIndex || 0, undefined);
+        this.focusNfPromptInput(nf.id);
     }
 
     /**
@@ -3541,25 +3753,7 @@ class UIController {
      * @param {HTMLElement} output - Output element
      */
     stopIperf3Server(nf, output) {
-        if (!this.iperf3Servers.has(nf.id)) {
-            this.addTerminalLine(output, 'No iperf3 server is running', 'error');
-            return;
-        }
-        
-        const serverState = this.iperf3Servers.get(nf.id);
-        
-        // If test is running, wait for it to complete
-        if (serverState.currentTest) {
-            this.addTerminalLine(output, 'Test in progress. Please wait for test to complete.', 'info');
-            return;
-        }
-        
-        // Stop server
-        this.iperf3Servers.delete(nf.id);
-        this.addTerminalLine(output, '', 'blank');
-        this.addTerminalLine(output, '^C', 'info');
-        this.addTerminalLine(output, '', 'blank');
-        this.addTerminalLine(output, 'iperf3 server stopped', 'info');
+        this._stopIperf3ServerAndRestorePrompt(nf, output);
     }
 
     /**

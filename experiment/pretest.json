@@ -1,8 +1,11 @@
 {
   "version": 2.0,
+  "filters": {
+    "difficulty": ["beginner", "intermediate"]
+  },
   "questions": [
     {
-      "question": "What is the primary core network entity responsible for handling UE registration in the 5G Core?",
+      "question": "Q1. What is the primary core network entity responsible for handling UE registration in the 5G Core?",
       "answers": {
         "a": "UPF",
         "b": "AMF",
@@ -19,7 +22,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which type of signaling is used between the UE and the gNB during the initial access procedure?",
+      "question": "Q2. Which type of signaling is used between the UE and the gNB during the initial access procedure?",
       "answers": {
         "a": "NAS",
         "b": "RAS",
@@ -33,10 +36,10 @@
         "d": "Incorrect. REST is used in SBA core communication."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What type of identity does the UE use to protect user privacy during registration?",
+      "question": "Q3. What type of identity does the UE use to protect user privacy during registration?",
       "answers": {
         "a": "IMSI",
         "b": "5G-GUTI",
@@ -53,7 +56,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which network function is responsible for generating authentication vectors in the 5G Core?",
+      "question": "Q4. Which network function is responsible for generating authentication vectors in the 5G Core?",
       "answers": {
         "a": "AMF",
         "b": "AUSF",
@@ -67,10 +70,10 @@
         "d": "Incorrect. UDR stores subscription data but does not authenticate."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "In the UE registration procedure, what message does the UE send to gNB to start NAS signaling?",
+      "question": "Q5. In the UE registration procedure, what message does the UE send to gNB to start NAS signaling?",
       "answers": {
         "a": "RRC Setup",
         "b": "RRC Setup Complete",
@@ -84,10 +87,10 @@
         "d": "Incorrect. This is sent by the AMF, not UE."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What is the purpose of the NAS Security Mode Command?",
+      "question": "Q6. What is the purpose of the NAS Security Mode Command?",
       "answers": {
         "a": "To fetch subscriber data from UDM",
         "b": "To select ciphering and integrity algorithms",
@@ -104,7 +107,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which function stores the subscription and profile data of a UE?",
+      "question": "Q7. Which function stores the subscription and profile data of a UE?",
       "answers": {
         "a": "PCF",
         "b": "UDM",
@@ -121,7 +124,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What does the AMF send to the UE after successful authentication and subscription retrieval?",
+      "question": "Q8. What does the AMF send to the UE after successful authentication and subscription retrieval?",
       "answers": {
         "a": "RRC Setup Request",
         "b": "Registration Accept",
@@ -138,7 +141,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the purpose of the 5G-GUTI identity assigned during registration?",
+      "question": "Q9. What is the purpose of the 5G-GUTI identity assigned during registration?",
       "answers": {
         "a": "To permanently identify the UE in the network",
         "b": "To encrypt NAS messages",
@@ -152,10 +155,10 @@
         "d": "Incorrect. Location is tracked via AMF and NG-RAN procedures."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "Which protocol defines NAS signaling messages used during registration?",
+      "question": "Q10. Which protocol defines NAS signaling messages used during registration?",
       "answers": {
         "a": "3GPP TS 38.311",
         "b": "3GPP TS 24.501",
@@ -169,10 +172,10 @@
         "d": "Incorrect. TS 23.502 provides overall procedure flows."
       },
       "correctAnswer": "b",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "Which network function decides access policies and mobility rules during registration?",
+      "question": "Q11. Which network function decides access policies and mobility rules during registration?",
       "answers": {
         "a": "PCF",
         "b": "NRF",
@@ -186,10 +189,10 @@
         "d": "Incorrect. AUSF handles authentication only."
       },
       "correctAnswer": "a",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What happens if the AMF cannot identify the UE based on initial identity?",
+      "question": "Q12. What happens if the AMF cannot identify the UE based on initial identity?",
       "answers": {
         "a": "It rejects the request immediately",
         "b": "It sends an Identity Request message",
@@ -206,7 +209,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which message is sent from the AMF to initiate mutual authentication?",
+      "question": "Q13. Which message is sent from the AMF to initiate mutual authentication?",
       "answers": {
         "a": "Authentication Response",
         "b": "Identity Request",
@@ -223,7 +226,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "During the RACH procedure, what does the UE send first to the gNB?",
+      "question": "Q14. During the RACH procedure, what does the UE send first to the gNB?",
       "answers": {
         "a": "RRC Setup Complete",
         "b": "Registration Request",
@@ -237,10 +240,10 @@
         "d": "Incorrect. NAS messages are sent after RRC setup."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "intermediate"
     },
     {
-      "question": "What happens after the UE receives the Registration Accept message from the AMF?",
+      "question": "Q15. What happens after the UE receives the Registration Accept message from the AMF?",
       "answers": {
         "a": "It immediately starts data transmission",
         "b": "It sends Registration Complete and stores 5G-GUTI",

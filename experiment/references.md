@@ -1,2 +1,9 @@
-1. Parikh, D., Bhat, A. J., Singh, S. K., & Agrawal, G. (2024). TECHNIQUES TO AVOID UE REGISTRATION LOOPING DUE TO MULTIPLE AMF REDIRECTIONS.
-2. Ma, L., Wen, X., Wang, L., Lu, Z., & Knopp, R. (2018). An SDN/NFV based framework for management and deployment of service based 5G core network. China Communications, 15(10), 86-98.
+<div style="font-family: 'Times New Roman', Times, serif; font-size: 12pt;">
+
+1. #### TECHNIQUES TO AVOID UE REGISTRA OID UE REGISTRATION LOOPING DUE T OOPING DUE MULTIPLE AMF REDIRECTIONS 
+https://www.tdcommons.org/cgi/viewcontent.cgi?article=8081&context=dpubs_series
+
+2. #### An SDN/NFV Based Framework for Management and Deployment of Service Based 5G Core Network
+https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8485472
+
+</div>

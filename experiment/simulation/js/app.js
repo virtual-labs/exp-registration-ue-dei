@@ -15,24 +15,24 @@
  * Main initialization function
  */
 async function initializeApp() {
-    console.log('═══════════════════════════════════════════════════════');
-    console.log('🚀 5G SERVICE-BASED ARCHITECTURE DASHBOARD');
-    console.log('═══════════════════════════════════════════════════════');
+    console.log('================================================');
+    console.log('5G SERVICE-BASED ARCHITECTURE DASHBOARD');
+    console.log('================================================');
     console.log('Initializing...');
 
     try {
         // ==========================================
         // STEP 1: Load NF Definitions
         // ==========================================
-        console.log('\n📄 Step 1: Loading NF definitions...');
+        console.log('\n[Step 1] Loading NF definitions...');
         try {
             const response = await fetch('../nf-definitions.json');
             window.nfDefinitions = await response.json();
-            console.log('✅ NF definitions loaded successfully');
+            console.log('✓ NF definitions loaded successfully');
             console.log('🔍 Sample NF definition (AMF):', window.nfDefinitions.AMF);
         } catch (error) {
-            console.warn('⚠️ Could not load data/nf-definitions.json, using defaults');
-            console.error('❌ Fetch error:', error);
+            console.warn('Warning: Could not load data/nf-definitions.json, using defaults');
+            console.error('Error: Fetch error:', error);
             window.nfDefinitions = getDefaultNFDefinitions();
         }
 
@@ -40,12 +40,12 @@ async function initializeApp() {
         // STEP 2: Initialize Global HTTP Protocol
         // ==========================================
         window.globalHTTPProtocol = 'HTTP/2'; // Default protocol
-        console.log('✅ Global HTTP Protocol set to:', window.globalHTTPProtocol);
+        console.log('✓ Global HTTP Protocol set to:', window.globalHTTPProtocol);
 
         // ==========================================
         // STEP 3: Initialize Core Managers
         // ==========================================
-        console.log('\n🔧 Step 3: Initializing core managers...');
+        console.log('\n[Step 3] Initializing core managers...');
 
         // Data Store (must be first)
         window.dataStore = new DataStore();
@@ -73,6 +73,9 @@ async function initializeApp() {
 
         // UI Controller
         window.uiController = new UIController();
+
+        // One-Click Deploy
+        window.oneClickDeploy = new OneClickDeploy();
 
         console.log('✅ All managers initialized successfully');
 
@@ -105,19 +108,19 @@ async function initializeApp() {
         // ==========================================
         // SUCCESS
         // ==========================================
-        console.log('\n═══════════════════════════════════════════════════════');
-        console.log('✅ DASHBOARD READY');
-        console.log('═══════════════════════════════════════════════════════');
+        console.log('\n================================================');
+        console.log('DASHBOARD READY');
+        console.log('================================================');
 
 
-        console.log('📌 Default HTTP Protocol:', window.globalHTTPProtocol);
-        console.log('📌 Click "Add NF" to start building your 5G network');
-        console.log('📌 Click "Add Bus Line" to create service buses');
-        console.log('📌 Use left sidebar to drag NFs onto canvas');
-        console.log('📌 Connect NFs: Select Source → Select Destination → Click NF or Bus Line');
-        console.log('🚌 Bus lines are CLICKABLE and work as message hubs!');
-        console.log('❓ Click "Help" button or press F1 for 5G architecture guide');
-        console.log('═══════════════════════════════════════════════════════\n');
+        console.log('Default HTTP Protocol:', window.globalHTTPProtocol);
+        console.log('Click "Add NF" to start building your 5G network');
+        console.log('Click "Add Bus Line" to create service buses');
+        console.log('Use left sidebar to drag NFs onto canvas');
+        console.log('Connect NFs: Select Source -> Select Destination -> Click NF or Bus Line');
+        console.log('Bus lines are CLICKABLE and work as message hubs!');
+        console.log('Click "Help" button or press F1 for 5G architecture guide');
+        console.log('================================================\n');
 
         // // Show helpful instructions
         // setTimeout(() => {
@@ -134,12 +137,12 @@ async function initializeApp() {
         // }, 2000);
 
     } catch (error) {
-        console.error('═══════════════════════════════════════════════════════');
-        console.error('❌ INITIALIZATION FAILED');
-        console.error('═══════════════════════════════════════════════════════');
+        console.error('================================================');
+        console.error('INITIALIZATION FAILED');
+        console.error('================================================');
         console.error('Error:', error);
         console.error('Stack:', error.stack);
-        console.error('═══════════════════════════════════════════════════════');
+        console.error('================================================');
 
         alert('Failed to initialize dashboard: ' + error.message);
     }

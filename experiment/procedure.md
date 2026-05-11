@@ -17,142 +17,326 @@ Ensure:
 - The UI is responsive.
 - No errors appear during initialization.
 
-![Service-Based Architecture (SBA) Dashboard](./images/prd1.png)
+<img src="images/prd1.png" width="90%">
 
-*Figure 1: Service-Based Architecture (SBA) Dashboard*
-
----
-
-## Step 2: Start a Network Function (NF)
-
-### 1. Select an NF to Configure
-
-From the NF List Panel, select the Network Function to deploy.
-
-Common examples:
-
-- **AMF** – Access and Mobility Management Function  
-- **SMF** – Session Management Function  
-- **UPF** – User Plane Function  
-- **NRF** – Network Repository Function  
-
-After selection, the Configuration Panel appears.
-
-![NF Selection and Configuration Panel](./images/prd2.png)
-
-*Figure 2: NF Selection and Configuration Panel*
+*Fig: Service-Based Architecture (SBA) Dashboard*
 
 ---
 
-### 2. Enter NF Configuration Details
+## Step 2: Deploy Core Network Using Terminal
 
-#### IP Address
-Enter a valid IPv4 address:
+This method allows you to deploy all Network Functions and gNB services using Docker Compose from the terminal. This is the fastest way to set up the entire 5G Core Network infrastructure.
+
+---
+
+### Step 2.1: Launch the Core Network
+
+Click on the **Terminal** button to open the terminal, then from the project root directory, execute:
 
 ```bash
-192.168.1.10
+docker compose -f docker-compose.yml up -d
 ```
 
-#### Port Number
-Enter a valid service port (e.g., `8080`, `9090`).
+This is your one-shot command to bring the entire 5G core network to life. It reads the `docker-compose.yml` file and spins up all the Network Functions — AMF, SMF, UPF, NRF, and the rest — as Docker containers running quietly in the background. The `-d` flag (detached mode) means your terminal stays free while everything starts up behind the scenes. You won't see a wall of logs flooding your screen; instead, Docker just confirms each container is starting and hands control back to you.
 
-#### Protocol
-Choose:
-- HTTP/1  
-- HTTP/2  
+**What this command does:**
+- Reads the `docker-compose.yml` configuration file
+- Creates and starts all containerized Network Functions
+- Runs containers in **detached mode** (`-d` flag) so they run in the background
+- Automatically establishes inter-NF communication
 
----
 
-### 3. Start the NF
+<img src="images/prd2.png" width="90%">
 
-Click **Start NF** to launch the selected Network Function.
+*Fig: Core Network Deployment*
 
----
 
-### 4. Wait for NF Stabilization
+<img src="images/prd2a.png" width="90%">
 
-- Initialization typically takes **4–5 seconds**.
-- The NF registers with the core network.
-- The NF prepares to communicate with other NFs.
-
-![NF Stabilization Process](./images/prd3.png)
-
-*Figure 3: NF Stabilization Process*
+*Fig: Core Network Deployed*
 
 ---
 
-### 5. Verify NF Startup Logs
+### Step 2.2: Launch the gNB Services
 
-In the Logs Section, confirm:
+Once the core network is up and running, deploy the gNB services:
 
-- `NF started successfully`
-- `Service registration complete`
-- `NF ready to accept connections`
+```bash
+docker compose -f docker-compose-gnb.yml up -d
+```
 
-These indicate successful startup.
+Once the core is up, this command brings the gNB (next-generation NodeB) online. The gNB is your 5G base station — the bridge between the radio side and the core network. As soon as it starts, it reaches out to the AMF to register itself and sets up the GTP-U tunnel with the UPF for user data. Without this step, no UE can ever attach to the network.
 
----
+**What this command does:**
+- Deploys the gNB (base station) container
+- Configures gNB networking parameters
+- Establishes NGAP signaling connection with AMF
+- Creates GTP-U tunnel with UPF
+- Prepares the gNB for UE attachment
 
-### 6. Repeat for All Core Network Functions
+<img src="images/prd2b.png" width="90%">
 
-Start all required NFs:
+*Fig: gNB Deployment and Core Integration*
 
-- AMF  
-- SMF  
-- UPF  
-- UDM  
-- AUSF  
-- NRF  
-- PCF  
-- Any additional required NFs  
 
-Ensure each NF:
-- Starts successfully  
-- Stabilizes properly  
-- Shows active status in logs  
+<img src="images/prd2c.png" width="90%">
 
-![5G Core Network Stabilization](./images/prd4.png)
+*Fig: gNB Deployed and Core Integrated*
 
-*Figure 4: 5G Core Network Stabilization*
 
 ---
 
-## Step 3: Configure and Start the gNB
+### Step 2.3: Monitor Container Status
 
-### 1. Configure the gNB
+To continuously monitor the status of the core network containers, use:
 
-Select the gNB tile from the NF panel and configure:
+```bash
+watch docker compose -f docker-compose.yml ps -a
+```
 
-- IP Address  
-- Port Number  
-- Protocol (HTTP/2 recommended)
+Think of this as your deployment health monitor. The `watch` command re-runs the `docker compose ps -a` every 2 seconds, giving you a live, auto-refreshing table of all containers and their current state. The `-a` flag is key here — it shows every container, including ones that may have exited or crashed, so nothing slips past you. Keep this running in a separate terminal right after deployment and watch everything settle into a healthy `running` state before moving on.
 
----
+<img src="images/prd2d.png" width="90%">
 
-### 2. Start the gNB
+*Fig: Live container status monitoring with watch command*
 
-Click **Start gNB**.
+### Step 2.4: Verify Network and IP Assignment (Optional)
 
-Within approximately **5 seconds**, it will:
+To verify the Docker network and IP assignments:
 
-- Establish NGAP signaling with the AMF  
-- Create the GTP-U tunnel with the UPF  
+```bash
+docker network inspect oaiworkshop
+```
+<img src="images/prd2e.png" width="90%">
 
-![gNB Startup and NGAP](./images/prd5.png)
+*Fig: Docker network inspection showing container IP assignments*
 
-*Figure 5: gNB Startup and NGAP*
-
-![GTP-U Tunnels Active](./images/prd6.png)
-
-*Figure 6: GTP-U Tunnels Active*
+This is a quick sanity check after deployment. It shows you the full details of the `oaiworkshop` Docker network — which containers are connected, what IP addresses they've been assigned, and how the network is configured. If you ever need to verify that a specific NF got the right IP or that all containers are on the same network, this is the command to run.
 
 ---
 
-## Step 4: UE Configuration and Registration
+### Step 2.6: Stop All Services
 
-### 1. Configure the UE
+When you're done with testing or need to reset the environment:
 
-Enter the following in the UE Configuration Panel:
+```bash
+docker compose -f docker-compose.yml down
+```
+
+<img src="images/prd2f.png" width="90%">
+
+*Fig: Stopping all services and removing containers with docker compose down*
+
+This command stops and removes all containers, networks, and associated resources.
+
+---
+
+## Step 3: Configure and Start Network Functions (NFs)
+
+After deployment, configure individual Network Functions from the dashboard to establish proper service operation.
+
+---
+
+### Step 3.1: Select an NF to Configure
+
+From the NF List on the dashboard, click on the NF you want to deploy.
+
+Examples include:
+
+- **AMF** (Access and Mobility Management Function)
+- **SMF** (Session Management Function)
+- **UPF** (User Plane Function)
+- **NRF** (Network Repository Function)
+- **AUSF** (Authentication Server Function)
+- **UDM** (Unified Data Management)
+- **PCF** (Policy Control Function)
+
+Clicking an NF opens its Configuration Panel on the right.
+
+
+<img src="images/prd1.png" width="90%">
+
+*Fig: Select NF and Open Configuration Panel*
+
+---
+
+### Step 3.2: Enter NF Configuration Details
+
+In the configuration panel, enter the required fields:
+
+**IP Address:**
+- Provide a valid IPv4 address (e.g., 192.168.1.10)
+- This is the address the NF will bind to for service communication
+
+**Port Number:**
+- Set the port on which the NF will run (e.g., 8080, 9090, etc.)
+- Each NF should have a unique port to avoid conflicts
+
+**Protocol:**
+- Select either **HTTP/1** or **HTTP/2** depending on the NF behavior
+- Some NFs may auto-select based on internal configuration
+
+| Parameter | Example | Description |
+|-----------|---------|-------------|
+| IP Address | 192.168.1.10 | IPv4 address for NF binding |
+| Port Number | 8080 | Service listening port |
+| Protocol | HTTP/2 | Communication protocol |
+
+---
+
+### Step 3.3: Start the NF
+
+Click the **Start NF** button. The NF will begin starting up.
+
+---
+
+### Step 3.4: Wait for NF Stabilization
+
+Once initiated:
+
+- The NF takes around **4–5 seconds** to stabilize
+- During this time, it registers itself and establishes basic service readiness
+- The NF attempts to connect to other available NFs
+- Once stabilized, it becomes fully operational
+
+
+<img src="images/prd3.png" width="90%">
+
+*Fig: NF Stabilizing Process*
+
+---
+
+### Step 3.5: Verify NF Startup Logs
+
+Scroll down to the **Logs Section**:
+
+Successful startup messages include:
+
+-  `"NF started successfully"` – Process/container started without errors
+-  `"Service registration complete"` – NF registered with NRF
+-  `"NF ready to accept connections"` – NF is live and operational
+
+Example log output:
+```
+[AMF] 2024-01-15 10:32:45 - NF started successfully
+[AMF] 2024-01-15 10:32:47 - Connecting to NRF at 192.168.1.11:8000
+[AMF] 2024-01-15 10:32:48 - Service registration complete
+[AMF] 2024-01-15 10:32:49 - NF ready to accept connections
+```
+
+This indicates the function is live and communicating (if any peer NFs are up).
+
+---
+
+### Step 3.6: Repeat for All Remaining NFs
+
+Follow the same steps (3.1–3.5) for each NF in the 5G Core:
+
+1. **NRF** (Network Repository Function) – Deploy first
+2. **UDM** (Unified Data Management) – Deploy second
+3. **AUSF** (Authentication Server Function) – Deploy third
+4. **SMF** (Session Management Function) – Deploy fourth
+5. **UPF** (User Plane Function) – Deploy fifth
+6. **AMF** (Access and Mobility Management Function) – Deploy sixth
+7. **PCF** (Policy Control Function) – Deploy last (optional)
+
+**For each NF, ensure:**
+
+-  Starts correctly without errors
+-  Stabilizes within 4–5 seconds
+-  Appears in the logs as active
+-  Shows successful service registration
+
+Once all NFs are deployed, configured, and stabilized, your 5G core setup becomes fully active and interconnected, ready for gNB and UE attachment.
+
+---
+
+## Step 4: Start the gNB (Radio Access Node)
+
+Once the core network is stabilized, configure and start the gNB (base station).
+
+---
+
+### Step 4.1: Select and Configure the gNB
+
+From the NF List Panel on the dashboard:
+
+1. Locate and click on the **gNB** tile
+2. The gNB Configuration Panel appears on the right
+3. Enter the following configuration details:
+
+| Parameter | Example | Description |
+|-----------|---------|-------------|
+| IP Address | 192.168.1.20 | IPv4 address for gNB binding |
+| Port Number | 2152 | SCTP/UDP listening port (GTP-U port) |
+| PLMN ID | 20801 | Public Land Mobile Network ID |
+| gNB ID | 1 | Unique base station identifier |
+
+---
+
+### Step 4.2: Click Start gNB
+
+Click the **Start gNB** button to launch the radio access node.
+
+---
+
+### Step 4.3: Wait for gNB Stabilization
+
+Within **5 seconds**, the gNB will become stable. During this initialization:
+
+- The gNB starts up and initializes radio resources
+- SCTP association is established with the core network
+- Internal service readiness checks are performed
+- The gNB becomes available for UE connections
+
+---
+
+### Step 4.4: Verify gNB Connections
+
+The gNB will establish the following connections:
+
+**1. NGAP Connection with AMF (N2 Interface)**
+- Protocol: SCTP (Stream Control Transmission Protocol)
+- Purpose: Access and Mobility Management
+- Expected log: `"NGAP association established with AMF"`
+
+**2. GTP-U Tunnel with UPF (N3 Interface)**
+- Protocol: GTP-U (GPRS Tunneling Protocol – User Plane)
+- Purpose: User data forwarding
+- Expected log: `"GTP-U tunnel created with UPF at 192.168.1.13:2152"`
+
+**3. Service Registration with NRF**
+- All gNB services are registered in the Network Repository
+- Expected log: `"gNB registered successfully in NRF"`
+
+---
+
+### Step 4.5: Verify gNB Logs
+
+Scroll to the Logs Section and confirm these messages:
+
+```
+[gNB] 2024-01-15 10:35:00 - gNB started successfully
+[gNB] 2024-01-15 10:35:02 - Initializing radio resources
+[gNB] 2024-01-15 10:35:03 - SCTP association with core network established
+[gNB] 2024-01-15 10:35:04 - NGAP association established with AMF
+[gNB] 2024-01-15 10:35:05 - GTP-U tunnel created with UPF
+[gNB] 2024-01-15 10:35:05 - gNB ready to accept UE connections
+```
+
+All messages indicate successful gNB startup and core integration.
+
+---
+
+## Step 5: UE Configuration and Registration
+
+Once the gNB is up and connected to the core network, you can configure and register User Equipment (UE).
+
+---
+
+### Step 5.1: Configure the UE
+
+From the dashboard, select the **UE** tile and enter the following in the UE Configuration Panel:
 
 | Parameter | Example Value | Description |
 |------------|---------------|-------------|
@@ -162,53 +346,59 @@ Enter the following in the UE Configuration Panel:
 | DNN | 5G-Lab | Data Network Name |
 | NSSAI SST | 1 | Slice Type (1=eMBB, 2=URLLC, 3=MIoT) |
 
-![UE Configuration Panel](./images/prd7.png)
 
-*Figure 7: UE Configuration Panel*
+<img src="images/prd7.png" width="90%">
+
+*Fig: UE Configuration Panel*
 
 ---
 
-### 2. Match Subscriber Profile
+### Step 5.2: Match Subscriber Profile
 
 Ensure the UE configuration matches the profile stored in the **UDR (Unified Data Repository)**.
 
-This ensures successful authentication.
+This ensures successful authentication during the registration process.
 
 ---
 
-### 3. Start the UE
+### Step 5.3: Start the UE
 
 Click **Start UE**.
 
 Within approximately **5 seconds**, the UE:
 
 - Stabilizes
-- Sends registration messages
-- Initiates authentication
+- Sends registration messages to the core network
+- Initiates authentication with the core
 
 ---
 
-### 4. UE-to-Core Connection Sequence
+### Step 5.4: UE-to-Core Connection Sequence
 
-The following sequence occurs:
+The following sequence occurs after starting the UE:
 
-- N1 connection established (UE ↔ AMF)
-- NAS signaling activated
-- Authentication and security handshake completed
-- PDU session established
-- UE receives IP address on `tun_0` (e.g., `192.168.100.2`)
+- **N1 Connection Established** – UE ↔ AMF connectivity established
+- **NAS Signaling Activated** – Non-Access Stratum messages exchanged
+- **Authentication and Security Handshake Completed** – UE is authenticated
+- **PDU Session Established** – Data path created from UE through UPF
+- **IP Address Assignment** – UE receives IP address on `tun_0` (e.g., `192.168.100.2`)
 
-![UE Registration and NAS Signaling](./images/prd8.png)
 
-*Figure 8: UE Registration and NAS Signaling*
+<img src="images/prd8.png" width="90%">
+
+*Fig: UE Registration and NAS Signaling*
 
 ---
 
-## Step 5: Validate Connectivity
+## Step 6: Validate Connectivity
 
-### 1. Test Network Path Using Ping
+Once the UE is registered and assigned an IP address, validate end-to-end connectivity through the 5G network.
 
-From the UE terminal:
+---
+
+### Step 6.1: Test Network Path Using Ping
+
+From the UE terminal, test basic network connectivity:
 
 ```bash
 ping 8.8.8.8
@@ -216,56 +406,100 @@ ping 8.8.8.8
 
 Expected result:
 
-- Reply messages received  
-- 0% packet loss  
+-  Reply messages received from the destination
+-  0% packet loss indicating stable connectivity
 
-![Successful Ping Test](./images/prd9.png)
+Example successful ping output:
+```
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=119 time=25.3 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=119 time=24.8 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=119 time=25.1 ms
+--- 8.8.8.8 statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 6ms
+```
 
-*Figure 9: Successful Ping Test*
 
-Example IP mappings:
+<img src="images/prd9.png" width="90%">
 
-- `192.168.1.11` – AMF  
-- `192.168.1.13` – UPF  
-- `192.168.1.16` – External Data Network  
+*Fig: Successful Ping Test Through 5G Core*
+
+**Example IP Mappings in Your Environment:**
+
+- `192.168.1.11` – AMF (Access and Mobility Management Function)
+- `192.168.1.13` – UPF (User Plane Function)
+- `192.168.1.16` – External Data Network (External DN)
 
 ---
 
-### 2. Measure Throughput and RTT Using iPerf
+### Step 6.2: Measure Throughput Using iPerf
 
-#### Throughput Test
+To measure the throughput between the UE and external network, use **iPerf3**:
+
+**Throughput Test:**
 
 ```bash
 iperf3 -B <UE_ip> -c <ext-dn_ip>
 ```
 
-![Throughput Test with iperf](./images/prd10.png)
+Replace:
+- `<UE_ip>` with the UE's assigned IP (e.g., `192.168.100.2`)
+- `<ext-dn_ip>` with the external data network IP (e.g., `192.168.1.16`)
 
-*Figure 10: Throughput Test*
+Example:
+```bash
+iperf3 -B 192.168.100.2 -c 192.168.1.16
+```
+
+Expected output shows:
+- **Transfer amount** – Data transferred in MB/GB
+- **Bandwidth** – Throughput in Mbps or Gbps
+- **Jitter** – Variation in packet timing (lower is better)
+
+
+<img src="images/prd10.png" width="90%">
+
+*Fig: Throughput Measurement with iPerf*
 
 ---
 
-#### RTT Test
+### Step 6.3: Measure Round-Trip Time (RTT) Using iPerf
+
+To measure RTT (latency) in the reverse direction:
+
+**RTT Test:**
 
 ```bash
 iperf3 -B <UE_ip> -c <ext-dn_ip> -R
 ```
 
-![RTT Test with iperf](./images/prd11.png)
+The `-R` flag reverses the test direction, measuring reverse throughput and RTT.
 
-*Figure 11: RTT Test*
+Example:
+```bash
+iperf3 -B 192.168.100.2 -c 192.168.1.16 -R
+```
+
+This measures the latency and throughput from the external network back to the UE through the 5G core network.
+
+
+<img src="images/prd11.png" width="90%">
+
+*Fig: RTT Measurement with iPerf*
 
 ---
 
-## Final Verification
+### Step 6.4: Verify Connectivity Success Criteria
 
-The 5G Core Network simulation is functioning correctly if:
+Your 5G Core Network simulation is functioning correctly if:
 
-- All NFs start successfully  
-- gNB connects to AMF and UPF  
-- UE registers successfully  
-- UE receives an IP address  
-- Ping shows 0% packet loss  
-- iPerf shows measurable throughput  
+ **All NFs Start Successfully** – No errors during core network startup  
+ **gNB Connects to AMF and UPF** – Base station registered with core network  
+ **UE Registers Successfully** – User equipment attached to the network  
+ **UE Receives an IP Address** – IP assigned on the TUN interface  
+ **Ping Shows 0% Packet Loss** – Network path is stable  
+ **iPerf Shows Measurable Throughput** – Data transmission is functional  
+
+If all criteria are met, your 5G network is ready for further testing and validation.
 
 ---
