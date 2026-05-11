@@ -1,9 +1,6 @@
 ## 1. Introduction
 The User Equipment (UE) registration procedure is one of the most fundamental processes in 5G Standalone (5G SA) networks. This document provides a detailed theoretical analysis of how a UE (such as a smartphone or IoT device) registers with the Access and Mobility Management Function (AMF) in a 5G Core Network. Understanding this process is critical for comprehending 5G network architecture, security mechanisms, and service delivery.
 
-<details>
-<summary><strong>2. Fundamentals</strong></summary>
-
 ## 2. Fundamentals
 
 ### 2.1 5G Network Architecture
@@ -32,18 +29,13 @@ This document focuses on Initial Registration as the primary use case.
 * **NAS (Non-Access Stratum)**: Signaling between UE and AMF, encapsulated inside RAS messages
 * Registration requests and responses use NAS protocol messages defined in TS 24.501
 
-</details>
-
-<details>
-<summary><strong>3. UE Registration Process: Detailed Flow</strong></summary>
-
 ## 3. UE Registration Process: Detailed Flow
 
 <img src="images/fig-1.svg" alt="UE Registration Overall Message Sequence" width="45%">
 
 *Fig: UE Registration Overall Message Sequence*
 
-### 3.1 RRC Connection Establishment
+### 3.1 Phase 1: RRC Connection Establishment
 
 #### 3.1.1 Initial Access
 The registration process begins when the UE performs initial cell search and synchronization with the gNB:
@@ -64,7 +56,7 @@ The UE initiates Random Access Channel (RACH) procedure:
 * UE sends RRCSetupComplete message containing the NAS Registration Request message
 * This marks the end of RAS establishment and beginning of NAS signaling
 
-### 3.2 AMF Selection and Initial Context Setup
+### 3.2 Phase 2: AMF Selection and Initial Context Setup
 
 #### 3.2.1 gNB Selects AMF
 The gNB performs AMF selection based on:
@@ -94,7 +86,7 @@ The NAS Registration Request includes:
 * **UE Security Capabilities**: Supported security algorithms and protocols
 * **Device Properties**: IMEISV (device identity)
 
-### 3.3 Authentication and Security Setup
+### 3.3 Phase 3: Authentication and Security Setup
 
 #### 3.3.1 Identity Request (if SUCI not provided)
 If AMF cannot identify the UE from provided identity:
@@ -232,11 +224,6 @@ After registration completion:
 * Mobility procedures (handovers, Tracking Area Updates) are now available
 * UE is ready for full 5G service consumption
 
-</details>
-
-<details>
-<summary><strong>4. Key Concepts and Technical Details</strong></summary>
-
 ## 4. Key Concepts and Technical Details
 
 ### 4.1 SUCI Encryption and Protection
@@ -296,11 +283,6 @@ After authentication:
 * **RRC Integrity**: RRC messages integrity protected
 * Together ensure confidentiality and authenticity of signaling
 
-</details>
-
-<details>
-<summary><strong>5. Message Sequence Summary</strong></summary>
-
 ## 5. Message Sequence Summary
 
 Below is the sequence of key messages in UE registration:
@@ -319,11 +301,6 @@ Below is the sequence of key messages in UE registration:
 | 10 | Registration Complete | UE → AMF |
 
 Table: Key NAS and RRC Messages in UE Registration
-
-</details>
-
-<details>
-<summary><strong>6. Network Function Interactions</strong></summary>
 
 ## 6. Network Function Interactions
 
@@ -360,11 +337,6 @@ PCF controls access and mobility:
 
 *Fig: AMF Network Function Interactions and APIs*
 
-</details>
-
-<details>
-<summary><strong>7. Conclusion</strong></summary>
-
 ## 7. Conclusion
 
 The UE registration process in 5G networks is a comprehensive multi-phase procedure that establishes secure connectivity, authenticates users, retrieves subscription information, and applies network policies. This document has detailed:
@@ -377,4 +349,4 @@ The UE registration process in 5G networks is a comprehensive multi-phase proced
 
 Together, these sections form a comprehensive resource for implementing, testing, and optimizing UE registration in 5G networks.
 
-</details>
+
