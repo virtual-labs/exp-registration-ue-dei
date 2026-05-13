@@ -18,33 +18,122 @@ class LogEngine {
         this.maxLogsPerNF = 100;
         this.logListeners = [];
         this.dependencies = null;
-        this.logScenarios = null; // Custom log scenarios
-
-        this.init();
+        this.logScenarios = null; // Custom log scenarios — loaded via init() after construction
+        /** @type {Promise<void>|null} */
+        this._initPromise = null;
     }
 
+    /**
+     * Load nf-dependencies.json and log-scenarios.json. Must complete before NF logs match scenarios.
+     */
     async init() {
+        if (this._initPromise) return this._initPromise;
+
+        this._initPromise = this._doInit();
+        return this._initPromise;
+    }
+
+    async _doInit() {
         console.log('📋 LogEngine: Initializing...');
 
-        // Load dependencies
-        try {
-            const response = await fetch('../nf-dependencies.json');
-            this.dependencies = await response.json();
-            console.log('✅ Dependencies loaded');
-        } catch (error) {
-            console.warn('⚠️ Could not load dependencies');
-            this.dependencies = this.getDefaultDependencies();
-        }
+        const depRaw = await this._fetchJsonFirstOk([
+            '../nf-dependencies.json',
+            'nf-dependencies.json',
+            './nf-dependencies.json'
+        ]);
+        this.dependencies = this._normalizeLoadedDependencies(depRaw);
+        console.log('✅ Dependencies loaded (normalized)', Object.keys(this.dependencies).length, 'NF types');
 
-        // Load custom log scenarios
-        try {
-            const response = await fetch('../log-scenarios.json');
-            this.logScenarios = await response.json();
-            console.log('✅ Log scenarios loaded');
-        } catch (error) {
-            console.warn('⚠️ Could not load log scenarios, using basic logs');
+        this.logScenarios = await this._fetchJsonFirstOk([
+            '../log-scenarios.json',
+            'log-scenarios.json',
+            './log-scenarios.json'
+        ]);
+
+        if (this.logScenarios && typeof this.logScenarios === 'object') {
+            console.log('✅ Log scenarios loaded:', Object.keys(this.logScenarios).length, 'types');
+        } else {
+            console.warn('⚠️ Could not load log-scenarios.json from any path — logs will use basic scenario until reload');
             this.logScenarios = null;
         }
+    }
+
+    /**
+     * Fetch JSON from the first URL that returns ok JSON (handles different servers / paths).
+     */
+    async _fetchJsonFirstOk(urls) {
+        for (const url of urls) {
+            try {
+                const response = await fetch(url, { cache: 'no-store' });
+                if (!response.ok) continue;
+                return await response.json();
+            } catch (_) {
+                /* try next */
+            }
+        }
+        return null;
+    }
+
+    /**
+     * nf-dependencies.json contains rich metadata; LogEngine only needs required/optional arrays per type.
+     */
+    _normalizeLoadedDependencies(raw) {
+        const fallback = this.getDefaultDependencies();
+        if (!raw || typeof raw !== 'object') return fallback;
+
+        const out = {};
+        for (const [type, entry] of Object.entries(raw)) {
+            if (entry && typeof entry === 'object' && Array.isArray(entry.required)) {
+                out[type] = {
+                    required: [...entry.required],
+                    optional: Array.isArray(entry.optional) ? [...entry.optional] : []
+                };
+            }
+        }
+        return Object.keys(out).length ? out : fallback;
+    }
+
+    /**
+     * Map dataStore NF.type to top-level key in log-scenarios.json
+     */
+    resolveScenarioKey(nf) {
+        if (!nf?.type || !this.logScenarios) return null;
+        const t = nf.type;
+        if (this.logScenarios[t]) return t;
+
+        const aliases = {
+            mysql: 'MySQL',
+            MYSQL: 'MySQL',
+            gnb: 'gNB',
+            GNB: 'gNB',
+            ue: 'UE',
+            nrf: 'NRF',
+            amf: 'AMF',
+            smf: 'SMF',
+            upf: 'UPF',
+            ausf: 'AUSF',
+            udm: 'UDM',
+            udr: 'UDR',
+            pcf: 'PCF',
+            nssf: 'NSSF'
+        };
+        const mapped = aliases[t];
+        if (mapped && this.logScenarios[mapped]) return mapped;
+
+        if (String(t).toLowerCase() === 'ext-dn' && this.logScenarios['ext-dn']) return 'ext-dn';
+
+        return null;
+    }
+
+    /**
+     * Resolve nf-dependencies.json entry for this NF (handles type aliases).
+     */
+    _getDependencyBundleForNf(nf) {
+        if (!this.dependencies || !nf?.type) return null;
+        if (this.dependencies[nf.type]) return this.dependencies[nf.type];
+        const sk = this.resolveScenarioKey(nf);
+        if (sk && this.dependencies[sk]) return this.dependencies[sk];
+        return null;
     }
 
     getDefaultDependencies() {
@@ -60,7 +149,8 @@ class LogEngine {
             'UDR': { required: ['NRF'], optional: [] },
             'gNB': { required: ['AMF', 'UPF'], optional: [] },
             'UE': { required: ['gNB'], optional: [] },
-            'MySQL': { required: [], optional: ['UDM'] }
+            'MySQL': { required: [], optional: ['UDM'] },
+            'ext-dn': { required: [], optional: ['UPF'] }
         };
     }
 
@@ -173,31 +263,60 @@ class LogEngine {
     }
 
     /**
-     * NF Added - Generate custom logs based on scenarios
+     * NF Added — logs always follow log-scenarios.json after async resources load.
      */
     onNFAdded(nf) {
         console.log('📋 LogEngine: NF Added:', nf.name);
 
-        // Check if we have custom scenarios for this NF type
-        if (this.logScenarios && this.logScenarios[nf.type]) {
-            this.runCustomScenario(nf);
-        } else {
-            // Fallback to basic logs
-            this.runBasicScenario(nf);
-        }
+        this.init().then(() => {
+            const scenarioKey = this.resolveScenarioKey(nf);
+            if (this.logScenarios && scenarioKey) {
+                this.runCustomScenario(nf);
+            } else {
+                console.warn('📋 No log-scenarios entry for NF type:', nf?.type, '— using basic scenario');
+                this.runBasicScenario(nf);
+            }
+        }).catch((err) => {
+            console.warn('📋 LogEngine init failed, falling back:', err);
+            const scenarioKey = this.resolveScenarioKey(nf);
+            if (this.logScenarios && scenarioKey) {
+                this.runCustomScenario(nf);
+            } else {
+                this.runBasicScenario(nf);
+            }
+        });
     }
 
     /**
      * Run custom log scenario from JSON
      */
     runCustomScenario(nf) {
-        const scenario = this.logScenarios[nf.type];
+        const scenarioKey = this.resolveScenarioKey(nf);
+        if (!scenarioKey || !this.logScenarios) {
+            this.runBasicScenario(nf);
+            return;
+        }
+
+        const scenario = this.logScenarios[scenarioKey];
+        if (!scenario) {
+            this.runBasicScenario(nf);
+            return;
+        }
+
+        try {
 
         // ==================================
-        // STARTUP LOGS
+        // STARTUP LOGS (order: delay asc, then key — matches JSON intent)
         // ==================================
         if (scenario.startup) {
-            Object.values(scenario.startup).forEach(logConfig => {
+            const keys = Object.keys(scenario.startup).sort((a, b) => {
+                const da = scenario.startup[a].delay ?? 0;
+                const db = scenario.startup[b].delay ?? 0;
+                if (da !== db) return da - db;
+                return a.localeCompare(b);
+            });
+            keys.forEach(k => {
+                const logConfig = scenario.startup[k];
                 setTimeout(() => {
                     this.addLog(nf.id, logConfig.level, logConfig.message, logConfig.details || {});
                 }, logConfig.delay);
@@ -258,12 +377,14 @@ class LogEngine {
         // FINAL STATUS
         // ==================================
         if (scenario.final_status) {
-            const depInfo = this.dependencies[nf.type];
+            const depBundle = this._getDependencyBundleForNf(nf);
+            const required = Array.isArray(depBundle?.required) ? depBundle.required : [];
+            const optional = Array.isArray(depBundle?.optional) ? depBundle.optional : [];
+
             let hasErrors = false;
             let hasWarnings = false;
 
-            // Check all required dependencies
-            depInfo.required.forEach(reqType => {
+            required.forEach(reqType => {
                 const exists = this.checkNFTypeExists(reqType);
                 const isConnected = this.hasConnectionToType(nf, reqType);
                 if (!exists || !isConnected) {
@@ -271,8 +392,7 @@ class LogEngine {
                 }
             });
 
-            // Check optional dependencies
-            depInfo.optional.forEach(optType => {
+            optional.forEach(optType => {
                 const exists = this.checkNFTypeExists(optType);
                 const isConnected = this.hasConnectionToType(nf, optType);
                 if (!exists || !isConnected) {
@@ -280,14 +400,14 @@ class LogEngine {
                 }
             });
 
-            // Determine final status
             let finalStatus;
+            const fs = scenario.final_status;
             if (!hasErrors && !hasWarnings) {
-                finalStatus = scenario.final_status.all_ok;
+                finalStatus = fs.all_ok;
             } else if (hasErrors) {
-                finalStatus = scenario.final_status.failed;
+                finalStatus = fs.failed || fs.partial || fs.all_ok;
             } else {
-                finalStatus = scenario.final_status.partial;
+                finalStatus = fs.partial || fs.all_ok;
             }
 
             if (finalStatus) {
@@ -295,6 +415,11 @@ class LogEngine {
                     this.addLog(nf.id, finalStatus.level, finalStatus.message, finalStatus.details || {});
                 }, finalStatus.delay);
             }
+        }
+
+        } catch (err) {
+            console.error('📋 runCustomScenario failed:', err);
+            this.runBasicScenario(nf);
         }
     }
 
@@ -313,9 +438,8 @@ class LogEngine {
     }
 
     checkDependencies(nf) {
-        if (!this.dependencies || !this.dependencies[nf.type]) return;
-
-        const depInfo = this.dependencies[nf.type];
+        const depInfo = this._getDependencyBundleForNf(nf);
+        if (!depInfo) return;
         let hasErrors = false;
 
         depInfo.required.forEach((requiredType, index) => {

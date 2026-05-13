@@ -2,9 +2,8 @@
  * ============================================
  * ONE-CLICK DEPLOY
  * ============================================
- * Deploys the full 5G core topology silently.
- * Logs are replayed exactly from 5g-logs.json,
- * matched by NF type extracted from the nfId.
+ * Deploys the full 5G core topology sequentially.
+ * Per-NF logs follow log-scenarios.json (same as manual / terminal deploy).
  */
 
 class OneClickDeploy {
@@ -13,7 +12,6 @@ class OneClickDeploy {
         this.isDeploying = false;
         this.deployQueue = [];
         this.deployedNFMap = {};   // original topology nfId -> new NF object
-        this.nfLogBuckets = {};    // NF type string -> [ log entries ]
 
         this.TOTAL_DEPLOY_MIN = 10000;
         this.TOTAL_DEPLOY_MAX = 12000;
@@ -26,65 +24,10 @@ class OneClickDeploy {
         if (btn) btn.addEventListener('click', () => this.startDeploy());
     }
 
-    // ============================================
-    // EXTRACT NF TYPE FROM LOG nfId
-    // e.g. "amf-1766134029860-ri9n5" -> "AMF"
-    //      "ext-dn-1766134272916-zhua2" -> "ext-dn"
-    // ============================================
-    _typeFromNfId(nfId) {
-        if (!nfId || nfId === 'system') return null;
-
-        // ext-dn is a special two-part prefix
-        if (nfId.startsWith('ext-dn')) return 'ext-dn';
-
-        // All others: first segment before the first '-timestamp' block
-        // nfId format: <type>-<13digitTimestamp>-<random>
-        // Extract everything before the first long numeric segment
-        const match = nfId.match(/^([a-zA-Z]+)/);
-        if (!match) return null;
-
-        const prefix = match[1].toLowerCase();
-        const typeMap = {
-            'nrf':   'NRF',
-            'amf':   'AMF',
-            'smf':   'SMF',
-            'upf':   'UPF',
-            'ausf':  'AUSF',
-            'udm':   'UDM',
-            'pcf':   'PCF',
-            'nssf':  'NSSF',
-            'udr':   'UDR',
-            'mysql': 'MySQL',
-            'gnb':   'gNB',
-            'ue':    'UE'
-        };
-        return typeMap[prefix] || null;
-    }
-
-    // ============================================
-    // LOAD DATA
-    // ============================================
-
     async _loadData() {
-        const [topoRes, logRes] = await Promise.all([
-            fetch('../one-click.json'),
-            fetch('../5g-logs.json')
-        ]);
+        const topoRes = await fetch('../one-click.json');
         this.topology = await topoRes.json();
-        const logData = await logRes.json();
-        const allLogs = logData.logs || [];
-
-        // Build per-NF-type buckets using the nfId prefix
-        this.nfLogBuckets = {};
-        for (const log of allLogs) {
-            const type = this._typeFromNfId(log.nfId);
-            if (!type) continue;
-            if (!this.nfLogBuckets[type]) this.nfLogBuckets[type] = [];
-            this.nfLogBuckets[type].push(log);
-        }
-
-        console.log('[OneClickDeploy] Log buckets loaded:',
-            Object.entries(this.nfLogBuckets).map(([k, v]) => `${k}:${v.length}`).join(', '));
+        console.log('[OneClickDeploy] Topology loaded:', this.topology?.nfs?.length, 'NFs');
     }
 
     // ============================================
@@ -219,50 +162,29 @@ class OneClickDeploy {
 
         window.canvasRenderer?.render();
 
-        // Transition to stable after 5s
-        setTimeout(() => {
-            window.dataStore.updateNF(nf.id, { status: 'stable', statusTimestamp: Date.now() });
-            window.canvasRenderer?.render();
-        }, 5000);
-
         return nf;
     }
 
     // ============================================
-    // LOG REPLAY — exact entries from 5g-logs.json
+    // LOGS — log-scenarios.json (same as manual / terminal)
     // ============================================
 
     async _replayLogsForNF(nf, nfType, totalMs) {
-        const logs = this.nfLogBuckets[nfType] || [];
+        if (!this.isDeploying || !nf) return;
 
-        console.log(`[OneClickDeploy] Replaying ${logs.length} logs for ${nf.name} (${nfType}) over ${totalMs}ms`);
-
-        if (logs.length === 0) {
-            // Fallback single log if no entries found for this type
-            this._emitLog(nf.id, 'SUCCESS', `${nf.name} deployed successfully`, {
+        if (window.dockerTerminal && typeof window.dockerTerminal._attachManualStyleDeploymentForNF === 'function') {
+            window.dockerTerminal._attachManualStyleDeploymentForNF(nf);
+        } else if (window.logEngine) {
+            window.logEngine.onNFAdded(nf);
+        } else {
+            this._emitLog(nf.id, 'SUCCESS', `${nf.name} deployed`, {
                 ipAddress: nf.config.ipAddress,
                 port: nf.config.port,
                 protocol: nf.config.httpProtocol || 'HTTP/2'
             });
-            await this._sleep(totalMs);
-            return;
         }
 
-        // Spread all logs evenly across the per-NF time window
-        const gap = Math.floor(totalMs / (logs.length + 1));
-
-        for (let i = 0; i < logs.length; i++) {
-            if (!this.isDeploying) break;
-            await this._sleep(gap);
-
-            const src = logs[i];
-            const message = this._substituteNFName(src.message, nf.name, nfType);
-            const details = this._patchDetails(src.details, nf);
-
-            this._emitLog(nf.id, src.level, message, details);
-        }
-
-        await this._sleep(gap);
+        await this._sleep(totalMs);
     }
 
     /**
@@ -291,48 +213,6 @@ class OneClickDeploy {
 
         // Notify UI listeners — same path as logEngine.addLog
         window.logEngine.notifyListeners(entry);
-    }
-
-    /**
-     * Replace original NF name patterns in message with actual deployed name.
-     * e.g. "NRF-1 created successfully" -> "NRF-1 created successfully" (same)
-     *      "AMF-1 registered with NRF" -> "AMF-1 registered with NRF" (same)
-     */
-    _substituteNFName(message, actualName, nfType) {
-        // Replace exact type-number patterns like "NRF-1", "AMF-1", "ext-dn-1"
-        return message.replace(
-            /\b(NRF|AMF|SMF|UPF|AUSF|UDM|PCF|NSSF|UDR|MySQL|gNB|UE|ext-dn)-\d+\b/gi,
-            (match) => {
-                // Only replace if it matches the current NF's type
-                const matchType = match.replace(/-\d+$/, '').toLowerCase();
-                const currentType = nfType.toLowerCase();
-                if (matchType === currentType) return actualName;
-                return match; // keep other NF references as-is
-            }
-        );
-    }
-
-    /**
-     * Patch IP/port/endpoint in log details to match the actual deployed NF.
-     */
-    _patchDetails(details, nf) {
-        if (!details || typeof details !== 'object') return details || {};
-        const out = JSON.parse(JSON.stringify(details));
-
-        if (out.ipAddress !== undefined) out.ipAddress = nf.config.ipAddress;
-        if (out.port !== undefined) out.port = nf.config.port;
-        if (out.address !== undefined) out.address = `${nf.config.ipAddress}:${nf.config.port}`;
-        if (typeof out.endpoint === 'string') {
-            out.endpoint = out.endpoint.replace(
-                /192\.168\.\d+\.\d+:\d+/,
-                `${nf.config.ipAddress}:${nf.config.port}`
-            );
-        }
-        if (typeof out.subnet === 'string') {
-            const parts = nf.config.ipAddress.split('.');
-            out.subnet = `${parts[0]}.${parts[1]}.${parts[2]}.0/24`;
-        }
-        return out;
     }
 
     // ============================================

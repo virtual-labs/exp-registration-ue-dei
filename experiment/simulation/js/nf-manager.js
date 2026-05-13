@@ -51,8 +51,9 @@ class NFManager {
         if (type === 'UE') {
             const existingUEs = allNFs.filter(nf => nf.type === 'UE');
             if (existingUEs.length >= 2) {
+                console.warn('❌ UE limit reached: Maximum 2 UEs allowed');
                 const ueNames = existingUEs.map(ue => ue.name).join(', ');
-                console.warn(`❌ UE limit reached (${existingUEs.length}/2): ${ueNames}. Delete one first.`);
+                alert(`❌ UE Limit Reached!\n\nYou can only create a maximum of 2 User Equipment (UE) devices.\n\nCurrent UEs (${existingUEs.length}/2): ${ueNames}\n\nTo add a new UE, please delete one of the existing UEs first.`);
                 return null;
             } else {
                 console.log(`✅ UE creation allowed: ${existingUEs.length}/2 UEs currently exist`);
@@ -61,7 +62,8 @@ class NFManager {
             // For all other NF types - only allow ONE instance
             const existingNF = allNFs.find(nf => nf.type === type);
             if (existingNF) {
-                console.warn(`❌ ${type} already exists (${existingNF.name} @ ${existingNF.config.ipAddress}). Skipping silently.`);
+                console.warn(`❌ ${type} already exists: Only one instance allowed`);
+                alert(`❌ ${type} Already Exists!\n\nOnly ONE instance of ${type} is allowed in the network.\n\nExisting ${type}: ${existingNF.name} (${existingNF.config.ipAddress})\n\nTo create a new ${type}, please delete the existing one first.`);
                 return null;
             } else {
                 console.log(`✅ ${type} creation allowed: No existing instance found`);
@@ -256,21 +258,9 @@ class NFManager {
             return null;
         }
 
-        // Trigger log engine
+        // Trigger log engine (log-scenarios.json via runCustomScenario)
         if (window.logEngine) {
             window.logEngine.onNFAdded(nf);
-            
-            // Special logging for UPF tun0 interface
-            if (nf.type === 'UPF' && nf.config.tun0Interface) {
-                window.logEngine.addLog(nf.id, 'INFO',
-                    `tun0 network interface created: ${nf.config.tun0Interface.network}`, {
-                    interfaceName: nf.config.tun0Interface.interfaceName,
-                    network: nf.config.tun0Interface.network,
-                    gatewayIP: nf.config.tun0Interface.gatewayIP,
-                    availableIPs: '10.0.0.2 - 10.0.0.14 (13 IPs for UEs)',
-                    purpose: 'User plane data network for UE PDU sessions'
-                });
-            }
         }
 
         // Force canvas re-render
@@ -1294,11 +1284,11 @@ class NFManager {
      */
     getStatusColor(status) {
         switch (status) {
-            case 'starting': return '#f39c12'; // Orange — booting
-            case 'stable':   return '#2ecc71'; // Green  — healthy
-            case 'stopped':  return '#e74c3c'; // Red    — stopped
-            case 'error':    return '#e67e22'; // Amber  — error
-            default:         return '#3498db'; // Blue   — unknown
+            case 'starting': return '#e74c3c'; // Red
+            case 'stable': return '#2ecc71';   // Green
+            case 'error': return '#e67e22';    // Orange
+            case 'stopped': return '#e74c3c';  // Red (same as starting)
+            default: return '#3498db';         // Blue
         }
     }
 

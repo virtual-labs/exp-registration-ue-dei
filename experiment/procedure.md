@@ -249,6 +249,10 @@ Follow the same steps (3.1–3.5) for each NF in the 5G Core:
 
 Once all NFs are deployed, configured, and stabilized, your 5G core setup becomes fully active and interconnected, ready for gNB and UE attachment.
 
+<img src="images/prd4.png" width="90%">
+
+*Fig: All NF deployed*
+
 ---
 
 ## Step 4: Start the gNB (Radio Access Node)
@@ -267,10 +271,14 @@ From the NF List Panel on the dashboard:
 
 | Parameter | Example | Description |
 |-----------|---------|-------------|
-| IP Address | 192.168.1.20 | IPv4 address for gNB binding |
-| Port Number | 2152 | SCTP/UDP listening port (GTP-U port) |
+| IP Address | 192.168.1.21 | IPv4 address for gNB binding |
+| Port Number | 8089 | SCTP/UDP listening port (GTP-U port) |
 | PLMN ID | 20801 | Public Land Mobile Network ID |
 | gNB ID | 1 | Unique base station identifier |
+
+<img src="images/prd5.png" width="90%">
+
+*Fig: Configure & Start gNB*
 
 ---
 
@@ -288,6 +296,10 @@ Within **5 seconds**, the gNB will become stable. During this initialization:
 - SCTP association is established with the core network
 - Internal service readiness checks are performed
 - The gNB becomes available for UE connections
+
+<img src="images/prd6.png" width="90%">
+
+*Fig: gNB deployed & Stablized*
 
 ---
 
@@ -401,7 +413,7 @@ Once the UE is registered and assigned an IP address, validate end-to-end connec
 From the UE terminal, test basic network connectivity:
 
 ```bash
-ping 8.8.8.8
+ping -I oaitun_ue1 8.8.8.8 -c4
 ```
 
 Expected result:
@@ -434,21 +446,39 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 
 ### Step 6.2: Measure Throughput Using iPerf
 
-To measure the throughput between the UE and external network, use **iPerf3**:
+### Step 6.2.1: Start iPerf Server on External Data Network
+
+Click on **ext-dn-1**, open its terminal, and run the following command to start the iPerf server:
+
+```bash
+iperf3 -s
+```
+
+<img src="images/prd12.png" width="90%">
+
+*Fig: Starting iPerf Server on ext-dn-1*
+
+---
+
+### Step 6.2.2: Run iPerf Client from UE
+
+To measure the throughput between the UE and external data network, use **iPerf3**:
+
+Click on **UE**, open its terminal, and run the following command:
 
 **Throughput Test:**
 
 ```bash
-iperf3 -B <UE_ip> -c <ext-dn_ip>
+iperf3 -B <tun_ue_ip> -c <ext-dn_ip>
 ```
 
 Replace:
-- `<UE_ip>` with the UE's assigned IP (e.g., `192.168.100.2`)
-- `<ext-dn_ip>` with the external data network IP (e.g., `192.168.1.16`)
+- `<UE_ip>` with the UE's assigned IP (e.g., `10.0.0.3`)
+- `<ext-dn_ip>` with the external data network IP (e.g., `192.168.1.15`)
 
 Example:
 ```bash
-iperf3 -B 192.168.100.2 -c 192.168.1.16
+iperf3 -B 10.0.0.3 -c 192.168.1.15
 ```
 
 Expected output shows:
@@ -470,14 +500,14 @@ To measure RTT (latency) in the reverse direction:
 **RTT Test:**
 
 ```bash
-iperf3 -B <UE_ip> -c <ext-dn_ip> -R
+iperf3 -B <tun_ue_ip> -c <ext-dn_ip> -R
 ```
 
 The `-R` flag reverses the test direction, measuring reverse throughput and RTT.
 
 Example:
 ```bash
-iperf3 -B 192.168.100.2 -c 192.168.1.16 -R
+iperf3 -B 10.0.0.3 -c 192.168.1.15 -R
 ```
 
 This measures the latency and throughput from the external network back to the UE through the 5G core network.
