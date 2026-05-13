@@ -210,6 +210,11 @@ class DataStore {
                 }
                 return nf;
             });
+            
+            // Trigger 'nf-added' event for each imported NF to update filters
+            this.nfs.forEach(nf => {
+                this.notifyListeners('nf-added', nf);
+            });
         }
 
         if (data.connections && Array.isArray(data.connections)) {

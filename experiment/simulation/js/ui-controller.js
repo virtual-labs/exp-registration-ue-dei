@@ -20,8 +20,30 @@ class UIController {
         this.selectedDestinationNF = null;
         this.iperf3Servers = new Map(); // Track active iperf3 servers: nfId -> { server, output, intervalId }
         this.nfTerminalInputs = new Map(); // nfId -> { input, line }
+        this.activePings = new Map(); // Track active ping commands: nfId -> { isRunning, stopRequested }
+        this._terminalZCounter = 2500;
 
         console.log('✅ UIController initialized');
+    }
+
+    _bringTerminalToFront(terminalModal) {
+        if (!terminalModal) return;
+        this._terminalZCounter = Math.min(this._terminalZCounter + 1, 999999);
+        terminalModal.style.zIndex = String(this._terminalZCounter);
+    }
+
+    _clampTerminalPosition(win, desiredLeftPx, desiredTopPx) {
+        const viewportW = window.innerWidth || document.documentElement.clientWidth || 0;
+        const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
+
+        const rect = win.getBoundingClientRect();
+        const w = rect.width || win.offsetWidth || 0;
+        const h = rect.height || win.offsetHeight || 0;
+
+        const left = Math.max(0, Math.min(desiredLeftPx, Math.max(0, viewportW - w)));
+        const top = Math.max(0, Math.min(desiredTopPx, Math.max(0, viewportH - h)));
+
+        return { left, top };
     }
 
     /**
@@ -688,26 +710,6 @@ class UIController {
         const configForm = document.getElementById('config-form');
         if (!configForm) return;
 
-        // Check if NF already exists (except UE which allows 2 instances)
-        const allNFs = window.dataStore?.getAllNFs() || [];
-        
-        if (nfType === 'UE') {
-            // Check UE limit - only allow 2 UEs maximum
-            const existingUEs = allNFs.filter(nf => nf.type === 'UE');
-            if (existingUEs.length >= 2) {
-                const ueNames = existingUEs.map(ue => ue.name).join(', ');
-                alert(`❌ UE Limit Reached!\n\nThis simulation allows a maximum of 2 UE instances.\n\nExisting UEs: ${ueNames}\n\nPlease delete one UE before creating a new one.`);
-                return;
-            }
-        } else {
-            // For all other NF types - only allow ONE instance
-            const existingNF = allNFs.find(nf => nf.type === nfType);
-            if (existingNF) {
-                alert(`❌ Network Function Already Exists!\n\nThis simulation allows only 1 instance of ${nfType}.\n\nExisting: ${existingNF.name} at ${existingNF.config.ipAddress}:${existingNF.config.port}\n\nPlease delete the existing ${nfType} before creating a new one.`);
-                return;
-            }
-        }
-
         // Get NF definition for defaults
         const nfDef = window.nfManager?.getNFDefinition(nfType) || { name: nfType, color: '#95a5a6' };
 
@@ -1308,19 +1310,6 @@ class UIController {
 
                 console.log('✅ NF started successfully:', nf.name);
 
-                // Log service creation with network info
-                if (window.logEngine) {
-                    window.logEngine.addLog(nf.id, 'SUCCESS',
-                        `${nf.name} created successfully`, {
-                        ipAddress: ipAddress,
-                        port: port,
-                        subnet: window.nfManager?.getNetworkFromIP(ipAddress) + '.0/24',
-                        protocol: httpProtocol,
-                        status: 'starting',
-                        note: 'Service will be stable in 5 seconds'
-                    });
-                }
-
                 // Auto-connect to bus if applicable
                 this.autoConnectToBusIfApplicable(nf);
 
@@ -1375,8 +1364,8 @@ class UIController {
      * @param {Object} nf - Network Function
      */
     autoConnectToBusIfApplicable(nf) {
-        // Don't auto-connect UPF, gNB, and UE as per requirement
-        const excludedTypes = ['UPF', 'gNB', 'UE'];
+        // Don't auto-connect UPF, gNB, UE, MySQL, and ext-dn as per requirement
+        const excludedTypes = ['UPF', 'gNB', 'UE', 'MySQL', 'ext-dn'];
 
         if (excludedTypes.includes(nf.type)) {
             console.log(`🚫 Skipping auto-connect for ${nf.type} (excluded type)`);
@@ -2103,7 +2092,7 @@ class UIController {
         if (document.getElementById(modalId)) {
             // Focus existing by bringing to front
             const existing = document.getElementById(modalId);
-            existing.style.zIndex = String(2000 + Date.now() % 1000);
+            this._bringTerminalToFront(existing);
             return;
         }
 
@@ -2121,7 +2110,7 @@ class UIController {
         if (document.getElementById(modalId)) {
             // Focus existing by bringing to front
             const existing = document.getElementById(modalId);
-            existing.style.zIndex = String(2000 + Date.now() % 1000);
+            this._bringTerminalToFront(existing);
             return;
         }
 
@@ -2152,6 +2141,7 @@ class UIController {
         `;
 
         document.body.appendChild(terminalModal);
+        this._bringTerminalToFront(terminalModal);
 
         // Setup terminal functionality
         this.setupWindowsTerminal(nf, terminalModal);
@@ -2173,26 +2163,9 @@ class UIController {
         const win = terminalModal.querySelector('.windows-terminal-window');
         const output = terminalModal.querySelector(`#terminal-output-${nf.id}`);
         const closeBtn = terminalModal.querySelector(`#terminal-close-${nf.id}`);
-
+        
         let commandHistory = [];
         let historyIndex = -1;
-
-        // ── Z-index / focus management ──────────────────────────────────────
-        // The stacking context is determined by the position:fixed modal parent,
-        // NOT the inner win div — so we must raise z-index on terminalModal.
-        if (!UIController._nfTerminalZCounter) UIController._nfTerminalZCounter = 3000;
-
-        const bringToFront = () => {
-            UIController._nfTerminalZCounter += 10;
-            terminalModal.style.zIndex = String(UIController._nfTerminalZCounter);
-        };
-
-        // Bring to front on any mousedown inside the terminal window
-        win.addEventListener('mousedown', bringToFront);
-
-        // Bring to front immediately on creation
-        bringToFront();
-        // ────────────────────────────────────────────────────────────────────
 
         // Close button - cleanup iperf3 server if running
         closeBtn.addEventListener('click', () => {
@@ -2201,7 +2174,7 @@ class UIController {
                 this.iperf3Servers.delete(nf.id);
             }
             this.nfTerminalInputs.delete(nf.id);
-
+            
             terminalModal.classList.remove('show');
             setTimeout(() => {
                 terminalModal.remove();
@@ -2212,6 +2185,7 @@ class UIController {
         const titlebar = terminalModal.querySelector('.windows-terminal-titlebar');
         let dragging = false, dx = 0, dy = 0;
         titlebar.addEventListener('mousedown', (e) => {
+            this._bringTerminalToFront(terminalModal);
             dragging = true;
             dx = e.clientX - win.offsetLeft;
             dy = e.clientY - win.offsetTop;
@@ -2219,17 +2193,11 @@ class UIController {
         });
         document.addEventListener('mousemove', (e) => {
             if (!dragging) return;
-            const vw = window.innerWidth;
-            const vh = window.innerHeight;
-            const winW = win.offsetWidth;
-            const winH = win.offsetHeight;
-            const rawX = e.clientX - dx;
-            const rawY = e.clientY - dy;
-            // Clamp so the full window stays inside the viewport on all sides
-            const clampedX = Math.max(0, Math.min(rawX, vw - winW));
-            const clampedY = Math.max(0, Math.min(rawY, vh - winH));
-            win.style.left = `${clampedX}px`;
-            win.style.top  = `${clampedY}px`;
+            const desiredLeft = e.clientX - dx;
+            const desiredTop = e.clientY - dy;
+            const { left, top } = this._clampTerminalPosition(win, desiredLeft, desiredTop);
+            win.style.left = `${left}px`;
+            win.style.top = `${top}px`;
         });
         document.addEventListener('mouseup', () => {
             dragging = false;
@@ -2265,7 +2233,13 @@ class UIController {
 
         // Focus prompt input on click
         output.addEventListener('click', () => {
+            this._bringTerminalToFront(terminalModal);
             this.focusNfPromptInput(nf.id);
+        });
+
+        // Click anywhere on terminal brings it to front
+        win.addEventListener('mousedown', () => {
+            this._bringTerminalToFront(terminalModal);
         });
 
         // Initial welcome message
@@ -2311,15 +2285,60 @@ class UIController {
                 e.preventDefault();
                 const val = input.value;
 
+                const applyTokenCompletion = (token) => {
+                    const raw = input.value;
+                    const endsWithSpace = raw.endsWith(' ');
+                    const trimmed = raw.trimEnd();
+                    if (!trimmed) {
+                        input.value = token;
+                        return;
+                    }
+
+                    // Replace ONLY the current token (the last token if not endsWithSpace)
+                    const parts = trimmed.split(/\s+/);
+                    if (endsWithSpace) {
+                        input.value = trimmed + (trimmed ? ' ' : '') + token;
+                    } else {
+                        parts[parts.length - 1] = token;
+                        input.value = parts.join(' ');
+                    }
+                };
+
                 if (tabMatches.length === 0) {
                     tabMatches = this.getNFTabCompletions(nf, val);
                     tabIndex = -1;
                 }
 
-                if (tabMatches.length === 0) return;
+                // If there are no completions, but the current token is already a full word
+                // and there are templates that continue after it, emulate "advance to next word"
+                // by inserting a trailing space.
+                if (tabMatches.length === 0) {
+                    const trimmed = val.trimEnd();
+                    const endsWithSpace = val.endsWith(' ');
+                    if (!endsWithSpace && trimmed.length > 0) {
+                        const templates = this.getNFTabCompletionTemplates(nf);
+                        const lower = trimmed.toLowerCase();
+                        const hasContinuation = templates.some(t => t.toLowerCase().startsWith(lower + ' '));
+                        if (hasContinuation) {
+                            input.value = trimmed + ' ';
+                            resetTab();
+                        }
+                    }
+                    return;
+                }
 
                 tabIndex = (tabIndex + 1) % tabMatches.length;
-                input.value = tabMatches[tabIndex];
+                const nextToken = tabMatches[tabIndex];
+                applyTokenCompletion(nextToken);
+
+                // If there is only one completion and it finishes a token, auto-add a space
+                // so the NEXT Tab suggests the next word (real terminal behavior).
+                if (tabMatches.length === 1 && !input.value.endsWith(' ')) {
+                    const templates = this.getNFTabCompletionTemplates(nf);
+                    const prefix = input.value.trimEnd().toLowerCase();
+                    const hasContinuation = templates.some(t => t.toLowerCase().startsWith(prefix + ' '));
+                    if (hasContinuation) input.value = input.value + ' ';
+                }
                 return;
             }
 
@@ -2329,6 +2348,8 @@ class UIController {
                 const command = input.value.trim();
                 const active = this.nfTerminalInputs.get(nf.id);
                 if (active?.line) active.line.remove();
+                // Clear stale prompt reference before command execution (important for long-running commands)
+                this.nfTerminalInputs.delete(nf.id);
                 if (command) {
                     commandHistory.push(command);
                     historyIndex = commandHistory.length;
@@ -2341,8 +2362,7 @@ class UIController {
                     this.addTerminalLine(output, `C:\\${nf.name}>${command}`, 'command');
                     await this.processWindowsCommand(nf, command, output, terminalModal);
                 }
-                // Only create a new prompt if iperf3 server is NOT running
-                // iperf3 server will hide the prompt and restore it on Ctrl+C
+                // Create a new prompt only if we are not in a long-running foreground command (e.g., iperf3 -s)
                 if (!this.iperf3Servers.has(nf.id)) {
                     this.createNfPromptLine(nf, output, commandHistory, historyIndex, terminalModal);
                 }
@@ -2372,6 +2392,65 @@ class UIController {
      * @returns {string[]} Possible completions
      */
     getNFTabCompletions(nf, typed) {
+        const commands = this.getNFTabCompletionTemplates(nf);
+
+        if (!typed) {
+            // Only suggest the first word when empty
+            return commands.map(c => c.split(' ')[0]).filter((v, i, a) => a.indexOf(v) === i);
+        }
+
+        const raw = typed;
+        const endsWithSpace = raw.endsWith(' ');
+        const trimmed = raw.trimEnd();
+        if (!trimmed) {
+            return commands.map(c => c.split(' ')[0]).filter((v, i, a) => a.indexOf(v) === i);
+        }
+
+        // Token-based completion:
+        // - previous words must match a template exactly
+        // - only the current token is completed (never the rest of the command)
+        const words = trimmed.split(/\s+/);
+        const currentToken = endsWithSpace ? '' : (words[words.length - 1] || '');
+        const prevWords = endsWithSpace ? words : words.slice(0, -1);
+        const position = endsWithSpace ? words.length : words.length - 1;
+
+        const prevLower = prevWords.map(w => w.toLowerCase());
+        const tokenLower = currentToken.toLowerCase();
+
+        const candidates = new Set(); // token candidates only
+        for (const tmpl of commands) {
+            const tWords = tmpl.split(' ');
+            if (position >= tWords.length) continue;
+
+            // prev words must match exactly
+            let ok = true;
+            for (let i = 0; i < prevLower.length; i++) {
+                if ((tWords[i] || '').toLowerCase() !== prevLower[i]) {
+                    ok = false;
+                    break;
+                }
+            }
+            if (!ok) continue;
+
+            const cand = tWords[position] || '';
+            const candLower = cand.toLowerCase();
+            if (tokenLower && !candLower.startsWith(tokenLower)) continue;
+
+            // Only suggest something that *advances* beyond what is typed for this token
+            if (!endsWithSpace && candLower === tokenLower) continue;
+
+            candidates.add(cand);
+        }
+
+        return [...candidates];
+    }
+
+    /**
+     * Command templates used for word-by-word Tab completion.
+     * @param {Object} nf - Network Function
+     * @returns {string[]} templates
+     */
+    getNFTabCompletionTemplates(nf) {
         const commands = [
             'help',
             'ifconfig',
@@ -2395,36 +2474,7 @@ class UIController {
         if (nf.type === 'ext-dn') {
             commands.push('iperf3 -s');
         }
-
-        if (!typed) return commands.map(c => c.split(' ')[0]).filter((v, i, a) => a.indexOf(v) === i);
-
-        const lower = typed.toLowerCase();
-
-        // Find all commands that start with what's typed (ignoring trailing space for matching)
-        const matching = commands.filter(c => c.toLowerCase().startsWith(lower.trimEnd()));
-        if (matching.length === 0) return [];
-
-        // Determine word index to complete:
-        // "ping " → typed ends with space → complete next word (idx = number of typed words)
-        // "pin"   → complete current partial word (idx = last word index)
-        const endsWithSpace = typed.endsWith(' ');
-        const typedWords = typed.trimEnd().split(' ');
-        const idx = endsWithSpace ? typedWords.length : typedWords.length - 1;
-
-        const completions = new Set();
-        matching.forEach(cmd => {
-            const cmdWords = cmd.split(' ');
-            if (idx < cmdWords.length) {
-                // Build result: keep all words before idx, add completed word at idx
-                const result = [...typedWords.slice(0, idx), cmdWords[idx]].join(' ');
-                // Only add if it actually advances beyond what's typed
-                if (result.toLowerCase() !== typed.toLowerCase().trimEnd()) {
-                    completions.add(result);
-                }
-            }
-        });
-
-        return [...completions];
+        return commands;
     }
 
     focusNfPromptInput(nfId) {
@@ -2447,8 +2497,8 @@ class UIController {
 
         if (cmd === 'help' || cmd === '?') {
             this.showWindowsHelp(output);
-        } else if (cmd === 'ifconfig') {
-            this.showifconfig(nf, output);
+        } else if (cmd === 'ifconfig' || cmd === 'ip addr') {
+            this.showIfConfig(nf, output);
         } else if (cmd.startsWith('ping ')) {
             // Parse ping command with -I and -c options
             await this.executeLinuxPing(nf, command, output);
@@ -2471,8 +2521,6 @@ class UIController {
             this.showSystemInfo(nf, output);
         } else if (cmd === 'netstat') {
             this.showNetstat(nf, output);
-        } else if (cmd === 'ifconfig' || cmd === 'ip addr') {
-            this.showIfConfig(nf, output);
         } else if (cmd.startsWith('iperf3 ')) {
             await this.processIperf3Command(nf, command, output);
         } else if (cmd === '') {
@@ -2510,8 +2558,7 @@ class UIController {
             'Available commands:',
             '',
             'HELP        - Display this help message',
-            'ifconfig    - Display network configuration (Windows style)',
-            'IFCONFIG    - Display network interfaces (Linux style)',
+            'ifconfig    - Display network configuration',
             'PING        - Test network connectivity',
             '  Format:   ping -I <interface> <target> [-c<count>]',
             '  Examples: ping -I oaitun_ue1 8.8.8.8 -c4',
@@ -2540,64 +2587,8 @@ class UIController {
      * @param {HTMLElement} output - Output element
      */
     showifconfig(nf, output) {
-        const lines = [
-            'Windows IP Configuration',
-            '',
-            'Ethernet adapter Local Area Connection:',
-            '',
-            `   Connection-specific DNS Suffix  . : 5g.local`,
-            `   IPv4 Address. . . . . . . . . . . : ${nf.config.ipAddress}`,
-            `   Subnet Mask . . . . . . . . . . . : 255.255.255.0`,
-            `   Default Gateway . . . . . . . . . : 192.168.1.1`,
-            `   DNS Servers . . . . . . . . . . . : 8.8.8.8`,
-            `                                       8.8.4.4`,
-            ''
-        ];
-
-        lines.forEach(line => {
-            this.addTerminalLine(output, line, 'info');
-        });
-
-        // Show ogstun interface for UPF
-        if (nf.type === 'UPF' && nf.config.ogstunInterface) {
-            const ogstun = nf.config.ogstunInterface;
-            const tunLines = [
-                'Tunnel adapter ogstun (tun0):',
-                '',
-                `   Connection-specific DNS Suffix  . : `,
-                `   IPv4 Address. . . . . . . . . . . : ${ogstun.ipAddress}`,
-                `   Subnet Mask . . . . . . . . . . . : ${ogstun.netmask}`,
-                `   Default Gateway . . . . . . . . . : ${ogstun.gatewayIP}`,
-                `   MTU . . . . . . . . . . . . . . . : ${ogstun.mtu}`,
-                `   Flags . . . . . . . . . . . . . . : ${ogstun.flags}`,
-                `   IPv6 Address. . . . . . . . . . . : ${ogstun.ipv6}`,
-                ''
-            ];
-            tunLines.forEach(line => {
-                this.addTerminalLine(output, line, 'info');
-            });
-        }
-
-        // Show tun interface for UE
-        if (nf.type === 'UE' && nf.config.tunInterface) {
-            const tun = nf.config.tunInterface;
-            const tunLines = [
-                `Tunnel adapter ${tun.name}:`,
-                '',
-                `   Connection-specific DNS Suffix  . : `,
-                `   IPv4 Address. . . . . . . . . . . : ${tun.ipAddress}`,
-                `   Subnet Mask . . . . . . . . . . . : ${tun.netmask}`,
-                `   Default Gateway . . . . . . . . . : ${tun.gateway}`,
-                `   MTU . . . . . . . . . . . . . . . : ${tun.mtu}`,
-                `   Flags . . . . . . . . . . . . . . : ${tun.flags}`,
-                `   IPv6 Address. . . . . . . . . . . : ${tun.ipv6}`,
-                `   Destination . . . . . . . . . . . : ${tun.destination}`,
-                ''
-            ];
-            tunLines.forEach(line => {
-                this.addTerminalLine(output, line, 'info');
-            });
-        }
+        // Backwards compatibility: map legacy windows-style command to Linux-style output
+        this.showIfConfig(nf, output);
     }
 
     /**
@@ -2643,13 +2634,13 @@ class UIController {
         }
 
         // Show tun_ue interface for UE (when PDU session is established)
-        if (nf.type === 'UE' && nf.config.tunInterface && nf.config.pduSession) {
+        if (nf.type === 'UE' && nf.config.tunInterface) {
             const tun = nf.config.tunInterface;
             const flagsValue = 4305; // UP,POINTOPOINT,RUNNING,NOARP,MULTICAST
             const tunLines = [
                 `${tun.name}: flags=${flagsValue}<UP,POINTOPOINT,RUNNING,NOARP,MULTICAST>  mtu ${tun.mtu}`,
-                `        inet ${tun.ipAddress}  netmask ${tun.netmask}  destination ${tun.destination}`,
-                `        inet6 ${tun.ipv6}  prefixlen 64  scopeid 0x20<link>`,
+                `        inet ${tun.ipAddress}  netmask ${tun.netmask}  destination ${tun.destination || tun.ipAddress}`,
+                `        inet6 ${tun.ipv6 || `fe80::${Math.floor(Math.random() * 65535).toString(16).padStart(4, '0')}:${Math.floor(Math.random() * 65535).toString(16).padStart(4, '0')}:${Math.floor(Math.random() * 65535).toString(16).padStart(4, '0')}:${Math.floor(Math.random() * 65535).toString(16).padStart(4, '0')}`}  prefixlen 64  scopeid 0x20<link>`,
                 `        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 500  (UNSPEC)`,
                 `        RX packets ${Math.floor(Math.random() * 100)}  bytes ${Math.floor(Math.random() * 10000)} (${(Math.random() * 10).toFixed(1)} KB)`,
                 `        RX errors 0  dropped 0  overruns 0  frame 0`,
@@ -2758,10 +2749,69 @@ class UIController {
         const iface = interfaceName || 'eth0';
         this.addTerminalLine(output, `PING ${targetIP} (${targetIP}) from ${sourceIP} ${iface}: 56(84) bytes of data.`, 'info');
         
-        // Execute ping
+        // Setup Ctrl+C handler for stopping ping
+        const savedState = this.nfTerminalInputs.get(nf.id);
+        const savedHistory = savedState?.commandHistory || [];
+        const savedIndex = savedState?.historyIndex || 0;
+        
+        this.activePings.set(nf.id, {
+            isRunning: true,
+            stopRequested: false,
+            commandHistory: savedHistory,
+            historyIndex: savedIndex,
+            targetIP: targetIP,
+            count: count,
+            results: []
+        });
+        
+        // Hide the prompt during ping
+        const active = this.nfTerminalInputs.get(nf.id);
+        if (active?.line) active.line.style.display = 'none';
+        
+        // Attach Ctrl+C listener
+        const terminalContent = document.getElementById(`terminal-content-${nf.id}`);
+        const ctrlCHandler = (e) => {
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                const pingState = this.activePings.get(nf.id);
+                if (pingState) {
+                    pingState.stopRequested = true;
+                }
+            }
+        };
+        
+        if (terminalContent) {
+            terminalContent.setAttribute('tabindex', '0');
+            terminalContent.focus();
+            terminalContent.addEventListener('keydown', ctrlCHandler);
+            
+            // Store handler for cleanup
+            const pingState = this.activePings.get(nf.id);
+            if (pingState) {
+                pingState._ctrlCHandler = ctrlCHandler;
+                pingState._terminalContent = terminalContent;
+            }
+        }
+        
+        // Execute ping with Ctrl+C support
         const results = [];
-        for (let i = 1; i <= count; i++) {
+        let i = 1;
+        while (i <= count) {
+            const pingState = this.activePings.get(nf.id);
+            
+            // Check if Ctrl+C was pressed
+            if (!pingState || pingState.stopRequested) {
+                this.addTerminalLine(output, '^C', 'command');
+                break;
+            }
+            
             await this.delay(1000); // 1 second between pings
+            
+            // Check again after delay
+            if (!pingState || pingState.stopRequested) {
+                this.addTerminalLine(output, '^C', 'command');
+                break;
+            }
             
             if (isReachable) {
                 const responseTime = this.generateLinuxResponseTime(targetIP);
@@ -2787,11 +2837,27 @@ class UIController {
                 
                 this.addTerminalLine(output, `Request timeout for icmp_seq ${i}`, 'error');
             }
+            
+            i++;
         }
         
         // Display statistics
         await this.delay(500);
         this.showLinuxPingStatistics(targetIP, results, output, count);
+        
+        // Cleanup: Remove Ctrl+C listener and restore prompt
+        const pingState = this.activePings.get(nf.id);
+        if (pingState) {
+            if (pingState._terminalContent && pingState._ctrlCHandler) {
+                pingState._terminalContent.removeEventListener('keydown', pingState._ctrlCHandler);
+            }
+            this.activePings.delete(nf.id);
+        }
+        
+        // Restore prompt
+        if (active?.line) {
+            active.line.style.display = 'flex';
+        }
     }
     
     /**

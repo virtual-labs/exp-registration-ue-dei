@@ -52,6 +52,7 @@ async function initializeApp() {
 
         // Log Engine (needs data store)
         window.logEngine = new LogEngine();
+        await window.logEngine.init();
 
         // NF Manager
         window.nfManager = new NFManager();
