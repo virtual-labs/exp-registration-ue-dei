@@ -2458,7 +2458,6 @@ class UIController {
             'ping -I oaitun_ue1 8.8.8.8 -c4',
             'ping -I oaitun_ue1 10.0.0.1 -c4',
             'ping -I oaitun_ue1 12.45.0.39 -c4',
-            'ping subnet',
             'systeminfo',
             'netstat',
             'cls',
@@ -2499,11 +2498,12 @@ class UIController {
             this.showWindowsHelp(output);
         } else if (cmd === 'ifconfig' || cmd === 'ip addr') {
             this.showIfConfig(nf, output);
+        } else if (cmd === 'ping subnet') {
+            this.addTerminalLine(output, `'ping subnet' is not recognized as an internal or external command,`, 'error');
+            this.addTerminalLine(output, 'operable program or batch file.', 'error');
         } else if (cmd.startsWith('ping ')) {
             // Parse ping command with -I and -c options
             await this.executeLinuxPing(nf, command, output);
-        } else if (cmd === 'ping subnet') {
-            await this.executeWindowsPingSubnet(nf, output);
         } else if (cmd === 'cls' || cmd === 'clear') {
             output.innerHTML = '';
         } else if (cmd === 'exit') {
