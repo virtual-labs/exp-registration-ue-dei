@@ -2758,8 +2758,13 @@ class DockerTerminal {
         this.addTerminalLine(output, '902c1fcc4369   host          host      local', 'info');
         this.addTerminalLine(output, '0c712814bbb0   none          null      local', 'info');
         
-        // OAI workshop network (if exists)
-        if (this.oaiWorkshopNetworkExists) {
+        // OAI workshop network (if exists or NFs are present)
+        const hasNFs = (window.dataStore?.getAllNFs() || []).length > 0;
+        if (this.oaiWorkshopNetworkExists || hasNFs) {
+            if (!this.oaiWorkshopNetworkExists && hasNFs) {
+                this.oaiWorkshopNetworkExists = true;
+                this.oaiWorkshopCreatedTime = this.oaiWorkshopCreatedTime || Date.now();
+            }
             this.addTerminalLine(output, `${this.oaiWorkshopNetworkId}   oaiworkshop   bridge    local`, 'success');
         }
     }
@@ -2777,7 +2782,13 @@ class DockerTerminal {
         } else if (networkName === 'none') {
             this.inspectNoneNetwork(output);
         } else if (networkName === 'oaiworkshop') {
-            if (this.oaiWorkshopNetworkExists) {
+            const hasNFs = (window.dataStore?.getAllNFs() || []).length > 0;
+            if (this.oaiWorkshopNetworkExists || hasNFs) {
+                // Sync state if NFs exist but flag wasn't set (e.g. after page reload)
+                if (!this.oaiWorkshopNetworkExists) {
+                    this.oaiWorkshopNetworkExists = true;
+                    this.oaiWorkshopCreatedTime = this.oaiWorkshopCreatedTime || Date.now();
+                }
                 this.inspectOAIWorkshopNetwork(output);
             } else {
                 this.addTerminalLine(output, `Error: No such network: ${networkName}`, 'error');
