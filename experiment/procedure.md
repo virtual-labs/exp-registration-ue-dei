@@ -25,8 +25,7 @@ Ensure:
 
 ## Step 2: Deploy Core Network Using Terminal
 
-This method allows you to deploy all Network Functions and gNB services using Docker Compose from the terminal. This is the fastest way to set up the entire 5G Core Network infrastructure.
-
+This method allows you to deploy all Network Functions and gNB services using Docker Compose from the terminal. 
 ---
 
 ### Step 2.1: Launch the Core Network
@@ -37,13 +36,8 @@ Click on the **Terminal** button to open the terminal, then from the project roo
 docker compose -f docker-compose.yml up -d
 ```
 
-This is your one-shot command to bring the entire 5G core network to life. It reads the `docker-compose.yml` file and spins up all the Network Functions — AMF, SMF, UPF, NRF, and the rest — as Docker containers running quietly in the background. The `-d` flag (detached mode) means your terminal stays free while everything starts up behind the scenes. You won't see a wall of logs flooding your screen; instead, Docker just confirms each container is starting and hands control back to you.
+Executes Docker Compose to deploy core 5G network components (AMF, SMF, UPF, NRF, and others) in detached mode. Detached mode runs containers in the background, releasing the terminal session.
 
-**What this command does:**
-- Reads the `docker-compose.yml` configuration file
-- Creates and starts all containerized Network Functions
-- Runs containers in **detached mode** (`-d` flag) so they run in the background
-- Automatically establishes inter-NF communication
 
 
 <img src="images/prd2.png" width="90%">
@@ -65,14 +59,7 @@ Once the core network is up and running, deploy the gNB services:
 docker compose -f docker-compose-gnb.yml up -d
 ```
 
-Once the core is up, this command brings the gNB (next-generation NodeB) online. The gNB is your 5G base station — the bridge between the radio side and the core network. As soon as it starts, it reaches out to the AMF to register itself and sets up the GTP-U tunnel with the UPF for user data. Without this step, no UE can ever attach to the network.
-
-**What this command does:**
-- Deploys the gNB (base station) container
-- Configures gNB networking parameters
-- Establishes NGAP signaling connection with AMF
-- Creates GTP-U tunnel with UPF
-- Prepares the gNB for UE attachment
+Deploys the gNB (next-generation NodeB), the 5G radio access point. Upon startup, the gNB automatically registers with the core network, establishing connectivity for UE traffic.
 
 <img src="images/prd2b.png" width="90%">
 
@@ -94,7 +81,7 @@ To continuously monitor the status of the core network containers, use:
 watch docker compose -f docker-compose.yml ps -a
 ```
 
-Think of this as your deployment health monitor. The `watch` command re-runs the `docker compose ps -a` every 2 seconds, giving you a live, auto-refreshing table of all containers and their current state. The `-a` flag is key here — it shows every container, including ones that may have exited or crashed, so nothing slips past you. Keep this running in a separate terminal right after deployment and watch everything settle into a healthy `running` state before moving on.
+Provides a continuously refreshing view of core network container status. The -a flag displays all containers, including stopped ones. Used for monitoring stabilization and detecting unexpected exits.
 
 <img src="images/prd2d.png" width="90%">
 
@@ -111,7 +98,7 @@ docker network inspect oaiworkshop
 
 *Fig: Docker network inspection showing container IP assignments*
 
-This is a quick sanity check after deployment. It shows you the full details of the `oaiworkshop` Docker network — which containers are connected, what IP addresses they've been assigned, and how the network is configured. If you ever need to verify that a specific NF got the right IP or that all containers are on the same network, this is the command to run.
+It shows you the full details of the `oaiworkshop` Docker network — which containers are connected, what IP addresses they've been assigned, and how the network is configured. If you ever need to verify that a specific NF got the right IP or that all containers are on the same network, this is the command to run.
 
 ---
 

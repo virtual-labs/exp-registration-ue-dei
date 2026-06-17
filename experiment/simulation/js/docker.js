@@ -616,17 +616,9 @@ class DockerTerminal {
      * @param {HTMLElement} output - Output element
      */
     showLS(output) {
+        // Only show the primary compose file per user request
         const files = [
-            'total 48',
-            'drwxr-xr-x  4 user user 4096 Apr 20 10:00 .',
-            'drwxr-xr-x 12 user user 4096 Apr 20 09:55 ..',
-            'drwxr-xr-x  2 user user 4096 Apr 20 10:00 conf',
-            'drwxr-xr-x  2 user user 4096 Apr 20 10:00 database',
-            'drwxr-xr-x  2 user user 4096 Apr 20 10:00 healthscripts',
-            '-rw-r--r--  1 user user 3842 Apr 20 10:00 docker-compose.yml',
-            '-rw-r--r--  1 user user  812 Apr 20 10:00 docker-compose-gnb.yml',
-            '-rw-r--r--  1 user user  654 Apr 20 10:00 docker-compose-ue.yml',
-            '-rw-r--r--  1 user user  128 Apr 20 10:00 README.md',
+            'docker-compose.yml'
         ];
         files.forEach(line => this.addTerminalLine(output, line, 'info'));
     }
