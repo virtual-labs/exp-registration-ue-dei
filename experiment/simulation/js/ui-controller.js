@@ -107,6 +107,10 @@ class UIController {
             // Click to add NF
             item.addEventListener('click', () => {
                 console.log('🖱️ Palette item clicked:', type);
+                if (window.oneClickDeploy && window.oneClickDeploy.isDeploying) {
+                    alert('❌ One-click deployment is in progress. Please wait for it to complete before adding NFs manually.');
+                    return;
+                }
                 this.createNFFromPalette(type);
             });
 
@@ -140,6 +144,10 @@ class UIController {
 
         addNFBtn.addEventListener('click', () => {
             console.log('🖱️ Add NF button clicked');
+            if (window.oneClickDeploy && window.oneClickDeploy.isDeploying) {
+                alert('❌ One-click deployment is in progress. Please wait for it to complete before adding NFs manually.');
+                return;
+            }
             this.showAddNFModal();
         });
 
@@ -182,6 +190,10 @@ class UIController {
             // Click handler - NEW WORKFLOW: Show config first
             btn.addEventListener('click', () => {
                 console.log('🖱️ Modal: Selected NF type:', type);
+                if (window.oneClickDeploy && window.oneClickDeploy.isDeploying) {
+                    alert('❌ One-click deployment is in progress. Please wait for it to complete before adding NFs manually.');
+                    return;
+                }
 
                 // NEW: Show configuration panel first, don't create NF yet
                 this.showNFConfigurationForNewNF(type);
@@ -816,7 +828,7 @@ class UIController {
                 
                 <div class="form-group">
                     <label>Port *</label>
-                    <input type="number" id="config-port" value="${defaultPort}" required>
+                    <input type="text" id="config-port" value="${defaultPort}" required>
                 </div>
                 
                 <div class="form-group">
@@ -862,6 +874,9 @@ class UIController {
                 }
             });
         }
+
+        // Add input restrictions
+        this.setupIPPortInputRestrictions();
 
         // Start button handler
         const startBtn = document.getElementById('btn-start-nf');
@@ -1051,6 +1066,9 @@ class UIController {
             });
         }
 
+        // Add input restrictions
+        this.setupIPPortInputRestrictions();
+
         // Save button handler
         const saveBtn = document.getElementById('btn-save-config');
         saveBtn.addEventListener('click', () => {
@@ -1158,6 +1176,10 @@ class UIController {
      * @param {string} nfType - NF type
      */
     startNewNetworkFunction(nfType) {
+        if (window.oneClickDeploy && window.oneClickDeploy.isDeploying) {
+            alert('❌ One-click deployment is in progress. Please wait for it to complete before starting NFs manually.');
+            return;
+        }
         // UE: Handle subscriber information
         if (nfType === 'UE') {
             const imsi = document.getElementById('config-imsi')?.value;
@@ -1264,17 +1286,24 @@ class UIController {
 
         // Standard NF configuration
         const ipAddress = document.getElementById('config-ip')?.value;
-        const port = parseInt(document.getElementById('config-port')?.value);
+        const portInput = document.getElementById('config-port')?.value;
+        const port = parseInt(portInput);
         const httpProtocol = document.getElementById('config-http-protocol')?.value;
 
-        if (!ipAddress || !port) {
-            alert('Please fill all required fields');
+        if (!ipAddress || !portInput) {
+            alert('❌ Please fill all required fields');
             return;
         }
 
         // Validate IP address format
         if (!this.isValidIP(ipAddress)) {
-            alert('❌ Invalid IP address format!\n\nPlease enter a valid IP address (e.g., 192.168.1.20)');
+            alert('❌ Invalid IP address!\n\nIP must be from 1.0.0.0 to 255.255.255.255, and only contain numbers and dots. 0.0.0.0 is not allowed.');
+            return;
+        }
+
+        // Validate port
+        if (!this.isValidPort(portInput)) {
+            alert('❌ Invalid port!\n\nPort must be 4 to 6 digits and contain only numbers.');
             return;
         }
 
@@ -1417,6 +1446,10 @@ class UIController {
      * @param {string} nfId - NF ID
      */
     saveNFConfig(nfId) {
+        if (window.oneClickDeploy && window.oneClickDeploy.isDeploying) {
+            alert('❌ One-click deployment is in progress. Please wait for it to complete before saving NF configurations.');
+            return;
+        }
         const nf = window.dataStore.getNFById(nfId);
         if (!nf) return;
 
@@ -1510,17 +1543,24 @@ class UIController {
 
         // Standard NF configuration
         const ipAddress = document.getElementById('config-ip')?.value;
-        const port = parseInt(document.getElementById('config-port')?.value);
+        const portInput = document.getElementById('config-port')?.value;
+        const port = parseInt(portInput);
         const httpProtocol = document.getElementById('config-http-protocol')?.value;
 
-        if (!ipAddress || !port) {
-            alert('Please fill all required fields');
+        if (!ipAddress || !portInput) {
+            alert('❌ Please fill all required fields');
             return;
         }
 
         // Validate IP address format
         if (!this.isValidIP(ipAddress)) {
-            alert('❌ Invalid IP address format!\n\nPlease enter a valid IP address (e.g., 192.168.1.20)');
+            alert('❌ Invalid IP address!\n\nIP must be from 1.0.0.0 to 255.255.255.255, and only contain numbers and dots. 0.0.0.0 is not allowed.');
+            return;
+        }
+
+        // Validate port
+        if (!this.isValidPort(portInput)) {
+            alert('❌ Invalid port!\n\nPort must be 4 to 6 digits and contain only numbers.');
             return;
         }
 
@@ -3483,7 +3523,50 @@ class UIController {
      */
     isValidIP(ip) {
         const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-        return ipRegex.test(ip);
+        if (!ipRegex.test(ip)) {
+            return false;
+        }
+        if (ip === '0.0.0.0') {
+            return false;
+        }
+        const octets = ip.split('.').map(Number);
+        if (octets[0] < 1) {
+            return false;
+        }
+        return true;
+    }
+
+    isValidPort(port) {
+        const portStr = String(port);
+        const portRegex = /^\d{4,6}$/;
+        return portRegex.test(portStr);
+    }
+
+    setupIPPortInputRestrictions() {
+        console.log('🔧 setupIPPortInputRestrictions called');
+        const ipInput = document.getElementById('config-ip');
+        const portInput = document.getElementById('config-port');
+
+        console.log('ipInput found:', !!ipInput, 'portInput found:', !!portInput);
+
+        if (ipInput) {
+            ipInput.addEventListener('input', (e) => {
+                let value = e.target.value;
+                value = value.replace(/[^0-9.]/g, '');
+                e.target.value = value;
+            });
+        }
+
+        if (portInput) {
+            portInput.addEventListener('input', (e) => {
+                let value = e.target.value;
+                value = value.replace(/[^0-9]/g, '');
+                if (value.length > 6) {
+                    value = value.slice(0, 6);
+                }
+                e.target.value = value;
+            });
+        }
     }
 
     /**
