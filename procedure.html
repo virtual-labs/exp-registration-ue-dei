@@ -1,0 +1,856 @@
+<!DOCTYPE html><html lang="en"><head>
+      <!--Google Tag Manager-->
+      <script class="gtm">
+        var dataLayer = [{
+        'labName': 'Virtual Lab',
+        'discipline': 'Test',
+        'college': 'DLBG',
+        'phase': 'Testing',
+        'expName': 'Implement Registration of UE’s with the Core Network',
+        'expShortName': 'registration-ue'
+        }];
+    
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5NMQ9NQ');
+      </script>
+      <!--End Google Tag Manager-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    
+    	<meta name="experiment-short-name" content="registration-ue">
+    	<meta name="developer-institute" content="DLBG">
+    	<meta name="learning-unit" content="Implement Registration of UE’s with the Core Network">
+    	<meta name="task-name" content="Procedure">
+    
+    <!-- For iPhone -->
+    <meta name="msapplication-TileColor" content="#4076e0">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#4076e0">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#4076e0">
+    <title>Virtual Labs</title>
+    <link rel="shortcut icon" href="./assets/images/favicon.ico">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&amp;family=Raleway&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/github-markdown.min.css">
+    <link rel="stylesheet" href="./assets/css/vlabs-style.css">
+    <link rel="stylesheet" href="./assets/css/toast.css">
+    <link rel="stylesheet" href="./assets/katex_assets/katex.min.css">
+    
+    <script src="./assets/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      h1 {
+      font-size: 1.8rem;
+      }
+      h2 {
+      font-size: 1.4rem;
+      }
+      h3 {
+      font-size: 1.2rem;
+      }
+
+      h2, h3 {
+      font-weight: 800;
+      }
+    </style>
+    
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"></head>
+  <body class="p-0 container-fluid vlabs-page d-flex flex-column justify-content-between">
+      <!--Google Tag Manager (noscript)-->
+      <noscript class="gtm">
+        <iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-5NMQ9NQ" style="display:none;visibility:hidden" width="0">
+        </iframe>
+      </noscript>
+      <!--End Google Tag Manager (noscript)-->
+  
+      <header class="vlabs-header sticky-top bg-white">
+        <nav class="p-0 navbar navbar-light d-flex align-items-stretch">
+          
+          <button class="navbar-toggler px-4" type="button" onclick="toggle()">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="d-flex justify-content-center">        
+            <a href="https://vlab.co.in" class="navbar-brand">
+              <img src="./assets/images/vlabs-color-small-moe.jpg" alt="vlabs logo" class="vlabs-logo">
+            </a>
+          </div>
+          
+          <div id="headerNavbar" class="d-none border-top flex-grow-1 d-lg-flex align-items-center justify-content-end">
+            <div class="svc-rating-display">
+                <rating-display spreadsheetid="1x12nhpp0QvnsA6x-O1sV4IA9SAbfVsq_wiexWkutOmU" sheetname="Experiment-Database" columnname="Experiment Short Name" columnvalue="registration-ue" imagesdirectory="/plugins/svc-rating/images/">
+                </rating-display>
+            </div>      <div class="svc-rating-submit">
+                <rating-submit title="Rate" this="" experiment="">
+                </rating-submit>
+            </div>      <bug-report id="bug-report" title="[BUG REPORT] Implement Registration of UE’s with the Core Network" page-type="text" context-info="{&quot;organisation&quot;:&quot;Virtual Labs&quot;,&quot;developer_institute&quot;:&quot;DLBG&quot;,&quot;expname&quot;:&quot;Implement Registration of UE’s with the Core Network&quot;,&quot;labname&quot;:&quot;Virtual Lab&quot;,&quot;phase&quot;:&quot;Testing&quot;}" checkbox-json="{&quot;text&quot;:[&quot;Insufficient Content&quot;],&quot;video&quot;:[&quot;Insufficient Content&quot;],&quot;assesment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;assessment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;simulation&quot;:[&quot;Simulation Not Working&quot;,&quot;Incorrect Results/Observations&quot;,&quot;Insufficient/Incorrect Instructions&quot;],&quot;DEFAULT&quot;:[&quot;Page Not Loading&quot;,&quot;Content Not Visible&quot;,&quot;Incorrect Content&quot;]}" button_style="border: none; color: #fff; background-color: #288ec8; text-align: center; font-size: 1.05rem; border-radius: 1em;padding: 0.6em 1.2em; margin: 0 10px" position="override" custom_button_class="v-button"></bug-report>
+          </div>
+        </nav>
+      </header>
+      <div class="container-fluid flex-fill d-flex flex-column vlabs-page-main">
+        <div class="row d-flex justify-content-between">
+          <div class="flex-column">
+          <div class="row py-4 px-4 breadcrumbs">
+          	<div class="title is-4 tools">Tools</div>
+          	<span class="mx-2">
+          		<i aria-hidden="true" class="fa fa-angle-right"></i>
+          	</span>
+          	<a href="performance-report.html" class="my-2 mx-3" target="_blank">
+          		<button class="v-button">Performance Tool</button>
+          	</a>
+          	<a href="validator-report.html" class="my-2 mx-3" target="_blank">
+          		<button class="v-button">Validation Tool</button>
+          	</a>
+          </div>
+          </div>
+        </div>
+        <div class="row flex-grow-1 d-flex flex-nowrap flex-column flex-lg-row">
+          <div class="modal fade popupmenu" id="popupMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                              <a href="https://vlab.co.in" class="navbar-brand">
+                                  <img src="./assets/images/vlabs-color-small-moe.jpg" alt="vlabs logo" class="vlabs-logo">
+                              </a>
+                          </h5>
+                          <button type="button" class="btn-close align-self-center" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body nav-menu">
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="index.html" class="p-2 ">
+                                      Aim
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="theory.html" class="p-2 ">
+                                      Theory
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="pretest.html" class="p-2 ">
+                                      Pretest
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="procedure.html" class="p-2  current-item ">
+                                      Procedure
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="simulation.html" class="p-2 ">
+                                      Simulation
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="posttest.html" class="p-2 ">
+                                      Posttest
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="references.html" class="p-2 ">
+                                      References
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="contributors.html" class="p-2 ">
+                                      Contributors
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="feedback.html" class="p-2 ">
+                                      Feedback
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="nav flex-column sidebar nav-menu flex-shrink-0 px-lg-4 align-items-center align-items-lg-start hidden d-none d-lg-flex" id="menu">
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="index.html" class="p-2 ">
+                        Aim
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="theory.html" class="p-2 ">
+                        Theory
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="pretest.html" class="p-2 ">
+                        Pretest
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="procedure.html" class="p-2  current-item ">
+                        Procedure
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="simulation.html" class="p-2 ">
+                        Simulation
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="posttest.html" class="p-2 ">
+                        Posttest
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="references.html" class="p-2 ">
+                        References
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="contributors.html" class="p-2 ">
+                        Contributors
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="feedback.html" class="p-2 ">
+                        Feedback
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+          </div>          <div class="vlabs-page-content px-5 pb-4 flex-grow-1 markdown-body">
+            <div class="text-center fix-spacing">
+              <h1 id="implement-registration-of-ues-with-the-core-network">Implement Registration of UE’s with the Core Network</h1>
+          
+            </div>
+              <h2 id="step-1-initialize-the-service-based-architecture-sba-dashboard">Step 1: Initialize the Service-Based Architecture (SBA) Dashboard</h2>
+          <h3 id="1-open-the-sba-simulator-dashboard">1. Open the SBA Simulator Dashboard</h3>
+          <p>Launch the SBA Simulator Dashboard. This is the main interface for visualizing and managing all 5G Core Network Functions (NFs).</p>
+          <h3 id="2-verify-dashboard-initialization">2. Verify Dashboard Initialization</h3>
+          <p>Once the dashboard loads, verify the following:</p>
+          <ul>
+          <li><strong>NF List Panel</strong> – Displays all available NFs (left or top section).</li>
+          <li><strong>Configuration Panel</strong> – Allows configuring each NF upon selection (right side).</li>
+          <li><strong>Logs Section</strong> – Displays real-time NF logs (bottom section).</li>
+          <li><strong>Command Terminal</strong> – Available per NF for debugging commands such as <code>ping</code>.</li>
+          </ul>
+          <p>Ensure:</p>
+          <ul>
+          <li>The UI is responsive.</li>
+          <li>No errors appear during initialization.</li>
+          </ul>
+          <img src="images/prd1.png" width="90%">
+          
+          <p><em>Fig: Service-Based Architecture (SBA) Dashboard</em></p>
+          <hr>
+          <h2 id="step-2-deploy-core-network-using-terminal">Step 2: Deploy Core Network Using Terminal</h2>
+          <h2 id="this-method-allows-you-to-deploy-all-network-functions-and-gnb-services-using-docker-compose-from-the-terminal">This method allows you to deploy all Network Functions and gNB services using Docker Compose from the terminal. </h2>
+          <h3 id="step-21-launch-the-core-network">Step 2.1: Launch the Core Network</h3>
+          <p>Click on the <strong>Terminal</strong> button to open the terminal, then from the project root directory, execute:</p>
+          <pre><code class="language-bash">docker compose -f docker-compose.yml up -d
+          </code></pre>
+          <p>Executes Docker Compose to deploy core 5G network components (AMF, SMF, UPF, NRF, and others) in detached mode. Detached mode runs containers in the background, releasing the terminal session.</p>
+          <img src="images/prd2.png" width="90%">
+          
+          <p><em>Fig: Core Network Deployment</em></p>
+          <img src="images/prd2a.png" width="90%">
+          
+          <p><em>Fig: Core Network Deployed</em></p>
+          <hr>
+          <h3 id="step-22-launch-the-gnb-services">Step 2.2: Launch the gNB Services</h3>
+          <p>Once the core network is up and running, deploy the gNB services:</p>
+          <pre><code class="language-bash">docker compose -f docker-compose-gnb.yml up -d
+          </code></pre>
+          <p>Deploys the gNB (next-generation NodeB), the 5G radio access point. Upon startup, the gNB automatically registers with the core network, establishing connectivity for UE traffic.</p>
+          <img src="images/prd2b.png" width="90%">
+          
+          <p><em>Fig: gNB Deployment and Core Integration</em></p>
+          <img src="images/prd2c.png" width="90%">
+          
+          <p><em>Fig: gNB Deployed and Core Integrated</em></p>
+          <hr>
+          <h3 id="step-23-monitor-container-status">Step 2.3: Monitor Container Status</h3>
+          <p>To continuously monitor the status of the core network containers, use:</p>
+          <pre><code class="language-bash">watch docker compose -f docker-compose.yml ps -a
+          </code></pre>
+          <p>Provides a continuously refreshing view of core network container status. The -a flag displays all containers, including stopped ones. Used for monitoring stabilization and detecting unexpected exits.</p>
+          <img src="images/prd2d.png" width="90%">
+          
+          <p><em>Fig: Live container status monitoring with watch command</em></p>
+          <h3 id="step-24-verify-network-and-ip-assignment-optional">Step 2.4: Verify Network and IP Assignment (Optional)</h3>
+          <p>To verify the Docker network and IP assignments:</p>
+          <pre><code class="language-bash">docker network inspect oaiworkshop
+          </code></pre>
+          <img src="images/prd2e.png" width="90%">
+          
+          <p><em>Fig: Docker network inspection showing container IP assignments</em></p>
+          <p>It shows you the full details of the <code>oaiworkshop</code> Docker network — which containers are connected, what IP addresses they've been assigned, and how the network is configured. If you ever need to verify that a specific NF got the right IP or that all containers are on the same network, this is the command to run.</p>
+          <hr>
+          <h3 id="step-26-stop-all-services">Step 2.6: Stop All Services</h3>
+          <p>When you're done with testing or need to reset the environment:</p>
+          <pre><code class="language-bash">docker compose -f docker-compose.yml down
+          </code></pre>
+          <img src="images/prd2f.png" width="90%">
+          
+          <p><em>Fig: Stopping all services and removing containers with docker compose down</em></p>
+          <p>This command stops and removes all containers, networks, and associated resources.</p>
+          <hr>
+          <h2 id="step-3-configure-and-start-network-functions-nfs">Step 3: Configure and Start Network Functions (NFs)</h2>
+          <p>After deployment, configure individual Network Functions from the dashboard to establish proper service operation.</p>
+          <hr>
+          <h3 id="step-31-select-an-nf-to-configure">Step 3.1: Select an NF to Configure</h3>
+          <p>From the NF List on the dashboard, click on the NF you want to deploy.</p>
+          <p>Examples include:</p>
+          <ul>
+          <li><strong>AMF</strong> (Access and Mobility Management Function)</li>
+          <li><strong>SMF</strong> (Session Management Function)</li>
+          <li><strong>UPF</strong> (User Plane Function)</li>
+          <li><strong>NRF</strong> (Network Repository Function)</li>
+          <li><strong>AUSF</strong> (Authentication Server Function)</li>
+          <li><strong>UDM</strong> (Unified Data Management)</li>
+          <li><strong>PCF</strong> (Policy Control Function)</li>
+          </ul>
+          <p>Clicking an NF opens its Configuration Panel on the right.</p>
+          <img src="images/prd1.png" width="90%">
+          
+          <p><em>Fig: Select NF and Open Configuration Panel</em></p>
+          <hr>
+          <h3 id="step-32-enter-nf-configuration-details">Step 3.2: Enter NF Configuration Details</h3>
+          <p>In the configuration panel, enter the required fields:</p>
+          <p><strong>IP Address:</strong></p>
+          <ul>
+          <li>Provide a valid IPv4 address (e.g., 192.168.1.10)</li>
+          <li>This is the address the NF will bind to for service communication</li>
+          </ul>
+          <p><strong>Port Number:</strong></p>
+          <ul>
+          <li>Set the port on which the NF will run (e.g., 8080, 9090, etc.)</li>
+          <li>Each NF should have a unique port to avoid conflicts</li>
+          </ul>
+          <p><strong>Protocol:</strong></p>
+          <ul>
+          <li>Select either <strong>HTTP/1</strong> or <strong>HTTP/2</strong> depending on the NF behavior</li>
+          <li>Some NFs may auto-select based on internal configuration</li>
+          </ul>
+          <table>
+          <thead>
+          <tr>
+          <th>Parameter</th>
+          <th>Example</th>
+          <th>Description</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>IP Address</td>
+          <td>192.168.1.10</td>
+          <td>IPv4 address for NF binding</td>
+          </tr>
+          <tr>
+          <td>Port Number</td>
+          <td>8080</td>
+          <td>Service listening port</td>
+          </tr>
+          <tr>
+          <td>Protocol</td>
+          <td>HTTP/2</td>
+          <td>Communication protocol</td>
+          </tr>
+          </tbody></table>
+          <hr>
+          <h3 id="step-33-start-the-nf">Step 3.3: Start the NF</h3>
+          <p>Click the <strong>Start NF</strong> button. The NF will begin starting up.</p>
+          <hr>
+          <h3 id="step-34-wait-for-nf-stabilization">Step 3.4: Wait for NF Stabilization</h3>
+          <p>Once initiated:</p>
+          <ul>
+          <li>The NF takes around <strong>4–5 seconds</strong> to stabilize</li>
+          <li>During this time, it registers itself and establishes basic service readiness</li>
+          <li>The NF attempts to connect to other available NFs</li>
+          <li>Once stabilized, it becomes fully operational</li>
+          </ul>
+          <img src="images/prd3.png" width="90%">
+          
+          <p><em>Fig: NF Stabilizing Process</em></p>
+          <hr>
+          <h3 id="step-35-verify-nf-startup-logs">Step 3.5: Verify NF Startup Logs</h3>
+          <p>Scroll down to the <strong>Logs Section</strong>:</p>
+          <p>Successful startup messages include:</p>
+          <ul>
+          <li> <code>"NF started successfully"</code> – Process/container started without errors</li>
+          <li> <code>"Service registration complete"</code> – NF registered with NRF</li>
+          <li> <code>"NF ready to accept connections"</code> – NF is live and operational</li>
+          </ul>
+          <p>Example log output:</p>
+          <pre><code>[AMF] 2024-01-15 10:32:45 - NF started successfully
+          [AMF] 2024-01-15 10:32:47 - Connecting to NRF at 192.168.1.11:8000
+          [AMF] 2024-01-15 10:32:48 - Service registration complete
+          [AMF] 2024-01-15 10:32:49 - NF ready to accept connections
+          </code></pre>
+          <p>This indicates the function is live and communicating (if any peer NFs are up).</p>
+          <hr>
+          <h3 id="step-36-repeat-for-all-remaining-nfs">Step 3.6: Repeat for All Remaining NFs</h3>
+          <p>Follow the same steps (3.1–3.5) for each NF in the 5G Core:</p>
+          <ol>
+          <li><strong>NRF</strong> (Network Repository Function) – Deploy first</li>
+          <li><strong>UDM</strong> (Unified Data Management) – Deploy second</li>
+          <li><strong>AUSF</strong> (Authentication Server Function) – Deploy third</li>
+          <li><strong>SMF</strong> (Session Management Function) – Deploy fourth</li>
+          <li><strong>UPF</strong> (User Plane Function) – Deploy fifth</li>
+          <li><strong>AMF</strong> (Access and Mobility Management Function) – Deploy sixth</li>
+          <li><strong>PCF</strong> (Policy Control Function) – Deploy last (optional)</li>
+          </ol>
+          <p><strong>For each NF, ensure:</strong></p>
+          <ul>
+          <li> Starts correctly without errors</li>
+          <li> Stabilizes within 4–5 seconds</li>
+          <li> Appears in the logs as active</li>
+          <li> Shows successful service registration</li>
+          </ul>
+          <p>Once all NFs are deployed, configured, and stabilized, your 5G core setup becomes fully active and interconnected, ready for gNB and UE attachment.</p>
+          <img src="images/prd4.png" width="90%">
+          
+          <p><em>Fig: All NF deployed</em></p>
+          <hr>
+          <h2 id="step-4-start-the-gnb-radio-access-node">Step 4: Start the gNB (Radio Access Node)</h2>
+          <p>Once the core network is stabilized, configure and start the gNB (base station).</p>
+          <hr>
+          <h3 id="step-41-select-and-configure-the-gnb">Step 4.1: Select and Configure the gNB</h3>
+          <p>From the NF List Panel on the dashboard:</p>
+          <ol>
+          <li>Locate and click on the <strong>gNB</strong> tile</li>
+          <li>The gNB Configuration Panel appears on the right</li>
+          <li>Enter the following configuration details:</li>
+          </ol>
+          <table>
+          <thead>
+          <tr>
+          <th>Parameter</th>
+          <th>Example</th>
+          <th>Description</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>IP Address</td>
+          <td>192.168.1.21</td>
+          <td>IPv4 address for gNB binding</td>
+          </tr>
+          <tr>
+          <td>Port Number</td>
+          <td>8089</td>
+          <td>SCTP/UDP listening port (GTP-U port)</td>
+          </tr>
+          <tr>
+          <td>PLMN ID</td>
+          <td>20801</td>
+          <td>Public Land Mobile Network ID</td>
+          </tr>
+          <tr>
+          <td>gNB ID</td>
+          <td>1</td>
+          <td>Unique base station identifier</td>
+          </tr>
+          </tbody></table>
+          <img src="images/prd5.png" width="90%">
+          
+          <p><em>Fig: Configure &amp; Start gNB</em></p>
+          <hr>
+          <h3 id="step-42-click-start-gnb">Step 4.2: Click Start gNB</h3>
+          <p>Click the <strong>Start gNB</strong> button to launch the radio access node.</p>
+          <hr>
+          <h3 id="step-43-wait-for-gnb-stabilization">Step 4.3: Wait for gNB Stabilization</h3>
+          <p>Within <strong>5 seconds</strong>, the gNB will become stable. During this initialization:</p>
+          <ul>
+          <li>The gNB starts up and initializes radio resources</li>
+          <li>SCTP association is established with the core network</li>
+          <li>Internal service readiness checks are performed</li>
+          <li>The gNB becomes available for UE connections</li>
+          </ul>
+          <img src="images/prd6.png" width="90%">
+          
+          <p><em>Fig: gNB deployed &amp; Stablized</em></p>
+          <hr>
+          <h3 id="step-44-verify-gnb-connections">Step 4.4: Verify gNB Connections</h3>
+          <p>The gNB will establish the following connections:</p>
+          <p><strong>1. NGAP Connection with AMF (N2 Interface)</strong></p>
+          <ul>
+          <li>Protocol: SCTP (Stream Control Transmission Protocol)</li>
+          <li>Purpose: Access and Mobility Management</li>
+          <li>Expected log: <code>"NGAP association established with AMF"</code></li>
+          </ul>
+          <p><strong>2. GTP-U Tunnel with UPF (N3 Interface)</strong></p>
+          <ul>
+          <li>Protocol: GTP-U (GPRS Tunneling Protocol – User Plane)</li>
+          <li>Purpose: User data forwarding</li>
+          <li>Expected log: <code>"GTP-U tunnel created with UPF at 192.168.1.13:2152"</code></li>
+          </ul>
+          <p><strong>3. Service Registration with NRF</strong></p>
+          <ul>
+          <li>All gNB services are registered in the Network Repository</li>
+          <li>Expected log: <code>"gNB registered successfully in NRF"</code></li>
+          </ul>
+          <hr>
+          <h3 id="step-45-verify-gnb-logs">Step 4.5: Verify gNB Logs</h3>
+          <p>Scroll to the Logs Section and confirm these messages:</p>
+          <pre><code>[gNB] 2024-01-15 10:35:00 - gNB started successfully
+          [gNB] 2024-01-15 10:35:02 - Initializing radio resources
+          [gNB] 2024-01-15 10:35:03 - SCTP association with core network established
+          [gNB] 2024-01-15 10:35:04 - NGAP association established with AMF
+          [gNB] 2024-01-15 10:35:05 - GTP-U tunnel created with UPF
+          [gNB] 2024-01-15 10:35:05 - gNB ready to accept UE connections
+          </code></pre>
+          <p>All messages indicate successful gNB startup and core integration.</p>
+          <hr>
+          <h2 id="step-5-ue-configuration-and-registration">Step 5: UE Configuration and Registration</h2>
+          <p>Once the gNB is up and connected to the core network, you can configure and register User Equipment (UE).</p>
+          <hr>
+          <h3 id="step-51-configure-the-ue">Step 5.1: Configure the UE</h3>
+          <p>From the dashboard, select the <strong>UE</strong> tile and enter the following in the UE Configuration Panel:</p>
+          <table>
+          <thead>
+          <tr>
+          <th>Parameter</th>
+          <th>Example Value</th>
+          <th>Description</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>IMSI</td>
+          <td>001010000000101</td>
+          <td>15-digit subscriber identifier</td>
+          </tr>
+          <tr>
+          <td>Key (K)</td>
+          <td>fec86ba6eb707ed08905757b1bb44b8f</td>
+          <td>128-bit authentication key</td>
+          </tr>
+          <tr>
+          <td>OPc</td>
+          <td>C42449363BBAD02B66D16BC975D77CC1</td>
+          <td>Operator variant key</td>
+          </tr>
+          <tr>
+          <td>DNN</td>
+          <td>5G-Lab</td>
+          <td>Data Network Name</td>
+          </tr>
+          <tr>
+          <td>NSSAI SST</td>
+          <td>1</td>
+          <td>Slice Type (1=eMBB, 2=URLLC, 3=MIoT)</td>
+          </tr>
+          </tbody></table>
+          <img src="images/prd7.png" width="90%">
+          
+          <p><em>Fig: UE Configuration Panel</em></p>
+          <hr>
+          <h3 id="step-52-match-subscriber-profile">Step 5.2: Match Subscriber Profile</h3>
+          <p>Ensure the UE configuration matches the profile stored in the <strong>UDR (Unified Data Repository)</strong>.</p>
+          <p>This ensures successful authentication during the registration process.</p>
+          <hr>
+          <h3 id="step-53-start-the-ue">Step 5.3: Start the UE</h3>
+          <p>Click <strong>Start UE</strong>.</p>
+          <p>Within approximately <strong>5 seconds</strong>, the UE:</p>
+          <ul>
+          <li>Stabilizes</li>
+          <li>Sends registration messages to the core network</li>
+          <li>Initiates authentication with the core</li>
+          </ul>
+          <hr>
+          <h3 id="step-54-ue-to-core-connection-sequence">Step 5.4: UE-to-Core Connection Sequence</h3>
+          <p>The following sequence occurs after starting the UE:</p>
+          <ul>
+          <li><strong>N1 Connection Established</strong> – UE ↔ AMF connectivity established</li>
+          <li><strong>NAS Signaling Activated</strong> – Non-Access Stratum messages exchanged</li>
+          <li><strong>Authentication and Security Handshake Completed</strong> – UE is authenticated</li>
+          <li><strong>PDU Session Established</strong> – Data path created from UE through UPF</li>
+          <li><strong>IP Address Assignment</strong> – UE receives IP address on <code>tun_0</code> (e.g., <code>192.168.100.2</code>)</li>
+          </ul>
+          <img src="images/prd8.png" width="90%">
+          
+          <p><em>Fig: UE Registration and NAS Signaling</em></p>
+          <hr>
+          <h2 id="step-6-validate-connectivity">Step 6: Validate Connectivity</h2>
+          <p>Once the UE is registered and assigned an IP address, validate end-to-end connectivity through the 5G network.</p>
+          <hr>
+          <h3 id="step-61-test-network-path-using-ping">Step 6.1: Test Network Path Using Ping</h3>
+          <p>From the UE terminal, test basic network connectivity:</p>
+          <pre><code class="language-bash">ping -I oaitun_ue1 8.8.8.8 -c4
+          </code></pre>
+          <p>Expected result:</p>
+          <ul>
+          <li> Reply messages received from the destination</li>
+          <li> 0% packet loss indicating stable connectivity</li>
+          </ul>
+          <p>Example successful ping output:</p>
+          <pre><code>PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+          64 bytes from 8.8.8.8: icmp_seq=1 ttl=119 time=25.3 ms
+          64 bytes from 8.8.8.8: icmp_seq=2 ttl=119 time=24.8 ms
+          64 bytes from 8.8.8.8: icmp_seq=3 ttl=119 time=25.1 ms
+          --- 8.8.8.8 statistics ---
+          3 packets transmitted, 3 received, 0% packet loss, time 6ms
+          </code></pre>
+          <img src="images/prd9.png" width="90%">
+          
+          <p><em>Fig: Successful Ping Test Through 5G Core</em></p>
+          <p><strong>Example IP Mappings in Your Environment:</strong></p>
+          <ul>
+          <li><code>192.168.1.11</code> – AMF (Access and Mobility Management Function)</li>
+          <li><code>192.168.1.13</code> – UPF (User Plane Function)</li>
+          <li><code>192.168.1.16</code> – External Data Network (External DN)</li>
+          </ul>
+          <hr>
+          <h3 id="step-62-measure-throughput-using-iperf">Step 6.2: Measure Throughput Using iPerf</h3>
+          <h3 id="step-621-start-iperf-server-on-external-data-network">Step 6.2.1: Start iPerf Server on External Data Network</h3>
+          <p>Click on <strong>ext-dn-1</strong>, open its terminal, and run the following command to start the iPerf server:</p>
+          <pre><code class="language-bash">iperf3 -s
+          </code></pre>
+          <img src="images/prd12.png" width="90%">
+          
+          <p><em>Fig: Starting iPerf Server on ext-dn-1</em></p>
+          <hr>
+          <h3 id="step-622-run-iperf-client-from-ue">Step 6.2.2: Run iPerf Client from UE</h3>
+          <p>To measure the throughput between the UE and external data network, use <strong>iPerf3</strong>:</p>
+          <p>Click on <strong>UE</strong>, open its terminal, and run the following command:</p>
+          <p><strong>Throughput Test:</strong></p>
+          <pre><code class="language-bash">iperf3 -B &lt;tun_ue_ip&gt; -c &lt;ext-dn_ip&gt;
+          </code></pre>
+          <p>Replace:</p>
+          <ul>
+          <li><code>&lt;UE_ip&gt;</code> with the UE's assigned IP (e.g., <code>10.0.0.3</code>)</li>
+          <li><code>&lt;ext-dn_ip&gt;</code> with the external data network IP (e.g., <code>192.168.1.15</code>)</li>
+          </ul>
+          <p>Example:</p>
+          <pre><code class="language-bash">iperf3 -B 10.0.0.3 -c 192.168.1.15
+          </code></pre>
+          <p>Expected output shows:</p>
+          <ul>
+          <li><strong>Transfer amount</strong> – Data transferred in MB/GB</li>
+          <li><strong>Bandwidth</strong> – Throughput in Mbps or Gbps</li>
+          <li><strong>Jitter</strong> – Variation in packet timing (lower is better)</li>
+          </ul>
+          <img src="images/prd10.png" width="90%">
+          
+          <p><em>Fig: Throughput Measurement with iPerf</em></p>
+          <hr>
+          <h3 id="step-63-measure-round-trip-time-rtt-using-iperf">Step 6.3: Measure Round-Trip Time (RTT) Using iPerf</h3>
+          <p>To measure RTT (latency) in the reverse direction:</p>
+          <p><strong>RTT Test:</strong></p>
+          <pre><code class="language-bash">iperf3 -B &lt;tun_ue_ip&gt; -c &lt;ext-dn_ip&gt; -R
+          </code></pre>
+          <p>The <code>-R</code> flag reverses the test direction, measuring reverse throughput and RTT.</p>
+          <p>Example:</p>
+          <pre><code class="language-bash">iperf3 -B 10.0.0.3 -c 192.168.1.15 -R
+          </code></pre>
+          <p>This measures the latency and throughput from the external network back to the UE through the 5G core network.</p>
+          <img src="images/prd11.png" width="90%">
+          
+          <p><em>Fig: RTT Measurement with iPerf</em></p>
+          <hr>
+          <h3 id="step-64-verify-connectivity-success-criteria">Step 6.4: Verify Connectivity Success Criteria</h3>
+          <p>Your 5G Core Network simulation is functioning correctly if:</p>
+          <p> <strong>All NFs Start Successfully</strong> – No errors during core network startup<br> <strong>gNB Connects to AMF and UPF</strong> – Base station registered with core network<br> <strong>UE Registers Successfully</strong> – User equipment attached to the network<br> <strong>UE Receives an IP Address</strong> – IP assigned on the TUN interface<br> <strong>Ping Shows 0% Packet Loss</strong> – Network path is stable<br> <strong>iPerf Shows Measurable Throughput</strong> – Data transmission is functional  </p>
+          <p>If all criteria are met, your 5G network is ready for further testing and validation.</p>
+          <hr>
+          
+          </div>
+          <div class="bug-report-mobile">
+              <bug-report id="bug-report" title="[BUG REPORT] Implement Registration of UE’s with the Core Network" page-type="text" context-info="{&quot;organisation&quot;:&quot;Virtual Labs&quot;,&quot;developer_institute&quot;:&quot;DLBG&quot;,&quot;expname&quot;:&quot;Implement Registration of UE’s with the Core Network&quot;,&quot;labname&quot;:&quot;Virtual Lab&quot;,&quot;phase&quot;:&quot;Testing&quot;}" checkbox-json="{&quot;text&quot;:[&quot;Insufficient Content&quot;],&quot;video&quot;:[&quot;Insufficient Content&quot;],&quot;assesment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;assessment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;simulation&quot;:[&quot;Simulation Not Working&quot;,&quot;Incorrect Results/Observations&quot;,&quot;Insufficient/Incorrect Instructions&quot;],&quot;DEFAULT&quot;:[&quot;Page Not Loading&quot;,&quot;Content Not Visible&quot;,&quot;Incorrect Content&quot;]}" position="override" button_style="
+                          position: fixed; 
+                          bottom: 20px;
+                          right: 20px;
+                          z-index: 1;
+                          font-size: 0;
+                          padding: 25px;
+                          border-radius: 50%;
+                          border: none;
+                          background-color: #0fc0ff;
+                          background-image: url(data:image/png;base64,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);
+                          background-repeat: no-repeat;
+                          background-position: center;
+                          background-size: 30px;
+                          filter: invert(1);">
+              </bug-report>
+          </div>        </div>
+      </div>
+      <footer class="text-light pt-2 vlabs-footer d-flex flex-column">
+        <div class="row px-5 mx-0">
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Community Links</span>
+            <a href="https://www.sakshat.ac.in/" class="text-light">Sakshat Portal</a>
+            <a href="http://outreach.vlabs.ac.in/" class="text-light">Outreach Portal</a>
+            <a href="https://vlab.co.in/faq" class="text-light">FAQ: Virtual Labs</a>
+          </div>
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Contact Us</span>
+            <span> Phone: General Information: 011-26582050 </span>
+            <span> Email: support@vlabs.ac.in </span>
+          </div>
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Follow Us</span>
+            <div class="social-links">
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #55acee;" href="https://twitter.com/TheVirtualLabs">
+      	  <i class="fab fa-twitter"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #3b5998;" href="https://www.facebook.com/Virtual-Labs-IIT-Delhi-301510159983871/">
+      	  <i class="fab fa-facebook"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #e52d27;" href="https://www.youtube.com/watch?v=asxRaOgk6a0">
+      	  <i class="fab fa-youtube"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #2867B2;" href="https://in.linkedin.com/in/virtual-labs-008ba9136">
+      	  <i class="fab fa-linkedin"></i>
+      	</a>
+            </div>
+          </div>
+        </div>
+        <div class="m-0 py-2 text-center" style="font-family: &quot;Open Sans&quot;, sans-serif; background: #212121;">
+          <a class="text-primary font-weight-bold" href="https://www.gnu.org/licenses/agpl-3.0.en.html"> AGPL 3.0 </a>
+          &nbsp;&amp;&nbsp;
+          <a class="text-primary font-weight-bold" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"> Creative Commons (CC BY-NC-SA 4.0) </a>
+        </div>
+      </footer>
+    <script src="./assets/js/toggleSidebar.js"></script>
+    <script src="./assets/js/event-handler.js"></script>
+
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register("sw.js");
+        });
+      }
+    </script>
+  
+
+<script type="module" src="https://cdn.vlabs.ac.in/bug-report/vlabs-bug-report.js"></script><script type="module" src="/exp-registration-ue-dei/plugins/svc-rating/index.js"></script><script type="module" src="/exp-registration-ue-dei/plugins/svc-rating/config.js"></script><script type="module" src="https://apis.google.com/js/api.js"></script></body></html>

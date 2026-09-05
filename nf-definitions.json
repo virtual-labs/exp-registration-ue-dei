@@ -1,0 +1,231 @@
+{
+  "NRF": {
+    "name": "Network Repository Function",
+    "description": "Central registry for NF discovery and management. All NFs register with NRF.",
+    "color": "#9b59b6",
+    "icon": "simulation/images/icons/nrf.svg",
+    "functions": [
+      "NF Registration",
+      "NF Discovery",
+      "NF Status Management",
+      "NF Profile Storage"
+    ],
+    "interfaces": [
+      "Nnrf_NFManagement",
+      "Nnrf_NFDiscovery"
+    ]
+  },
+  "AMF": {
+    "name": "Access and Mobility Management Function",
+    "description": "Handles UE registration, connection, reachability, mobility, and access authentication.",
+    "color": "#3498db",
+    "icon": "simulation/images/icons/amf.svg",
+    "functions": [
+      "Registration Management",
+      "Connection Management",
+      "Mobility Management",
+      "Authentication",
+      "SMS Delivery"
+    ],
+    "interfaces": [
+      "Namf_Communication",
+      "Namf_EventExposure",
+      "N1",
+      "N2"
+    ]
+  },
+  "SMF": {
+    "name": "Session Management Function",
+    "description": "Manages PDU sessions including session establishment, modification, and release.",
+    "color": "#00bcd4",
+    "icon": "simulation/images/icons/smf.svg",
+    "functions": [
+      "Session Management",
+      "UE IP Address Allocation",
+      "QoS Management",
+      "Traffic Steering",
+      "Charging Data Collection"
+    ],
+    "interfaces": [
+      "Nsmf_PDUSession",
+      "Nsmf_EventExposure",
+      "N4"
+    ]
+  },
+  "UPF": {
+    "name": "User Plane Function",
+    "description": "Handles user plane data packet forwarding, QoS enforcement, and traffic measurement.",
+    "color": "#4caf50",
+    "icon": "simulation/images/icons/upf.svg",
+    "functions": [
+      "Packet Routing & Forwarding",
+      "QoS Handling",
+      "Traffic Usage Reporting",
+      "Lawful Intercept",
+      "Packet Inspection"
+    ],
+    "interfaces": [
+      "N3",
+      "N4",
+      "N6",
+      "N9"
+    ]
+  },
+  "AUSF": {
+    "name": "Authentication Server Function",
+    "description": "Performs UE authentication based on subscription data from UDM.",
+    "color": "#ff9800",
+    "icon": "simulation/images/icons/ausf.svg",
+    "functions": [
+      "UE Authentication",
+      "EAP Authentication",
+      "Key Generation",
+      "Security Context Management"
+    ],
+    "interfaces": [
+      "Nausf_UEAuthentication",
+      "Nausf_SoRProtection"
+    ]
+  },
+  "UDM": {
+    "name": "Unified Data Management",
+    "description": "Manages subscriber profiles and connects to UDR for data repository access.",
+    "color": "#ff5722",
+    "icon": "simulation/images/icons/udm.svg",
+    "functions": [
+      "Subscriber Profile Management",
+      "Credential Management",
+      "UE Context Management",
+      "Authentication Credential Processing",
+      "Data Repository Access"
+    ],
+    "interfaces": [
+      "Nudm_SDM",
+      "Nudm_UECM",
+      "Nudm_Authentication",
+      "Nudm_EventExposure",
+      "Nudr_DataRepository (toward UDR)"
+    ]
+  },
+  "PCF": {
+    "name": "Policy Control Function",
+    "description": "Provides policy rules and charging control for network behavior.",
+    "color": "#e91e63",
+    "icon": "simulation/images/icons/pcf.svg",
+    "functions": [
+      "Policy Authorization",
+      "QoS Policy Control",
+      "Charging Control",
+      "Service Data Flow Detection"
+    ],
+    "interfaces": [
+      "Npcf_AMPolicyControl",
+      "Npcf_SMPolicyControl",
+      "Npcf_PolicyAuthorization"
+    ]
+  },
+  "NSSF": {
+    "name": "Network Slice Selection Function",
+    "description": "Selects the appropriate network slice instance for UE based on subscription and policy.",
+    "color": "#ffc107",
+    "icon": "simulation/images/icons/nssf.svg",
+    "functions": [
+      "Network Slice Selection",
+      "Slice Availability Check",
+      "Allowed NSSAI Determination"
+    ],
+    "interfaces": [
+      "Nnssf_NSSelection",
+      "Nnssf_NSSAIAvailability"
+    ]
+  },
+  "UDR": {
+    "name": "Unified Data Repository",
+    "description": "Data repository that stores subscriber profiles and connects to MySQL database backend.",
+    "color": "#009688",
+    "icon": "simulation/images/icons/udr.svg",
+    "functions": [
+      "Subscriber Profile Management",
+      "Data Repository",
+      "Database Interface",
+      "Event Exposure",
+      "Data Storage"
+    ],
+    "interfaces": [
+      "Nudr_DataRepository",
+      "Nudr_EventExposure",
+      "SQL/REST API (toward MySQL)"
+    ]
+  },
+  "gNB": {
+    "name": "Next Generation NodeB (5G Base Station)",
+    "description": "5G radio access network base station that provides wireless connectivity to UEs",
+    "color": "#8e44ad",
+    "icon": "simulation/images/icons/gnb.svg",
+    "functions": [
+      "Radio Resource Management",
+      "Mobility Management",
+      "QoS Flow Management",
+      "Dual Connectivity",
+      "Beamforming"
+    ],
+    "interfaces": [
+      "N1 (toward UE)",
+      "N2 (toward AMF)",
+      "N3 (toward UPF)",
+      "Xn (toward other gNBs)"
+    ],
+    "type": "RAN"
+  },
+  "UE": {
+    "name": "User Equipment (Mobile Device)",
+    "description": "End-user device (smartphone, IoT device) that connects to 5G network",
+    "color": "#16a085",
+    "icon": "simulation/images/icons/ue.svg",
+    "functions": [
+      "Registration",
+      "Authentication",
+      "Session Establishment",
+      "Data Communication",
+      "Mobility"
+    ],
+    "interfaces": [
+      "N1 (toward AMF via gNB)",
+      "Radio Interface (toward gNB)"
+    ],
+    "type": "Device"
+  },
+  "MySQL": {
+    "name": "MySQL Database",
+    "description": "Backend database storing subscription data, authentication credentials, and user profiles",
+    "color": "#d35400",
+    "icon": "simulation/images/icons/mysql.svg",
+    "functions": [
+      "Subscription Data Storage",
+      "Authentication Credentials",
+      "User Profile Management",
+      "Policy Data",
+      "Network Configuration"
+    ],
+    "interfaces": [
+      "SQL API",
+      "REST API (toward UDR)"
+    ],
+    "type": "Database"
+  },
+  "ext-dn": {
+    "name": "External Data Network",
+    "description": "External data network (Internet) that provides internet connectivity through UPF",
+    "color": "#27ae60",
+    "icon": null,
+    "functions": [
+      "Internet Connectivity",
+      "Data Network Access",
+      "External Service Access"
+    ],
+    "interfaces": [
+      "N6 (toward UPF)"
+    ],
+    "type": "External Network"
+  }
+}

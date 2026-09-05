@@ -1,0 +1,1144 @@
+<!DOCTYPE html><html lang="en"><head>
+      <!--Google Tag Manager-->
+      <script class="gtm">
+        var dataLayer = [{
+        'labName': 'Virtual Lab',
+        'discipline': 'Test',
+        'college': 'DLBG',
+        'phase': 'Testing',
+        'expName': 'Implement Registration of UE’s with the Core Network',
+        'expShortName': 'registration-ue'
+        }];
+    
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5NMQ9NQ');
+      </script>
+      <!--End Google Tag Manager-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    
+    	<meta name="experiment-short-name" content="registration-ue">
+    	<meta name="developer-institute" content="DLBG">
+    	<meta name="learning-unit" content="Implement Registration of UE’s with the Core Network">
+    	<meta name="task-name" content="Theory">
+    
+    <!-- For iPhone -->
+    <meta name="msapplication-TileColor" content="#4076e0">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#4076e0">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#4076e0">
+    <title>Virtual Labs</title>
+    <link rel="shortcut icon" href="./assets/images/favicon.ico">
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css" integrity="sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&amp;family=Raleway&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/github-markdown.min.css">
+    <link rel="stylesheet" href="./assets/css/vlabs-style.css">
+    <link rel="stylesheet" href="./assets/css/toast.css">
+    <link rel="stylesheet" href="./assets/katex_assets/katex.min.css">
+    
+    <script src="./assets/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      h1 {
+      font-size: 1.8rem;
+      }
+      h2 {
+      font-size: 1.4rem;
+      }
+      h3 {
+      font-size: 1.2rem;
+      }
+
+      h2, h3 {
+      font-weight: 800;
+      }
+    </style>
+    
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"></head>
+  <body class="p-0 container-fluid vlabs-page d-flex flex-column justify-content-between">
+      <!--Google Tag Manager (noscript)-->
+      <noscript class="gtm">
+        <iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-5NMQ9NQ" style="display:none;visibility:hidden" width="0">
+        </iframe>
+      </noscript>
+      <!--End Google Tag Manager (noscript)-->
+  
+      <header class="vlabs-header sticky-top bg-white">
+        <nav class="p-0 navbar navbar-light d-flex align-items-stretch">
+          
+          <button class="navbar-toggler px-4" type="button" onclick="toggle()">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="d-flex justify-content-center">        
+            <a href="https://vlab.co.in" class="navbar-brand">
+              <img src="./assets/images/vlabs-color-small-moe.jpg" alt="vlabs logo" class="vlabs-logo">
+            </a>
+          </div>
+          
+          <div id="headerNavbar" class="d-none border-top flex-grow-1 d-lg-flex align-items-center justify-content-end">
+            <div class="svc-rating-display">
+                <rating-display spreadsheetid="1x12nhpp0QvnsA6x-O1sV4IA9SAbfVsq_wiexWkutOmU" sheetname="Experiment-Database" columnname="Experiment Short Name" columnvalue="registration-ue" imagesdirectory="/plugins/svc-rating/images/">
+                </rating-display>
+            </div>      <div class="svc-rating-submit">
+                <rating-submit title="Rate" this="" experiment="">
+                </rating-submit>
+            </div>      <bug-report id="bug-report" title="[BUG REPORT] Implement Registration of UE’s with the Core Network" page-type="text" context-info="{&quot;organisation&quot;:&quot;Virtual Labs&quot;,&quot;developer_institute&quot;:&quot;DLBG&quot;,&quot;expname&quot;:&quot;Implement Registration of UE’s with the Core Network&quot;,&quot;labname&quot;:&quot;Virtual Lab&quot;,&quot;phase&quot;:&quot;Testing&quot;}" checkbox-json="{&quot;text&quot;:[&quot;Insufficient Content&quot;],&quot;video&quot;:[&quot;Insufficient Content&quot;],&quot;assesment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;assessment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;simulation&quot;:[&quot;Simulation Not Working&quot;,&quot;Incorrect Results/Observations&quot;,&quot;Insufficient/Incorrect Instructions&quot;],&quot;DEFAULT&quot;:[&quot;Page Not Loading&quot;,&quot;Content Not Visible&quot;,&quot;Incorrect Content&quot;]}" button_style="border: none; color: #fff; background-color: #288ec8; text-align: center; font-size: 1.05rem; border-radius: 1em;padding: 0.6em 1.2em; margin: 0 10px" position="override" custom_button_class="v-button"></bug-report>
+          </div>
+        </nav>
+      </header>
+      <div class="container-fluid flex-fill d-flex flex-column vlabs-page-main">
+        <div class="row d-flex justify-content-between">
+          <div class="flex-column">
+          <div class="row py-4 px-4 breadcrumbs">
+          	<div class="title is-4 tools">Tools</div>
+          	<span class="mx-2">
+          		<i aria-hidden="true" class="fa fa-angle-right"></i>
+          	</span>
+          	<a href="performance-report.html" class="my-2 mx-3" target="_blank">
+          		<button class="v-button">Performance Tool</button>
+          	</a>
+          	<a href="validator-report.html" class="my-2 mx-3" target="_blank">
+          		<button class="v-button">Validation Tool</button>
+          	</a>
+          </div>
+          </div>
+        </div>
+        <div class="row flex-grow-1 d-flex flex-nowrap flex-column flex-lg-row">
+          <div class="modal fade popupmenu" id="popupMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                              <a href="https://vlab.co.in" class="navbar-brand">
+                                  <img src="./assets/images/vlabs-color-small-moe.jpg" alt="vlabs logo" class="vlabs-logo">
+                              </a>
+                          </h5>
+                          <button type="button" class="btn-close align-self-center" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body nav-menu">
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="index.html" class="p-2 ">
+                                      Aim
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="theory.html" class="p-2  current-item ">
+                                      Theory
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="pretest.html" class="p-2 ">
+                                      Pretest
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="procedure.html" class="p-2 ">
+                                      Procedure
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="simulation.html" class="p-2 ">
+                                      Simulation
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="posttest.html" class="p-2 ">
+                                      Posttest
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="references.html" class="p-2 ">
+                                      References
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="contributors.html" class="p-2 ">
+                                      Contributors
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div>
+                                  <div class="d-flex nav-menu-body">
+                                      <a href="feedback.html" class="p-2 ">
+                                      Feedback
+                                      </a>
+                                      
+                                  </div>
+                                  <div id="t-" class="collapse">
+                                      <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                                      </div>
+                                  </div>
+                              </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="nav flex-column sidebar nav-menu flex-shrink-0 px-lg-4 align-items-center align-items-lg-start hidden d-none d-lg-flex" id="menu">
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="index.html" class="p-2 ">
+                        Aim
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="theory.html" class="p-2  current-item ">
+                        Theory
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="pretest.html" class="p-2 ">
+                        Pretest
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="procedure.html" class="p-2 ">
+                        Procedure
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="simulation.html" class="p-2 ">
+                        Simulation
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="posttest.html" class="p-2 ">
+                        Posttest
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="references.html" class="p-2 ">
+                        References
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="contributors.html" class="p-2 ">
+                        Contributors
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex nav-menu-body">
+                        <a href="feedback.html" class="p-2 ">
+                        Feedback
+                        </a>
+                        
+                    </div>
+                    <div id="t-" class="collapse">
+                        <div class="px-3 d-flex flex-column tasks align-items-center align-items-lg-start">
+                        </div>
+                    </div>
+                </div>
+          </div>          <div class="vlabs-page-content px-5 pb-4 flex-grow-1 markdown-body">
+            <div class="text-center fix-spacing">
+              <h1 id="implement-registration-of-ues-with-the-core-network">Implement Registration of UE’s with the Core Network</h1>
+          
+            </div>
+              <h2 id="1-introduction">1. Introduction</h2>
+          <p>The User Equipment (UE) registration procedure is one of the most fundamental processes in 5G Standalone (5G SA) networks. This document provides a detailed theoretical analysis of how a UE (such as a smartphone or IoT device) registers with the Access and Mobility Management Function (AMF) in a 5G Core Network. Understanding this process is critical for comprehending 5G network architecture, security mechanisms, and service delivery.</p>
+          <h2 id="2-fundamentals">2. Fundamentals</h2>
+          <h3 id="21-5g-network-architecture">2.1 5G Network Architecture</h3>
+          <p>The 5G Core Network (5GC) uses a service-oriented architecture (SOA) with multiple Network Functions (NFs) communicating via standardized APIs. The key entities involved in UE registration are:</p>
+          <ul>
+          <li><strong>UE (User Equipment)</strong>: The end-user device initiating the registration request</li>
+          <li><strong>gNB (Next Generation NodeB)</strong>: The 5G radio access network base station responsible for radio resource management</li>
+          <li><strong>AMF (Access and Mobility Management Function)</strong>: Core network entity managing mobility, access control, and NAS signaling</li>
+          <li><strong>UDM (Unified Data Management)</strong>: Stores subscription information and authentication credentials</li>
+          <li><strong>AUSF (Authentication Server Function)</strong>: Handles authentication vectors and security procedures</li>
+          <li><strong>PCF (Policy Control Function)</strong>: Manages access and mobility policies</li>
+          <li><strong>EIR (Equipment Identity Register)</strong>: Validates device identity and checks for blacklisted equipment</li>
+          </ul>
+          <h3 id="22-registration-types">2.2 Registration Types</h3>
+          <p>The 5G specification (3GPP TS 24.501) defines multiple registration types:</p>
+          <ul>
+          <li><strong>Initial Registration</strong>: First-time attachment of UE to 5G network</li>
+          <li><strong>Mobility Registration Update</strong>: Registration when UE moves to new AMF coverage area</li>
+          <li><strong>Periodic Registration Update</strong>: UE registers periodically as per timer-based policy</li>
+          <li><strong>Emergency Registration</strong>: Registration for emergency services access</li>
+          </ul>
+          <p>This document focuses on Initial Registration as the primary use case.</p>
+          <h3 id="23-nas-vs-ras-signaling">2.3 NAS vs RAS Signaling</h3>
+          <ul>
+          <li><strong>RAS (Radio Access Stratum)</strong>: Signaling between UE and gNB (RRC protocol)</li>
+          <li><strong>NAS (Non-Access Stratum)</strong>: Signaling between UE and AMF, encapsulated inside RAS messages</li>
+          <li>Registration requests and responses use NAS protocol messages defined in TS 24.501</li>
+          </ul>
+          <h2 id="3-ue-registration-process-detailed-flow">3. UE Registration Process: Detailed Flow</h2>
+          <p>The complete message flow during the UE registration process is illustrated in <strong>Figure 1</strong>, starting from the initial RRC connection establishment between the UE and the gNB, followed by the NAS signaling exchanges with the AMF for authentication, security mode setup, and finally the registration completion.</p>
+          <img src="images/fig-1.svg" alt="UE Registration Overall Message Sequence" width="45%">
+          
+          <p><em>Figure 1: UE Registration Overall Message Sequence</em></p>
+          <h3 id="31-phase-1-rrc-connection-establishment">3.1 Phase 1: RRC Connection Establishment</h3>
+          <h4 id="311-initial-access">3.1.1 Initial Access</h4>
+          <p>The registration process begins when the UE performs initial cell search and synchronization with the gNB:</p>
+          <ul>
+          <li>UE scans for 5G signals (NRSS - NR Synchronization Signals)</li>
+          <li>UE detects and locks onto the gNB's reference signal</li>
+          <li>UE obtains system information blocks (SIBs) containing RACH configuration</li>
+          </ul>
+          <h4 id="312-rach-procedure-random-access-channel">3.1.2 RACH Procedure (Random Access Channel)</h4>
+          <p>The UE initiates Random Access Channel (RACH) procedure:</p>
+          <ul>
+          <li><strong>Preamble Transmission</strong>: UE sends preamble to gNB to request connection</li>
+          <li><strong>RA Response</strong>: gNB assigns uplink resources for UE to send RRC Setup Request</li>
+          <li><strong>RRC Setup</strong>: UE sends RRC Setup Request message including registration cause ("MO Signaling" or "MO Data")</li>
+          </ul>
+          <h4 id="313-rrc-setup-complete">3.1.3 RRC Setup Complete</h4>
+          <ul>
+          <li>gNB allocates RAN UE NGAP ID (unique identifier for this UE session)</li>
+          <li>UE sends RRCSetupComplete message containing the NAS Registration Request message</li>
+          <li>This marks the end of RAS establishment and beginning of NAS signaling</li>
+          </ul>
+          <h3 id="32-phase-2-amf-selection-and-initial-context-setup">3.2 Phase 2: AMF Selection and Initial Context Setup</h3>
+          <h4 id="321-gnb-selects-amf">3.2.1 gNB Selects AMF</h4>
+          <p>The gNB performs AMF selection based on:</p>
+          <ul>
+          <li>Supported network slices (NSSAI - Network Slice Selection Assistance Information) requested by UE</li>
+          <li>AMF capabilities advertised during gNB-AMF N2 connection setup</li>
+          <li>Load balancing policies and availability</li>
+          <li>Last known AMF (if UE has previous registration)</li>
+          </ul>
+          <h4 id="322-initial-ue-message-gnb-→-amf">3.2.2 Initial UE Message (gNB → AMF)</h4>
+          <p>The gNB sends NGAP Initial UE Message containing:</p>
+          <ul>
+          <li><strong>RAN UE NGAP ID</strong>: Unique identifier allocated by gNB</li>
+          <li><strong>NAS PDU</strong>: The Registration Request message from UE</li>
+          <li><strong>User Location Information</strong>: UE's location (TA - Tracking Area, cell ID)</li>
+          <li><strong>RRC Establishment Cause</strong>: Indicates why connection was established</li>
+          <li><strong>UE Context Request</strong>: Optionally requests retrieval from old AMF (in mobility scenarios)</li>
+          </ul>
+          <h4 id="323-registration-request-message-ue-→-amf">3.2.3 Registration Request Message (UE → AMF)</h4>
+          <p>The NAS Registration Request includes:</p>
+          <ul>
+          <li><strong>SUCI (Subscription Concealed User Identity)</strong> or <strong>5G-GUTI (Globally Unique Temporary Identity)</strong>: User identity (SUCI preferred for privacy)</li>
+          <li><strong>Registration Type</strong>: Initial, Mobility, or Periodic</li>
+          <li><strong>Last Visited TAI (Tracking Area Identity)</strong>: Previous tracking area (if applicable)</li>
+          <li><strong>Requested NSSAI</strong>: Network slices the UE wants to access</li>
+          <li><strong>PDU Session Status</strong>: Active PDU sessions if any</li>
+          <li><strong>UE Security Capabilities</strong>: Supported security algorithms and protocols</li>
+          <li><strong>Device Properties</strong>: IMEISV (device identity)</li>
+          </ul>
+          <h3 id="33-phase-3-authentication-and-security-setup">3.3 Phase 3: Authentication and Security Setup</h3>
+          <h4 id="331-identity-request-if-suci-not-provided">3.3.1 Identity Request (if SUCI not provided)</h4>
+          <p>If AMF cannot identify the UE from provided identity:</p>
+          <ul>
+          <li>AMF sends NAS Identity Request requesting SUCI</li>
+          <li>UE responds with NAS Identity Response containing SUCI</li>
+          <li>This step is conditional based on UE identity provision</li>
+          </ul>
+          <h4 id="332-ausf-interaction-and-authentication">3.3.2 AUSF Interaction and Authentication</h4>
+          <p><strong>Step 1: UDM Authentication Information Request</strong></p>
+          <ul>
+          <li>AMF requests authentication vectors from UDM via AUSF</li>
+          <li>Authentication vector contains: RAND (random challenge), AUTN (authentication token), XRES* (expected response)</li>
+          </ul>
+          <p><strong>Step 2: NAS Authentication Request (AMF → UE)</strong></p>
+          <ul>
+          <li>AMF sends NAS Authentication Request containing:<ul>
+          <li>RAND (128-bit random number)</li>
+          <li>AUTN (128-bit authentication token for network authentication to UE)</li>
+          </ul>
+          </li>
+          <li>UE verifies AUTN to authenticate the network (mutual authentication)</li>
+          <li>UE computes authentication response: RES* = f4(RAND, Security Key K)</li>
+          </ul>
+          <p><strong>Step 3: NAS Authentication Response (UE → AMF)</strong></p>
+          <ul>
+          <li>UE sends NAS Authentication Response containing RES*</li>
+          <li>AMF verifies RES* against XRES*</li>
+          <li>If verification successful, UE is authenticated</li>
+          <li>If verification fails, authentication is rejected and UE is rejected</li>
+          </ul>
+          <h4 id="333-security-mode-setup">3.3.3 Security Mode Setup</h4>
+          <p>The mutual authentication between the UE and the network, alongside the secure negotiation of cryptographic algorithms to protect subsequent signaling and data, is detailed in <strong>Figure 2</strong>. </p>
+          <img src="images/fig-2.svg" alt="Authentication and Security Mode Setup Detail" width="45%">
+          
+          <p><em>Figure 2: Authentication and Security Mode Setup Detail</em></p>
+          <p>After successful authentication, security is established as follows:</p>
+          <p><strong>Step 1: NAS Security Mode Command (AMF → UE)</strong></p>
+          <ul>
+          <li>AMF sends NAS Security Mode Command selecting security algorithms:<ul>
+          <li>NAS encryption algorithm (e.g., 128-EEA2, 128-EEA3)</li>
+          <li>NAS integrity protection algorithm (e.g., 128-EIA2, 128-EIA3)</li>
+          <li>RRC ciphering and integrity protection algorithms (for radio link)</li>
+          </ul>
+          </li>
+          <li>UE security capabilities are compared with network capabilities to ensure compatibility</li>
+          </ul>
+          <p><strong>Step 2: NAS Security Mode Complete (UE → AMF)</strong></p>
+          <ul>
+          <li>UE responds with NAS Security Mode Complete message</li>
+          <li>Message is now protected with selected algorithms</li>
+          <li>All subsequent NAS messages are encrypted and integrity protected</li>
+          </ul>
+          <p><strong>Step 3: EIR Check (Optional)</strong></p>
+          <ul>
+          <li>AMF sends IMEISV (device serial number) to EIR for device validation</li>
+          <li>EIR checks if device is blacklisted or whitelisted</li>
+          <li>Result returned to AMF</li>
+          </ul>
+          <h3 id="34-phase-4-uecm-registration-and-subscription-data-retrieval">3.4 Phase 4: UECM Registration and Subscription Data Retrieval</h3>
+          <h4 id="341-ue-context-management-uecm-registration">3.4.1 UE Context Management (UECM) Registration</h4>
+          <p>AMF registers with UDM using Nudm_UECM_Registration:</p>
+          <ul>
+          <li>AMF sends registration message indicating it is the serving AMF for this UE</li>
+          <li>UDM stores the AMF identity associated with this access type (3GPP, non-3GPP, etc.)</li>
+          <li>UDM subscribes to deregistration events from this AMF</li>
+          <li>This step ensures that only one AMF is serving the UE at any given time for a specific access type</li>
+          </ul>
+          <h4 id="342-subscription-data-management-sdm---get">3.4.2 Subscription Data Management (SDM) - GET</h4>
+          <p>AMF retrieves UE subscription data:</p>
+          <ul>
+          <li>Nudm_SDM_Get operation retrieves:<ul>
+          <li>NSSAI (Network Slice Selection Assistance Information) authorized for this UE</li>
+          <li>Access and Roaming Restriction Rules</li>
+          <li>Slice-specific subscription parameters</li>
+          <li>User Consent and Privacy settings</li>
+          <li>Operator Policies</li>
+          </ul>
+          </li>
+          </ul>
+          <h4 id="343-subscription-data-management-sdm---subscribe">3.4.3 Subscription Data Management (SDM) - Subscribe</h4>
+          <p>AMF subscribes to SDM events:</p>
+          <ul>
+          <li>AMF subscribes using Nudm_SDM_Subscribe to be notified of:<ul>
+          <li>Changes in UE's subscription data</li>
+          <li>Changes in network slice subscriptions</li>
+          <li>Updates to policies affecting the UE</li>
+          </ul>
+          </li>
+          <li>UDM will notify AMF whenever these parameters change</li>
+          </ul>
+          <h3 id="35-phase-5-policy-control-and-access-management">3.5 Phase 5: Policy Control and Access Management</h3>
+          <h4 id="351-am-policy-association-amf-pcf-interaction">3.5.1 AM Policy Association (AMF-PCF Interaction)</h4>
+          <p>AMF establishes policy association with PCF:</p>
+          <ul>
+          <li>AMF uses Npcf_AMPolicyControl_Create to create policy association</li>
+          <li>PCF provides:<ul>
+          <li>Access control policies (which slices/services allowed)</li>
+          <li>Mobility policies (handover thresholds, RAI - Registration Area Information)</li>
+          <li>QoS policies</li>
+          <li>Charging policies</li>
+          </ul>
+          </li>
+          </ul>
+          <h4 id="352-allowed-nssai-determination">3.5.2 Allowed NSSAI Determination</h4>
+          <ul>
+          <li>Combined from UE-Requested NSSAI and subscribed NSSAI, AMF determines Allowed NSSAI</li>
+          <li>Only slices that are both requested AND subscribed are included</li>
+          <li>This filtered set is sent to UE in Registration Accept message</li>
+          </ul>
+          <h3 id="36-phase-6-registration-accept-and-completion">3.6 Phase 6: Registration Accept and Completion</h3>
+          <h4 id="361-nas-registration-accept-amf-→-ue">3.6.1 NAS Registration Accept (AMF → UE)</h4>
+          <p>AMF sends NAS Registration Accept message containing:</p>
+          <ul>
+          <li><strong>5G-GUTI (5G Globally Unique Temporary Identity)</strong>: Temporary identity assigned by AMF for future use</li>
+          <li><strong>Allowed NSSAI</strong>: List of network slices UE is authorized to use</li>
+          <li><strong>TAI List (Tracking Area Identity List)</strong>: List of TAs where UE is registered (registration area)</li>
+          <li><strong>GPRS Timer 3</strong>: Periodic registration update timer value</li>
+          <li><strong>SMS over NAS Support</strong>: Indicator if SMS over NAS is supported</li>
+          <li><strong>Access Type</strong>: 3GPP or non-3GPP access</li>
+          </ul>
+          <h4 id="362-rrc-reconfiguration">3.6.2 RRC Reconfiguration</h4>
+          <ul>
+          <li>gNB receives the updated parameters and sends RRCReconfiguration to UE</li>
+          <li>UE acknowledges with RRCReconfigurationComplete</li>
+          </ul>
+          <h4 id="363-nas-registration-complete-ue-→-amf">3.6.3 NAS Registration Complete (UE → AMF)</h4>
+          <ul>
+          <li>UE sends NAS Registration Complete message to acknowledge successful registration</li>
+          <li>UE stores received 5G-GUTI for future use</li>
+          <li>UE stores TAI List and registration area information</li>
+          <li>This marks the successful completion of initial registration</li>
+          </ul>
+          <h3 id="37-phase-7-post-registration---ue-policy-association-optional">3.7 Phase 7: Post-Registration - UE Policy Association (Optional)</h3>
+          <h4 id="371-ue-policy-association">3.7.1 UE Policy Association</h4>
+          <p>After successful registration, AMF can establish UE policy association:</p>
+          <ul>
+          <li>AMF uses Npcf_UEPolicyControl_Create with PCF</li>
+          <li>PCF provides UE policies (device management, service enablement)</li>
+          <li>These policies are sent to UE via UE Configuration Update message</li>
+          </ul>
+          <h4 id="372-ue-ready-for-data-services">3.7.2 UE Ready for Data Services</h4>
+          <p>After registration completion:</p>
+          <ul>
+          <li>UE can establish PDU sessions to access data services</li>
+          <li>UE can send and receive SMS over NAS</li>
+          <li>Mobility procedures (handovers, Tracking Area Updates) are now available</li>
+          <li>UE is ready for full 5G service consumption</li>
+          </ul>
+          <h2 id="4-key-concepts-and-technical-details">4. Key Concepts and Technical Details</h2>
+          <h3 id="41-suci-encryption-and-protection">4.1 SUCI Encryption and Protection</h3>
+          <p>The SUCI (Subscription Concealed User Identity) protects user privacy:</p>
+          <ul>
+          <li>UE's permanent identity (IMSI) is concealed using public key encryption</li>
+          <li>Public key of the network obtained from public key distribution center</li>
+          <li>SUCI format: NAI (Network Access Identifier) encrypted with operator's public key</li>
+          <li>AUSF can decrypt SUCI to obtain SUPI (Subscription Permanent User Identity)</li>
+          </ul>
+          <h3 id="42-temporary-identity-handling">4.2 Temporary Identity Handling</h3>
+          <ul>
+          <li><strong>5G-GUTI</strong>: Temporary identity allocated by AMF for future registrations</li>
+          <li>UE uses 5G-GUTI in subsequent registration attempts instead of SUCI</li>
+          <li>Provides privacy improvement by rotating UE identity periodically</li>
+          <li>Old 5G-GUTI remains valid until new one is accepted by UE</li>
+          </ul>
+          <p>Throughout the registration lifecycle, a UE transitions between various states (such as deregistered, registered, and idle modes) based on network events and connectivity status. These state transitions are depicted in <strong>Figure 3</strong>.</p>
+          <img src="images/fig-3.svg" alt="UE Registration State Transitions" width="45%">
+           
+          <p><em>Figure 3: UE Registration State Transitions</em></p>
+          <h3 id="43-registration-area-ta-list">4.3 Registration Area (TA List)</h3>
+          <ul>
+          <li>AMF assigns a Tracking Area Identity (TAI) List (also called RA - Registration Area)</li>
+          <li>UE can move within this area without sending registration update messages</li>
+          <li>When UE moves outside TA List, it must perform Mobility Registration Update</li>
+          <li>Reduces signaling overhead and improves mobility efficiency</li>
+          </ul>
+          <h3 id="44-network-slicing-in-registration">4.4 Network Slicing in Registration</h3>
+          <p>Network slicing allows the UE to connect to specialized network instances. As outlined in <strong>Figure 4</strong>, the UE's requested NSSAI is evaluated against its subscribed slices and network policies to determine the allowed NSSAI for optimized service delivery. The key aspects of this process include:</p>
+          <ul>
+          <li>UE can request specific network slices via Requested NSSAI (1 to 8 slices)</li>
+          <li>Each NSSAI contains: S-NSSAI (Single-NSSAI) = {SST (Slice/Service Type) + SD (Slice Differentiator)}</li>
+          <li>AMF filters requested NSSAI against subscribed NSSAI to determine Allowed NSSAI</li>
+          <li>Different slices may have different:<ul>
+          <li>QoS characteristics</li>
+          <li>Allowed services</li>
+          <li>PDU session types (IPv4, IPv6, Ethernet)</li>
+          <li>Charging models</li>
+          </ul>
+          </li>
+          </ul>
+          <img src="images/fig-4.svg" alt="Network Slice Selection (NSSAI) Processing Flow" width="45%">
+          
+          <p><em>Figure 4: Network Slice Selection (NSSAI) Processing Flow</em></p>
+          <h3 id="45-security-context-derivation">4.5 Security Context Derivation</h3>
+          <p>After authentication, the UE and the network establish a hierarchical structure of cryptographic keys to protect signaling and data. As illustrated in <strong>Figure 5</strong>, the primary authentication keys are used to derive specific keys for NAS and RRC signaling encryption and integrity protection:</p>
+          <ul>
+          <li><strong>NAS key (K_NAS)</strong>: Derived from shared secret using key derivation function</li>
+          <li><strong>RRC keys (K_RRC enc, K_RRC int)</strong>: Derived from K_NAS for radio link protection</li>
+          <li>K_NAS = KDF(Authentication Key, Server Function Name)</li>
+          <li>Separate keys for encryption and integrity protection ensure security separation</li>
+          </ul>
+          <img src="images/fig-5.svg" alt="Security Context and Key Derivation Tree" width="45%">
+          
+          <p><em>Figure 5: Security Context and Key Derivation Tree</em></p>
+          <h3 id="46-ciphering-and-integrity-protection">4.6 Ciphering and Integrity Protection</h3>
+          <ul>
+          <li><strong>NAS Ciphering</strong>: All NAS signaling messages encrypted after security mode setup</li>
+          <li><strong>NAS Integrity</strong>: All NAS messages receive message authentication code (MAC) for integrity</li>
+          <li><strong>RRC Ciphering</strong>: RRC messages on radio link encrypted</li>
+          <li><strong>RRC Integrity</strong>: RRC messages integrity protected</li>
+          <li>Together ensure confidentiality and authenticity of signaling</li>
+          </ul>
+          <h2 id="5-message-sequence-summary">5. Message Sequence Summary</h2>
+          <p>Below is the sequence of key messages in UE registration:</p>
+          <table>
+          <thead>
+          <tr>
+          <th>Step</th>
+          <th>Message</th>
+          <th>Direction</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>1</td>
+          <td>RRCSetupComplete (with Registration Request)</td>
+          <td>UE → gNB → AMF</td>
+          </tr>
+          <tr>
+          <td>2</td>
+          <td>Identity Request</td>
+          <td>AMF → UE</td>
+          </tr>
+          <tr>
+          <td>3</td>
+          <td>Identity Response</td>
+          <td>UE → AMF</td>
+          </tr>
+          <tr>
+          <td>4</td>
+          <td>NAS Authentication Request</td>
+          <td>AMF → UE</td>
+          </tr>
+          <tr>
+          <td>5</td>
+          <td>NAS Authentication Response</td>
+          <td>UE → AMF</td>
+          </tr>
+          <tr>
+          <td>6</td>
+          <td>NAS Security Mode Command</td>
+          <td>AMF → UE</td>
+          </tr>
+          <tr>
+          <td>7</td>
+          <td>NAS Security Mode Complete</td>
+          <td>UE → AMF</td>
+          </tr>
+          <tr>
+          <td>8</td>
+          <td>Registration Accept</td>
+          <td>AMF → UE</td>
+          </tr>
+          <tr>
+          <td>9</td>
+          <td>RRCReconfiguration (from gNB)</td>
+          <td>gNB → UE</td>
+          </tr>
+          <tr>
+          <td>10</td>
+          <td>Registration Complete</td>
+          <td>UE → AMF</td>
+          </tr>
+          </tbody></table>
+          <p>Table: Key NAS and RRC Messages in UE Registration</p>
+          <h2 id="6-network-function-interactions">6. Network Function Interactions</h2>
+          <h3 id="61-amf-udm-interaction">6.1 AMF-UDM Interaction</h3>
+          <p>The AMF and UDM interact multiple times during registration:</p>
+          <table>
+          <thead>
+          <tr>
+          <th>Operation</th>
+          <th>API</th>
+          <th>Purpose</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>Authentication Get</td>
+          <td>Nudm_AUSF_Get</td>
+          <td>Retrieve authentication vectors</td>
+          </tr>
+          <tr>
+          <td>UECM Registration</td>
+          <td>Nudm_UECM_Registration</td>
+          <td>Register AMF as serving function</td>
+          </tr>
+          <tr>
+          <td>SDM GET</td>
+          <td>Nudm_SDM_Get</td>
+          <td>Retrieve subscription data</td>
+          </tr>
+          <tr>
+          <td>SDM Subscribe</td>
+          <td>Nudm_SDM_Subscribe</td>
+          <td>Subscribe to data changes</td>
+          </tr>
+          <tr>
+          <td>AM Policy Control</td>
+          <td>Npcf_AMPolicyControl_Create</td>
+          <td>Create policy for UE</td>
+          </tr>
+          </tbody></table>
+          <p>Table: AMF Service Consumer Operations</p>
+          <h3 id="62-authentication-via-ausf">6.2 Authentication via AUSF</h3>
+          <p>AUSF acts as authentication server:</p>
+          <ul>
+          <li>Communicates with UDM to retrieve authentication credentials</li>
+          <li>Generates authentication vectors (RAND, AUTN, XRES*)</li>
+          <li>Returns vectors to AMF</li>
+          <li>Validates RES* received from UE</li>
+          </ul>
+          <h3 id="63-policy-control-via-pcf">6.3 Policy Control via PCF</h3>
+          <p>PCF controls access and mobility:</p>
+          <ul>
+          <li>Creates policy association when AMF requests</li>
+          <li>Provides access control and mobility policies</li>
+          <li>Handles QoS policies and charging information</li>
+          <li>Notifies AMF of policy changes</li>
+          </ul>
+          <p>The broader service-based interactions of the AMF with other core network functions—such as the UDM, AUSF, and PCF—are illustrated in <strong>Figure 6</strong>. These interactions utilize standardized APIs to retrieve authentication vectors, manage subscriptions, and apply network policies throughout the registration process.</p>
+          <img src="images/fig-6.svg" alt="AMF Network Function Interactions and APIs" width="45%">
+          
+          <p><em>Figure 6: AMF Network Function Interactions and APIs</em></p>
+          <h2 id="7-ngap-procedure-details">7. NGAP Procedure Details</h2>
+          <p>While Section 3 described the end-to-end registration flow, this section focuses specifically on the <strong>NGAP (NG Application Protocol)</strong> procedures that carry NAS messages between gNB and AMF over the N2/NG-C interface, and that establish the UE's context inside the core network.</p>
+          <h3 id="71-ngaps-role-in-registration">7.1 NGAP's Role in Registration</h3>
+          <p>NGAP runs over SCTP (port 38412) between gNB and AMF. It does not interpret NAS content — it transports NAS PDUs transparently while also managing the UE's context, resources, and signaling connection at the gNB.</p>
+          <p>The key NGAP procedures involved in registration are:</p>
+          <table>
+          <thead>
+          <tr>
+          <th>NGAP Procedure</th>
+          <th>Direction</th>
+          <th>Purpose</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>Initial UE Message</td>
+          <td>gNB → AMF</td>
+          <td>Carries the first NAS message (Registration Request) and establishes UE's NGAP context</td>
+          </tr>
+          <tr>
+          <td>Downlink NAS Transport</td>
+          <td>AMF → gNB</td>
+          <td>Carries subsequent NAS messages (Identity Request, Auth Request, Security Mode Command, etc.) to the UE</td>
+          </tr>
+          <tr>
+          <td>Uplink NAS Transport</td>
+          <td>gNB → AMF</td>
+          <td>Carries UE's NAS responses back to AMF</td>
+          </tr>
+          <tr>
+          <td>Initial Context Setup Request</td>
+          <td>AMF → gNB</td>
+          <td>Instructs gNB to establish UE context, security, and (optionally) PDU session resources</td>
+          </tr>
+          <tr>
+          <td>Initial Context Setup Response</td>
+          <td>gNB → AMF</td>
+          <td>Confirms UE context establishment</td>
+          </tr>
+          <tr>
+          <td>UE Context Release Command/Complete</td>
+          <td>AMF ↔ gNB</td>
+          <td>Releases NGAP/UE context (e.g., after registration failure or reject)</td>
+          </tr>
+          <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          </tr>
+          </tbody></table>
+          <h3 id="72-initial-ue-message-detailed">7.2 Initial UE Message (Detailed)</h3>
+          <p>This is the first NGAP message and creates the UE's context at the AMF side:</p>
+          <pre><code>NGAP: INITIAL UE MESSAGE
+          {
+              RAN UE NGAP ID: 1                      -- allocated by gNB
+              NAS-PDU: &lt;Registration Request&gt;         -- opaque NAS container
+              User Location Information:
+              {
+                  NR CGI: { PLMN: 00101, Cell ID: 0x0000101 }
+                  TAI: { PLMN: 00101, TAC: 000064 }
+              }
+              RRC Establishment Cause: mo-Signalling
+              UE Context Request: true                -- requests AMF to set up UE context
+          }
+          </code></pre>
+          <p>At this point, AMF allocates its own <strong>AMF UE NGAP ID</strong>, and the pair (RAN UE NGAP ID, AMF UE NGAP ID) uniquely identifies the UE's NGAP signaling connection for the remainder of the procedure.</p>
+          <h3 id="73-downlink--uplink-nas-transport">7.3 Downlink / Uplink NAS Transport</h3>
+          <p>Once the initial context exists, all further NAS exchanges (Identity Request/Response, Authentication Request/Response, Security Mode Command/Complete) are wrapped in these lightweight NGAP procedures:</p>
+          <pre><code>NGAP: DOWNLINK NAS TRANSPORT
+          {
+              AMF UE NGAP ID: 10
+              RAN UE NGAP ID: 1
+              NAS-PDU: &lt;Authentication Request&gt;
+          }
+          </code></pre>
+          <pre><code>NGAP: UPLINK NAS TRANSPORT
+          {
+              AMF UE NGAP ID: 10
+              RAN UE NGAP ID: 1
+              NAS-PDU: &lt;Authentication Response&gt;
+              User Location Information: { ... }      -- updated location, if changed
+          }
+          </code></pre>
+          <p>These two procedures repeat for each NAS round-trip shown in the Section 5 message table (Identity, Authentication, Security Mode).</p>
+          <h3 id="74-initial-context-setup">7.4 Initial Context Setup</h3>
+          <p>After security is established (post Security Mode Complete), AMF sends <strong>Initial Context Setup Request</strong> to instruct the gNB to finalize the UE's radio and security context:</p>
+          <pre><code>NGAP: INITIAL CONTEXT SETUP REQUEST
+          {
+              AMF UE NGAP ID: 10
+              RAN UE NGAP ID: 1
+              Old-to-New Security Context: { K_gNB, NAS algorithms, ... }
+              UE Aggregate Maximum Bit Rate: { UL: 100 Mbps, DL: 500 Mbps }
+              Mobility Restriction List: { ... }
+              NAS-PDU: &lt;Registration Accept&gt;          -- often piggybacked here
+          }
+          </code></pre>
+          <p>The gNB applies the security context to the RRC connection (deriving AS-level keys from K_gNB), configures radio bearers, and responds:</p>
+          <pre><code>NGAP: INITIAL CONTEXT SETUP RESPONSE
+          {
+              AMF UE NGAP ID: 10
+              RAN UE NGAP ID: 1
+          }
+          </code></pre>
+          <p>This procedure is what transitions the NGAP signaling connection from a "bare" initial context (created by Initial UE Message) into a fully secured, resourced UE context — the NGAP-level counterpart to the NAS Registration Accept/Complete exchange in Section 3.6.</p>
+          <h3 id="75-ue-context-release">7.5 UE Context Release</h3>
+          <p>If registration fails, is rejected, or the UE later deregisters, the NGAP context is torn down:</p>
+          <pre><code>NGAP: UE CONTEXT RELEASE COMMAND
+          {
+              AMF UE NGAP ID: 10
+              RAN UE NGAP ID: 1
+              Cause: { NAS(Normal-Release) | RadioNetwork(...) }
+          }
+          </code></pre>
+          <p>gNB releases RRC connection and radio resources, then confirms with <strong>UE Context Release Complete</strong>.</p>
+          <h2 id="8-registration-failure-and-rejection-scenarios">8. Registration Failure and Rejection Scenarios</h2>
+          <p>Registration does not always succeed. 5G defines specific <strong>5GMM cause codes</strong> (3GPP TS 24.501) returned in a <strong>NAS Registration Reject</strong> message, as well as failure points at the NGAP level.</p>
+          <h3 id="81-failure-points-across-the-registration-flow">8.1 Failure Points Across the Registration Flow</h3>
+          <table>
+          <thead>
+          <tr>
+          <th>Phase</th>
+          <th>Possible Failure</th>
+          <th>Resulting Action</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>Identity</td>
+          <td>UE fails to provide valid SUCI</td>
+          <td>AMF aborts registration, sends Registration Reject</td>
+          </tr>
+          <tr>
+          <td>Authentication</td>
+          <td>RES* ≠ XRES* (authentication failure)</td>
+          <td>AMF sends Authentication Reject; UE registration fails</td>
+          </tr>
+          <tr>
+          <td>Authentication</td>
+          <td>UE fails to verify AUTN (network authentication failure)</td>
+          <td>UE sends Authentication Failure to AMF; AMF may retry or abort</td>
+          </tr>
+          <tr>
+          <td>Security Mode</td>
+          <td>UE/network cannot agree on algorithms</td>
+          <td>Security Mode Reject sent; registration aborted</td>
+          </tr>
+          <tr>
+          <td>EIR Check</td>
+          <td>Device IMEISV blacklisted</td>
+          <td>AMF sends Registration Reject with equipment-related cause</td>
+          </tr>
+          <tr>
+          <td>Subscription (UDM)</td>
+          <td>SUPI not found / subscription barred</td>
+          <td>AMF sends Registration Reject (illegal UE / not authorized)</td>
+          </tr>
+          <tr>
+          <td>Slice Selection</td>
+          <td>Requested NSSAI not subscribed or not supported in TA</td>
+          <td>Registration Reject, or Registration Accept with reduced Allowed NSSAI</td>
+          </tr>
+          <tr>
+          <td>Policy (PCF)</td>
+          <td>AM Policy Association fails</td>
+          <td>AMF may still complete registration with default policies, or reject depending on operator configuration</td>
+          </tr>
+          <tr>
+          <td>NGAP</td>
+          <td>Initial Context Setup fails (radio resource shortage)</td>
+          <td>NGAP Initial Context Setup Failure; AMF may retry or release UE context</td>
+          </tr>
+          <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          </tr>
+          </tbody></table>
+          <h3 id="82-nas-registration-reject--key-cause-codes">8.2 NAS Registration Reject — Key Cause Codes</h3>
+          <p>The Registration Reject message carries a <strong>5GMM Cause</strong> value indicating why registration failed:</p>
+          <table>
+          <thead>
+          <tr>
+          <th>Cause Value</th>
+          <th>Cause Name</th>
+          <th>Typical Meaning</th>
+          </tr>
+          </thead>
+          <tbody><tr>
+          <td>3</td>
+          <td>Illegal UE</td>
+          <td>UE identity/authentication invalid or fraudulent</td>
+          </tr>
+          <tr>
+          <td>5</td>
+          <td>PEI not accepted</td>
+          <td>Device identity rejected by EIR</td>
+          </tr>
+          <tr>
+          <td>6</td>
+          <td>Illegal ME</td>
+          <td>Mobile equipment not accepted (blacklisted/non-conforming)</td>
+          </tr>
+          <tr>
+          <td>7</td>
+          <td>5GS services not allowed</td>
+          <td>Subscription does not permit 5GS access</td>
+          </tr>
+          <tr>
+          <td>9</td>
+          <td>UE identity cannot be derived by the network</td>
+          <td>SUCI/GUTI could not be resolved</td>
+          </tr>
+          <tr>
+          <td>11</td>
+          <td>PLMN not allowed</td>
+          <td>UE not permitted to register on this PLMN</td>
+          </tr>
+          <tr>
+          <td>12</td>
+          <td>Tracking area not allowed</td>
+          <td>TA restrictions prevent registration</td>
+          </tr>
+          <tr>
+          <td>13</td>
+          <td>Roaming not allowed in this tracking area</td>
+          <td>Roaming agreement/restriction violation</td>
+          </tr>
+          <tr>
+          <td>15</td>
+          <td>No suitable cells in tracking area</td>
+          <td>Radio/TA mismatch</td>
+          </tr>
+          <tr>
+          <td>22</td>
+          <td>Congestion</td>
+          <td>Network overload; often paired with a back-off timer</td>
+          </tr>
+          <tr>
+          <td>27</td>
+          <td>N1 mode not allowed</td>
+          <td>UE/network NAS mode mismatch</td>
+          </tr>
+          <tr>
+          <td>62</td>
+          <td>No network slices available</td>
+          <td>Requested NSSAI cannot be satisfied at all</td>
+          </tr>
+          <tr>
+          <td>72–95</td>
+          <td>(Reserved/protocol errors)</td>
+          <td>Various protocol error conditions (e.g., message type not compatible)</td>
+          </tr>
+          <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          </tr>
+          </tbody></table>
+          <h3 id="83-example-registration-reject-message">8.3 Example Registration Reject Message</h3>
+          <pre><code>NAS: REGISTRATION REJECT
+          {
+              5GMM Cause: 11                          -- PLMN not allowed
+              T3346 value: 30                         -- back-off timer (minutes), if congestion-related
+              T3502 value: not present
+          }
+          </code></pre>
+          <p>When a back-off timer (e.g., <strong>T3346</strong>) is included, the UE must not re-attempt registration on that PLMN/access type until the timer expires — mirroring the back-off behavior described for PDU sessions in the Session Management document (Section 8).</p>
+          <h3 id="84-authentication-failure-handling">8.4 Authentication Failure Handling</h3>
+          <p>If the UE detects a network authentication failure (invalid AUTN, e.g., SQN out of range):</p>
+          <pre><code>NAS: AUTHENTICATION FAILURE
+          {
+              5GMM Cause: 21    -- Synch failure
+              AUTS: &lt;resynchronization token&gt;
+          }
+          </code></pre>
+          <p>The AMF forwards AUTS to AUSF/UDM to resynchronize the sequence number, and the authentication procedure is retried once. Repeated failures result in registration abandonment and a Registration Reject.</p>
+          <h3 id="85-ngap-level-failures">8.5 NGAP-Level Failures</h3>
+          <p>Separate from NAS-level rejects, NGAP itself can fail the procedure before Registration Reject is even sent at the NAS layer:</p>
+          <ul>
+          <li><strong>Initial Context Setup Failure</strong>: gNB cannot allocate radio resources (congestion, unsupported UE capability) — AMF may retry, redirect, or abandon.</li>
+          <li><strong>NG Setup not completed</strong>: If gNB–AMF NG Setup (see the companion NG Setup/N3 document) has not completed, no Initial UE Message can be sent at all, and the UE registration cannot proceed past cell selection.</li>
+          <li><strong>SCTP association loss mid-procedure</strong>: Causes AMF to release the partial UE context and requires the UE to restart from RRC Setup.</li>
+          </ul>
+          <h3 id="86-ue-side-retry-behavior">8.6 UE-Side Retry Behavior</h3>
+          <ul>
+          <li>UE stores the 5GMM cause and any back-off timer per PLMN.</li>
+          <li>Certain causes (e.g., "Illegal UE," "PLMN not allowed") may cause the UE to mark the PLMN/USIM combination as forbidden until manual intervention or SIM/PLMN change.</li>
+          <li>Congestion-related causes (with T3346) allow automatic retry after the timer expires.</li>
+          <li>Synch-failure cases trigger an automatic, immediate one-time retry using AUTS before falling back to a hard reject.</li>
+          </ul>
+          <h2 id="9-conclusion">9. Conclusion</h2>
+          <p>The UE registration process in 5G networks is a comprehensive multi-phase procedure that establishes secure connectivity, authenticates users, retrieves subscription information, and applies network policies. This document has detailed:</p>
+          <ol>
+          <li>The complete flow from RRC setup through NAS registration completion</li>
+          <li>Security mechanisms including authentication, encryption, and integrity protection</li>
+          <li>Network function interactions demonstrating distributed processing</li>
+          <li>Policy control and network slicing considerations</li>
+          <li>The underlying NGAP procedures (Initial UE Message, NAS Transport, Initial Context Setup, Context Release) that carry and support NAS signaling</li>
+          <li>Failure and rejection scenarios at both the NAS and NGAP levels, including 5GMM cause codes and back-off/retry behavior</li>
+          <li>Key concepts essential for understanding 5G registration
+          Together, these sections form a comprehensive resource for implementing, testing, and optimizing UE registration in 5G networks.</li>
+          </ol>
+          
+          </div>
+          <div class="bug-report-mobile">
+              <bug-report id="bug-report" title="[BUG REPORT] Implement Registration of UE’s with the Core Network" page-type="text" context-info="{&quot;organisation&quot;:&quot;Virtual Labs&quot;,&quot;developer_institute&quot;:&quot;DLBG&quot;,&quot;expname&quot;:&quot;Implement Registration of UE’s with the Core Network&quot;,&quot;labname&quot;:&quot;Virtual Lab&quot;,&quot;phase&quot;:&quot;Testing&quot;}" checkbox-json="{&quot;text&quot;:[&quot;Insufficient Content&quot;],&quot;video&quot;:[&quot;Insufficient Content&quot;],&quot;assesment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;assessment&quot;:[&quot;Incorrect Options&quot;,&quot;Incorrect Answer&quot;,&quot;Incorrect Question&quot;],&quot;simulation&quot;:[&quot;Simulation Not Working&quot;,&quot;Incorrect Results/Observations&quot;,&quot;Insufficient/Incorrect Instructions&quot;],&quot;DEFAULT&quot;:[&quot;Page Not Loading&quot;,&quot;Content Not Visible&quot;,&quot;Incorrect Content&quot;]}" position="override" button_style="
+                          position: fixed; 
+                          bottom: 20px;
+                          right: 20px;
+                          z-index: 1;
+                          font-size: 0;
+                          padding: 25px;
+                          border-radius: 50%;
+                          border: none;
+                          background-color: #0fc0ff;
+                          background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAAAXNSR0IArs4c6QAABiFJREFUaEPFmVuMFEUUhv/TM7uwoBGVyG22u7ZnYGG5REETo8RA1BhFIka8ABFf0PCgDxhFEpCLqAlE1OiTiSj4gFGjD0QBETQaEqPRICALSHdPV+8YQQJBA+wuO1PHdMNcWGame2ZWqMfuc/nq1KlT1acJAzhShjFVAUsYdL8G3HjRdA7gHwna5uahLR91dnaeb9QlNWrA1+/o6GjuPnv2DQ30LICKNhk4qLF63PK8g434rejATJhjKa6m9WazOzOZzKlKTmYAcc8QnxEwJwqIAk5STpvpZJwD1eTHjR43PKflhtkZ2+ovVxbaTJiTSVM/gzCYGIebu4fc1nmi80w5J0nDWA7Qq1GACzLMR3pV7pZMJtNdTs/UzelE6msAQ0BYb7vuS6VyZaGTungGhPfygkRYZ7nusv4OEonEDc2xuEfA0JqgATBhieO6b/fXE0IM1pgPECgVvGP+x/bksFDo1JhUguPZI8FMAz0+zzFtSjqd9p8VRlJvew7E79QKHNgEDjrSndRfNyXEGmasLK4KttmeOysU2hdIGm0vA/xKUZh32VLeW6psCrGMmO+uB5qIeEh398P7jx8/m9cP9pGm9vtpmQ9WjHDzUSkPRYJOpVKDuK9vP0Dj8goMfsSR8ot6IKPoJI22XUBpEHitLWUx6heNVC15pmHMItCXBYeKPUZsLlFWVYNQsVg2nU7v82XaW1tHZ4lGhUEztOlEKOQ4A/b5XHZyuc0aWqdNIbYSY3aY00veM/9te3KE/ywlxGpmrKpJP8h5ftCR8qtyeqHQY3XdVNAO5vMskvMGoRWrT9Ke90QlX6HQF6N16Y4OI28Ampn/jatcxx+ZzJ8NQScSiZZBWvzJwAhhJoCKUQhkaoVmnAZoJcC9WowOH02nf6gWl0iRLpQk3ZwOym0n0DVVg10rNAAF7Ig1xedYltUbtpCRoZO6Po1J+z7S6VcHdLCIClusLnfBgED7NVv1ZX8lYGKYwbrSo8Qogxc4Um5pOD1Mo20DgZ+PBFxPTpcYJuBUljDRdd1jdW/EcYnEmKwWSxNR05WADnwo2mB3pV+oGzopxDowlkYGbjDSF9ILpwd1D2mtdB2uuhEv3D+yfwG4/opCB5WVnrZk+v1yfqtCJ3X9TpC2pybggYj0BYcf29KdXwe0WArCuqsCzSxtT4qq0GareStIXXo3JjxGwNSrAh0crMFFq3jYEJ9wpPygkB6mYZwg0PCaAcsp1Hm4RPFtS5eK0LpxvqayVs3DlYIO7r0K8xUhlufRGKNrupLmFQcImsEZBhWaOxq4y5ZyRvXqIcSnYDwaZdkukRkgaGqK32RZ1on+/qt/buliFRFWXxXokonXBJ3S22Yz8darAc2sdjqed1/NddpvnMQUHwPRdTWBD0R6EBbbrltoGJX6D71PJ3V9E0h76kpCMzirNTWNLpfPPkcodNDXi6m9QLGqhE6gwUgzaKMj04sq+QmF9hVrjnYj0IwejmvtjuN4DUEbhjEqztgLoqCXEToagQavsKV8rZqPSJH2DaSEmMGMXZHSpE5oZnzneK7fL8w1DJ1sTU6CltvEwPj/88OWwRYx77Y9b3HD0KYuvqUL/Y5oo85I542TooesrnTF8yE0PUwh5hGj6tfxZTNpEBqKvUE9QyfW9bnV3t5+bV9P7yECxuTBFGOvRn5v5eJgTLzsUhUFmuGCcLJoBiNL/ZT7bVFYiWrrnTSM9QC9WBSmzy2ZnluqI4QYGQcWM/O8Qi+7EjSjB4xtTNqHjuf4HVHO20q1tiZZi/k/j1r8Z8zcRxyfanfZv/dnrJgeYw1jQo6xr+SOfY5j2oRq9VMIIWLA7QSMslz3raDGG8ZMJhoPpR1QmvrFdd2eSoFKGm0rAF5bfM97bCnvKp2c/64idFLXd4C0woWFwMstKV+PthPrk/L/R/aeOfcbCBOKq8uLLCk3llos/0tON+8hUt+U5O1Rao5PjtIcrA+3qOWvDEC78wFlIO1I1wyFTuptC0G8uWSZHrCl3N4oUFT9NiE2a4yFQW6DLUfKsaHQU0aMGHq2pWULM98Bpncdzy35yxXVdf1yftXK9vS8CUVjtBjWHHXdn0qt/Qf/x1JblU8EiAAAAABJRU5ErkJggg==);
+                          background-repeat: no-repeat;
+                          background-position: center;
+                          background-size: 30px;
+                          filter: invert(1);">
+              </bug-report>
+          </div>        </div>
+      </div>
+      <footer class="text-light pt-2 vlabs-footer d-flex flex-column">
+        <div class="row px-5 mx-0">
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Community Links</span>
+            <a href="https://www.sakshat.ac.in/" class="text-light">Sakshat Portal</a>
+            <a href="http://outreach.vlabs.ac.in/" class="text-light">Outreach Portal</a>
+            <a href="https://vlab.co.in/faq" class="text-light">FAQ: Virtual Labs</a>
+          </div>
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Contact Us</span>
+            <span> Phone: General Information: 011-26582050 </span>
+            <span> Email: support@vlabs.ac.in </span>
+          </div>
+          <div class="col d-flex flex-column">
+            <span class="font-weight-bold vlabs-footer-sect-name pb-2 mb-3">Follow Us</span>
+            <div class="social-links">
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #55acee;" href="https://twitter.com/TheVirtualLabs">
+      	  <i class="fab fa-twitter"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #3b5998;" href="https://www.facebook.com/Virtual-Labs-IIT-Delhi-301510159983871/">
+      	  <i class="fab fa-facebook"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #e52d27;" href="https://www.youtube.com/watch?v=asxRaOgk6a0">
+      	  <i class="fab fa-youtube"></i>
+      	</a>
+      	<a class="p-2 mt-1 mr-2 d-inline-flex justify-content-center align-items-center" style="background: #2867B2;" href="https://in.linkedin.com/in/virtual-labs-008ba9136">
+      	  <i class="fab fa-linkedin"></i>
+      	</a>
+            </div>
+          </div>
+        </div>
+        <div class="m-0 py-2 text-center" style="font-family: &quot;Open Sans&quot;, sans-serif; background: #212121;">
+          <a class="text-primary font-weight-bold" href="https://www.gnu.org/licenses/agpl-3.0.en.html"> AGPL 3.0 </a>
+          &nbsp;&amp;&nbsp;
+          <a class="text-primary font-weight-bold" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"> Creative Commons (CC BY-NC-SA 4.0) </a>
+        </div>
+      </footer>
+    <script src="./assets/js/toggleSidebar.js"></script>
+    <script src="./assets/js/event-handler.js"></script>
+
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register("sw.js");
+        });
+      }
+    </script>
+  
+
+<script type="module" src="https://cdn.vlabs.ac.in/bug-report/vlabs-bug-report.js"></script><script type="module" src="/exp-registration-ue-dei/plugins/svc-rating/index.js"></script><script type="module" src="/exp-registration-ue-dei/plugins/svc-rating/config.js"></script><script type="module" src="https://apis.google.com/js/api.js"></script></body></html>
