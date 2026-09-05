@@ -31,9 +31,11 @@ This document focuses on Initial Registration as the primary use case.
 
 ## 3. UE Registration Process: Detailed Flow
 
+The complete message flow during the UE registration process is illustrated in **Figure 1**, starting from the initial RRC connection establishment between the UE and the gNB, followed by the NAS signaling exchanges with the AMF for authentication, security mode setup, and finally the registration completion.
+
 <img src="images/fig-1.svg" alt="UE Registration Overall Message Sequence" width="45%">
 
-*Fig: UE Registration Overall Message Sequence*
+*Figure 1: UE Registration Overall Message Sequence*
 
 ### 3.1 Phase 1: RRC Connection Establishment
 
@@ -116,11 +118,13 @@ If AMF cannot identify the UE from provided identity:
 
 #### 3.3.3 Security Mode Setup
 
+The mutual authentication between the UE and the network, alongside the secure negotiation of cryptographic algorithms to protect subsequent signaling and data, is detailed in **Figure 2**. 
+
 <img src="images/fig-2.svg" alt="Authentication and Security Mode Setup Detail" width="45%">
 
-*Fig: Authentication and Security Mode Setup Detail*
+*Figure 2: Authentication and Security Mode Setup Detail*
 
-After successful authentication, security is established:
+After successful authentication, security is established as follows:
 
 **Step 1: NAS Security Mode Command (AMF → UE)**
 * AMF sends NAS Security Mode Command selecting security algorithms:
@@ -240,9 +244,11 @@ The SUCI (Subscription Concealed User Identity) protects user privacy:
 * Provides privacy improvement by rotating UE identity periodically
 * Old 5G-GUTI remains valid until new one is accepted by UE
 
+Throughout the registration lifecycle, a UE transitions between various states (such as deregistered, registered, and idle modes) based on network events and connectivity status. These state transitions are depicted in **Figure 3**.
+
 <img src="images/fig-3.svg" alt="UE Registration State Transitions" width="45%">
  
-*Fig: UE Registration State Transitions*
+*Figure 3: UE Registration State Transitions*
 
 ### 4.3 Registration Area (TA List)
 * AMF assigns a Tracking Area Identity (TAI) List (also called RA - Registration Area)
@@ -251,6 +257,8 @@ The SUCI (Subscription Concealed User Identity) protects user privacy:
 * Reduces signaling overhead and improves mobility efficiency
 
 ### 4.4 Network Slicing in Registration
+Network slicing allows the UE to connect to specialized network instances. As outlined in **Figure 4**, the UE's requested NSSAI is evaluated against its subscribed slices and network policies to determine the allowed NSSAI for optimized service delivery. The key aspects of this process include:
+
 * UE can request specific network slices via Requested NSSAI (1 to 8 slices)
 * Each NSSAI contains: S-NSSAI (Single-NSSAI) = {SST (Slice/Service Type) + SD (Slice Differentiator)}
 * AMF filters requested NSSAI against subscribed NSSAI to determine Allowed NSSAI
@@ -262,10 +270,10 @@ The SUCI (Subscription Concealed User Identity) protects user privacy:
 
 <img src="images/fig-4.svg" alt="Network Slice Selection (NSSAI) Processing Flow" width="45%">
 
-*Fig: Network Slice Selection (NSSAI) Processing Flow*
+*Figure 4: Network Slice Selection (NSSAI) Processing Flow*
 
 ### 4.5 Security Context Derivation
-After authentication:
+After authentication, the UE and the network establish a hierarchical structure of cryptographic keys to protect signaling and data. As illustrated in **Figure 5**, the primary authentication keys are used to derive specific keys for NAS and RRC signaling encryption and integrity protection:
 
 * **NAS key (K_NAS)**: Derived from shared secret using key derivation function
 * **RRC keys (K_RRC enc, K_RRC int)**: Derived from K_NAS for radio link protection
@@ -274,7 +282,7 @@ After authentication:
 
 <img src="images/fig-5.svg" alt="Security Context and Key Derivation Tree" width="45%">
 
-*Fig: Security Context and Key Derivation Tree*
+*Figure 5: Security Context and Key Derivation Tree*
 
 ### 4.6 Ciphering and Integrity Protection
 * **NAS Ciphering**: All NAS signaling messages encrypted after security mode setup
@@ -333,20 +341,210 @@ PCF controls access and mobility:
 * Handles QoS policies and charging information
 * Notifies AMF of policy changes
 
+The broader service-based interactions of the AMF with other core network functions—such as the UDM, AUSF, and PCF—are illustrated in **Figure 6**. These interactions utilize standardized APIs to retrieve authentication vectors, manage subscriptions, and apply network policies throughout the registration process.
+
 <img src="images/fig-6.svg" alt="AMF Network Function Interactions and APIs" width="45%">
 
-*Fig: AMF Network Function Interactions and APIs*
+*Figure 6: AMF Network Function Interactions and APIs*
 
-## 7. Conclusion
+## 7. NGAP Procedure Details
+ 
+While Section 3 described the end-to-end registration flow, this section focuses specifically on the **NGAP (NG Application Protocol)** procedures that carry NAS messages between gNB and AMF over the N2/NG-C interface, and that establish the UE's context inside the core network.
+ 
+### 7.1 NGAP's Role in Registration
+ 
+NGAP runs over SCTP (port 38412) between gNB and AMF. It does not interpret NAS content — it transports NAS PDUs transparently while also managing the UE's context, resources, and signaling connection at the gNB.
+ 
+The key NGAP procedures involved in registration are:
+ 
+| NGAP Procedure | Direction | Purpose |
+|---|---|---|
+| Initial UE Message | gNB → AMF | Carries the first NAS message (Registration Request) and establishes UE's NGAP context |
+| Downlink NAS Transport | AMF → gNB | Carries subsequent NAS messages (Identity Request, Auth Request, Security Mode Command, etc.) to the UE |
+| Uplink NAS Transport | gNB → AMF | Carries UE's NAS responses back to AMF |
+| Initial Context Setup Request | AMF → gNB | Instructs gNB to establish UE context, security, and (optionally) PDU session resources |
+| Initial Context Setup Response | gNB → AMF | Confirms UE context establishment |
+| UE Context Release Command/Complete | AMF ↔ gNB | Releases NGAP/UE context (e.g., after registration failure or reject) |
+ 
+### 7.2 Initial UE Message (Detailed)
+ 
+This is the first NGAP message and creates the UE's context at the AMF side:
+ 
+```
+NGAP: INITIAL UE MESSAGE
+{
+    RAN UE NGAP ID: 1                      -- allocated by gNB
+    NAS-PDU: <Registration Request>         -- opaque NAS container
+    User Location Information:
+    {
+        NR CGI: { PLMN: 00101, Cell ID: 0x0000101 }
+        TAI: { PLMN: 00101, TAC: 000064 }
+    }
+    RRC Establishment Cause: mo-Signalling
+    UE Context Request: true                -- requests AMF to set up UE context
+}
+```
+ 
+At this point, AMF allocates its own **AMF UE NGAP ID**, and the pair (RAN UE NGAP ID, AMF UE NGAP ID) uniquely identifies the UE's NGAP signaling connection for the remainder of the procedure.
+ 
+### 7.3 Downlink / Uplink NAS Transport
+ 
+Once the initial context exists, all further NAS exchanges (Identity Request/Response, Authentication Request/Response, Security Mode Command/Complete) are wrapped in these lightweight NGAP procedures:
+ 
+```
+NGAP: DOWNLINK NAS TRANSPORT
+{
+    AMF UE NGAP ID: 10
+    RAN UE NGAP ID: 1
+    NAS-PDU: <Authentication Request>
+}
+```
+ 
+```
+NGAP: UPLINK NAS TRANSPORT
+{
+    AMF UE NGAP ID: 10
+    RAN UE NGAP ID: 1
+    NAS-PDU: <Authentication Response>
+    User Location Information: { ... }      -- updated location, if changed
+}
+```
+ 
+These two procedures repeat for each NAS round-trip shown in the Section 5 message table (Identity, Authentication, Security Mode).
+ 
+### 7.4 Initial Context Setup
+ 
+After security is established (post Security Mode Complete), AMF sends **Initial Context Setup Request** to instruct the gNB to finalize the UE's radio and security context:
+ 
+```
+NGAP: INITIAL CONTEXT SETUP REQUEST
+{
+    AMF UE NGAP ID: 10
+    RAN UE NGAP ID: 1
+    Old-to-New Security Context: { K_gNB, NAS algorithms, ... }
+    UE Aggregate Maximum Bit Rate: { UL: 100 Mbps, DL: 500 Mbps }
+    Mobility Restriction List: { ... }
+    NAS-PDU: <Registration Accept>          -- often piggybacked here
+}
+```
+ 
+The gNB applies the security context to the RRC connection (deriving AS-level keys from K_gNB), configures radio bearers, and responds:
+ 
+```
+NGAP: INITIAL CONTEXT SETUP RESPONSE
+{
+    AMF UE NGAP ID: 10
+    RAN UE NGAP ID: 1
+}
+```
+ 
+This procedure is what transitions the NGAP signaling connection from a "bare" initial context (created by Initial UE Message) into a fully secured, resourced UE context — the NGAP-level counterpart to the NAS Registration Accept/Complete exchange in Section 3.6.
+ 
+### 7.5 UE Context Release
+ 
+If registration fails, is rejected, or the UE later deregisters, the NGAP context is torn down:
+ 
+```
+NGAP: UE CONTEXT RELEASE COMMAND
+{
+    AMF UE NGAP ID: 10
+    RAN UE NGAP ID: 1
+    Cause: { NAS(Normal-Release) | RadioNetwork(...) }
+}
+```
+ 
+gNB releases RRC connection and radio resources, then confirms with **UE Context Release Complete**.
+ 
+## 8. Registration Failure and Rejection Scenarios
+ 
+Registration does not always succeed. 5G defines specific **5GMM cause codes** (3GPP TS 24.501) returned in a **NAS Registration Reject** message, as well as failure points at the NGAP level.
+ 
+### 8.1 Failure Points Across the Registration Flow
+ 
+| Phase | Possible Failure | Resulting Action |
+|---|---|---|
+| Identity | UE fails to provide valid SUCI | AMF aborts registration, sends Registration Reject |
+| Authentication | RES* ≠ XRES* (authentication failure) | AMF sends Authentication Reject; UE registration fails |
+| Authentication | UE fails to verify AUTN (network authentication failure) | UE sends Authentication Failure to AMF; AMF may retry or abort |
+| Security Mode | UE/network cannot agree on algorithms | Security Mode Reject sent; registration aborted |
+| EIR Check | Device IMEISV blacklisted | AMF sends Registration Reject with equipment-related cause |
+| Subscription (UDM) | SUPI not found / subscription barred | AMF sends Registration Reject (illegal UE / not authorized) |
+| Slice Selection | Requested NSSAI not subscribed or not supported in TA | Registration Reject, or Registration Accept with reduced Allowed NSSAI |
+| Policy (PCF) | AM Policy Association fails | AMF may still complete registration with default policies, or reject depending on operator configuration |
+| NGAP | Initial Context Setup fails (radio resource shortage) | NGAP Initial Context Setup Failure; AMF may retry or release UE context |
+ 
+### 8.2 NAS Registration Reject — Key Cause Codes
+ 
+The Registration Reject message carries a **5GMM Cause** value indicating why registration failed:
+ 
+| Cause Value | Cause Name | Typical Meaning |
+|---|---|---|
+| 3 | Illegal UE | UE identity/authentication invalid or fraudulent |
+| 5 | PEI not accepted | Device identity rejected by EIR |
+| 6 | Illegal ME | Mobile equipment not accepted (blacklisted/non-conforming) |
+| 7 | 5GS services not allowed | Subscription does not permit 5GS access |
+| 9 | UE identity cannot be derived by the network | SUCI/GUTI could not be resolved |
+| 11 | PLMN not allowed | UE not permitted to register on this PLMN |
+| 12 | Tracking area not allowed | TA restrictions prevent registration |
+| 13 | Roaming not allowed in this tracking area | Roaming agreement/restriction violation |
+| 15 | No suitable cells in tracking area | Radio/TA mismatch |
+| 22 | Congestion | Network overload; often paired with a back-off timer |
+| 27 | N1 mode not allowed | UE/network NAS mode mismatch |
+| 62 | No network slices available | Requested NSSAI cannot be satisfied at all |
+| 72–95 | (Reserved/protocol errors) | Various protocol error conditions (e.g., message type not compatible) |
+ 
+### 8.3 Example Registration Reject Message
+ 
+```
+NAS: REGISTRATION REJECT
+{
+    5GMM Cause: 11                          -- PLMN not allowed
+    T3346 value: 30                         -- back-off timer (minutes), if congestion-related
+    T3502 value: not present
+}
+```
+ 
+When a back-off timer (e.g., **T3346**) is included, the UE must not re-attempt registration on that PLMN/access type until the timer expires — mirroring the back-off behavior described for PDU sessions in the Session Management document (Section 8).
+ 
+### 8.4 Authentication Failure Handling
+ 
+If the UE detects a network authentication failure (invalid AUTN, e.g., SQN out of range):
+ 
+```
+NAS: AUTHENTICATION FAILURE
+{
+    5GMM Cause: 21    -- Synch failure
+    AUTS: <resynchronization token>
+}
+```
+ 
+The AMF forwards AUTS to AUSF/UDM to resynchronize the sequence number, and the authentication procedure is retried once. Repeated failures result in registration abandonment and a Registration Reject.
+ 
+### 8.5 NGAP-Level Failures
+ 
+Separate from NAS-level rejects, NGAP itself can fail the procedure before Registration Reject is even sent at the NAS layer:
+ 
+- **Initial Context Setup Failure**: gNB cannot allocate radio resources (congestion, unsupported UE capability) — AMF may retry, redirect, or abandon.
+- **NG Setup not completed**: If gNB–AMF NG Setup (see the companion NG Setup/N3 document) has not completed, no Initial UE Message can be sent at all, and the UE registration cannot proceed past cell selection.
+- **SCTP association loss mid-procedure**: Causes AMF to release the partial UE context and requires the UE to restart from RRC Setup.
 
+### 8.6 UE-Side Retry Behavior
+ 
+- UE stores the 5GMM cause and any back-off timer per PLMN.
+- Certain causes (e.g., "Illegal UE," "PLMN not allowed") may cause the UE to mark the PLMN/USIM combination as forbidden until manual intervention or SIM/PLMN change.
+- Congestion-related causes (with T3346) allow automatic retry after the timer expires.
+- Synch-failure cases trigger an automatic, immediate one-time retry using AUTS before falling back to a hard reject.
+
+## 9. Conclusion
+ 
 The UE registration process in 5G networks is a comprehensive multi-phase procedure that establishes secure connectivity, authenticates users, retrieves subscription information, and applies network policies. This document has detailed:
-
+ 
 1. The complete flow from RRC setup through NAS registration completion
 2. Security mechanisms including authentication, encryption, and integrity protection
 3. Network function interactions demonstrating distributed processing
 4. Policy control and network slicing considerations
-5. Key concepts essential for understanding 5G registration
-
+5. The underlying NGAP procedures (Initial UE Message, NAS Transport, Initial Context Setup, Context Release) that carry and support NAS signaling
+6. Failure and rejection scenarios at both the NAS and NGAP levels, including 5GMM cause codes and back-off/retry behavior
+7. Key concepts essential for understanding 5G registration
 Together, these sections form a comprehensive resource for implementing, testing, and optimizing UE registration in 5G networks.
-
 
