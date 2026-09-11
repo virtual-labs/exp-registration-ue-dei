@@ -1,3 +1,5 @@
+**Video Walkthrough:** We have created a video demonstrating this experiment where we perform the procedure and explain the steps. [Click here to watch on YouTube]( https://youtu.be/ZsL-HG5Q2A4)
+
 ## Step 1: Initialize the Service-Based Architecture (SBA) Dashboard
 
 ### 1. Open the SBA Simulator Dashboard
