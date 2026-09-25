@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<!-- Database cylinder top -->
+<ellipse cx="32" cy="20" rx="20" ry="6" fill="#d35400"/>
+<!-- Database cylinder body -->
+<rect x="12" y="20" width="40" height="24" fill="#d35400"/>
+<!-- Database cylinder bottom -->
+<ellipse cx="32" cy="44" rx="20" ry="6" fill="#d35400"/>
+<!-- Highlight lines -->
+<ellipse cx="32" cy="28" rx="20" ry="6" fill="none" stroke="#ecf0f1" stroke-width="1" opacity="0.5"/>
+<ellipse cx="32" cy="36" rx="20" ry="6" fill="none" stroke="#ecf0f1" stroke-width="1" opacity="0.5"/>
+<!-- MySQL logo style -->
+<path d="M25,48 Q28,52 32,50 Q36,52 39,48" stroke="#ecf0f1" fill="none" stroke-width="2"/>
+</svg>

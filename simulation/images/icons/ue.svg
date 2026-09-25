@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<!-- Phone body -->
+<rect x="20" y="10" width="24" height="44" rx="3" fill="#16a085"/>
+<!-- Screen -->
+<rect x="22" y="14" width="20" height="32" fill="#ecf0f1"/>
+<!-- Home button -->
+<circle cx="32" cy="50" r="2" fill="#ecf0f1"/>
+<!-- Signal waves -->
+<path d="M15,8 Q12,12 15,16" stroke="#16a085" fill="none" stroke-width="2"/>
+<path d="M49,8 Q52,12 49,16" stroke="#16a085" fill="none" stroke-width="2"/>
+<path d="M10,10 Q6,14 10,18" stroke="#16a085" fill="none" stroke-width="1.5" opacity="0.6"/>
+<path d="M54,10 Q58,14 54,18" stroke="#16a085" fill="none" stroke-width="1.5" opacity="0.6"/>
+</svg>

@@ -1,0 +1,263 @@
+{
+  "version": 2.0,
+  "filters": {
+    "difficulty": ["beginner", "intermediate"]
+  },
+  "questions": [
+    {
+      "question": "Q1. What is the primary core network entity responsible for handling UE registration in the 5G Core?",
+      "answers": {
+        "a": "UPF",
+        "b": "AMF",
+        "c": "PCF",
+        "d": "NRF"
+      },
+      "explanations": {
+        "a": "Incorrect. UPF handles user-plane data forwarding, not registration.",
+        "b": "Correct. The AMF manages registration, mobility, and NAS signaling.",
+        "c": "Incorrect. PCF controls policies, not registration procedures.",
+        "d": "Incorrect. NRF handles NF discovery, not UE registration."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q2. Which type of signaling is used between the UE and the gNB during the initial access procedure?",
+      "answers": {
+        "a": "NAS",
+        "b": "RAS",
+        "c": "SIP",
+        "d": "REST"
+      },
+      "explanations": {
+        "a": "Incorrect. NAS starts only after RRC setup is complete.",
+        "b": "Correct. RAS (Random Access Signaling) is used during initial access.",
+        "c": "Incorrect. SIP is used in IMS, not RAN access.",
+        "d": "Incorrect. REST is used in SBA core communication."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q3. What type of identity does the UE use to protect user privacy during registration?",
+      "answers": {
+        "a": "IMSI",
+        "b": "5G-GUTI",
+        "c": "SUCI",
+        "d": "IMEI"
+      },
+      "explanations": {
+        "a": "Incorrect. IMSI is the permanent identity and not sent directly.",
+        "b": "Incorrect. 5G-GUTI is assigned after registration.",
+        "c": "Correct. SUCI is the concealed identity protecting IMSI.",
+        "d": "Incorrect. IMEI identifies the device, not subscriber privacy."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q4. Which network function is responsible for generating authentication vectors in the 5G Core?",
+      "answers": {
+        "a": "AMF",
+        "b": "AUSF",
+        "c": "PCF",
+        "d": "UDR"
+      },
+      "explanations": {
+        "a": "Incorrect. AMF triggers authentication but does not generate vectors.",
+        "b": "Correct. AUSF handles authentication vector generation.",
+        "c": "Incorrect. PCF handles policy decisions.",
+        "d": "Incorrect. UDR stores subscription data but does not authenticate."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q5. In the UE registration procedure, what message does the UE send to gNB to start NAS signaling?",
+      "answers": {
+        "a": "RRC Setup",
+        "b": "RRC Setup Complete",
+        "c": "Registration Accept",
+        "d": "Authentication Request"
+      },
+      "explanations": {
+        "a": "Incorrect. This is sent by the gNB to the UE.",
+        "b": "Correct. RRC Setup Complete contains the initial NAS message.",
+        "c": "Incorrect. This is sent by the AMF to UE later.",
+        "d": "Incorrect. This is sent by the AMF, not UE."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q6. What is the purpose of the NAS Security Mode Command?",
+      "answers": {
+        "a": "To fetch subscriber data from UDM",
+        "b": "To select ciphering and integrity algorithms",
+        "c": "To request network slices",
+        "d": "To assign a temporary identity"
+      },
+      "explanations": {
+        "a": "Incorrect. Subscriber data retrieval happens earlier.",
+        "b": "Correct. It establishes NAS security algorithms.",
+        "c": "Incorrect. Slice request is part of PDU session setup.",
+        "d": "Incorrect. 5G-GUTI assignment happens after registration."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q7. Which function stores the subscription and profile data of a UE?",
+      "answers": {
+        "a": "PCF",
+        "b": "UDM",
+        "c": "SMF",
+        "d": "AMF"
+      },
+      "explanations": {
+        "a": "Incorrect. PCF manages policies.",
+        "b": "Correct. UDM stores subscriber data and profiles.",
+        "c": "Incorrect. SMF manages PDU sessions and IP allocation.",
+        "d": "Incorrect. AMF handles mobility and NAS procedures."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q8. What does the AMF send to the UE after successful authentication and subscription retrieval?",
+      "answers": {
+        "a": "RRC Setup Request",
+        "b": "Registration Accept",
+        "c": "Authentication Reject",
+        "d": "RRC Reconfiguration Complete"
+      },
+      "explanations": {
+        "a": "Incorrect. RRC messages are gNB-level.",
+        "b": "Correct. This finalizes registration.",
+        "c": "Incorrect. This is sent on authentication failure.",
+        "d": "Incorrect. RRC reconfig is unrelated to registration accept."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. What is the purpose of the 5G-GUTI identity assigned during registration?",
+      "answers": {
+        "a": "To permanently identify the UE in the network",
+        "b": "To encrypt NAS messages",
+        "c": "To reduce use of permanent identities like IMSI",
+        "d": "To identify the UE’s location"
+      },
+      "explanations": {
+        "a": "Incorrect. 5G-GUTI is temporary, not permanent.",
+        "b": "Incorrect. Encryption is done via NAS security keys.",
+        "c": "Correct. 5G-GUTI protects privacy by replacing IMSI.",
+        "d": "Incorrect. Location is tracked via AMF and NG-RAN procedures."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q10. Which protocol defines NAS signaling messages used during registration?",
+      "answers": {
+        "a": "3GPP TS 38.311",
+        "b": "3GPP TS 24.501",
+        "c": "3GPP TS 29.244",
+        "d": "3GPP TS 23.502"
+      },
+      "explanations": {
+        "a": "Incorrect. Defines RAN procedures.",
+        "b": "Correct. TS 24.501 specifies NAS signaling.",
+        "c": "Incorrect. TS 29.244 defines N4 interface.",
+        "d": "Incorrect. TS 23.502 provides overall procedure flows."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q11. Which network function decides access policies and mobility rules during registration?",
+      "answers": {
+        "a": "PCF",
+        "b": "NRF",
+        "c": "SMF",
+        "d": "AUSF"
+      },
+      "explanations": {
+        "a": "Correct. PCF provides policy decisions for mobility and access.",
+        "b": "Incorrect. NRF handles NF discovery.",
+        "c": "Incorrect. SMF handles user-plane session management.",
+        "d": "Incorrect. AUSF handles authentication only."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q12. What happens if the AMF cannot identify the UE based on initial identity?",
+      "answers": {
+        "a": "It rejects the request immediately",
+        "b": "It sends an Identity Request message",
+        "c": "It requests the UE to reconnect",
+        "d": "It sends a deregistration message"
+      },
+      "explanations": {
+        "a": "Incorrect. AMF tries identity procedures first.",
+        "b": "Correct. Identity Request is used to retrieve SUCI or IMEI.",
+        "c": "Incorrect. No such reconnect procedure exists.",
+        "d": "Incorrect. Deregistration is unrelated."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q13. Which message is sent from the AMF to initiate mutual authentication?",
+      "answers": {
+        "a": "Authentication Response",
+        "b": "Identity Request",
+        "c": "Authentication Request",
+        "d": "Registration Accept"
+      },
+      "explanations": {
+        "a": "Incorrect. This is sent by the UE.",
+        "b": "Incorrect. This requests identity, not authentication.",
+        "c": "Correct. Authentication Request starts the 5G-AKA/ EAP procedure.",
+        "d": "Incorrect. Registration Accept finalizes registration."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q14. During the RACH procedure, what does the UE send first to the gNB?",
+      "answers": {
+        "a": "RRC Setup Complete",
+        "b": "Registration Request",
+        "c": "Preamble",
+        "d": "NAS Message"
+      },
+      "explanations": {
+        "a": "Incorrect. Occurs much later.",
+        "b": "Incorrect. This is in NAS signaling.",
+        "c": "Correct. Preamble initiates random access.",
+        "d": "Incorrect. NAS messages are sent after RRC setup."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q15. What happens after the UE receives the Registration Accept message from the AMF?",
+      "answers": {
+        "a": "It immediately starts data transmission",
+        "b": "It sends Registration Complete and stores 5G-GUTI",
+        "c": "It restarts the registration procedure",
+        "d": "It releases the radio connection"
+      },
+      "explanations": {
+        "a": "Incorrect. Data transmission requires PDU session setup.",
+        "b": "Correct. UE acknowledges and stores the new 5G-GUTI.",
+        "c": "Incorrect. Registration is already successful.",
+        "d": "Incorrect. Radio release is not triggered here."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/app.js
+  51:32  warning  'DataStore' is not defined          no-undef
+  54:32  warning  'LogEngine' is not defined          no-undef
+  58:32  warning  'NFManager' is not defined          no-undef
+  61:40  warning  'ConnectionManager' is not defined  no-undef
+  64:33  warning  'BusManager' is not defined         no-undef
+  67:34  warning  'PingManager' is not defined        no-undef
+  70:37  warning  'DockerTerminal' is not defined     no-undef
+  73:37  warning  'CanvasRenderer' is not defined     no-undef
+  76:35  warning  'UIController' is not defined       no-undef
+  79:37  warning  'OneClickDeploy' is not defined     no-undef
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/bus-manager.js
+  8:7  warning  'BusManager' is defined but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/canvas-renderer.js
+   15:7   warning  'CanvasRenderer' is defined but never used  no-unused-vars
+  598:19  warning  'e' is defined but never used               no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/connection-manager.js
+  15:7  warning  'ConnectionManager' is defined but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/data-store.js
+  15:7  warning  'DataStore' is defined but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/docker.js
+   174:13  warning  'tabBase' is assigned a value but never used  no-unused-vars
+   630:27  warning  'output' is defined but never used            no-unused-vars
+  1126:29  warning  'index' is defined but never used             no-unused-vars
+  2242:28  warning  'output' is defined but never used            no-unused-vars
+  2488:25  warning  'terminalModal' is defined but never used     no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/log-engine.js
+   15:7   warning  'LogEngine' is defined but never used                 no-unused-vars
+  632:15  warning  'ranUENGAPId' is assigned a value but never used      no-unused-vars
+  633:15  warning  'amfUENGAPId' is assigned a value but never used      no-unused-vars
+  782:15  warning  'teidGNB' is assigned a value but never used          no-unused-vars
+  783:15  warning  'teidUPF' is assigned a value but never used          no-unused-vars
+  784:15  warning  'sequenceNum' is assigned a value but never used      no-unused-vars
+  840:19  warning  'totalThroughput' is assigned a value but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/nf-manager.js
+  15:7  warning  'NFManager' is defined but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/one-click-deploy.js
+  9:7  warning  'OneClickDeploy' is defined but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/ping-manager.js
+   14:7   warning  'PingManager' is defined but never used      no-unused-vars
+  545:21  warning  'pingId' is assigned a value but never used  no-unused-vars
+
+/home/runner/work/exp-registration-ue-dei/exp-registration-ue-dei/experiment/simulation/js/ui-controller.js
+    16:7   warning  'UIController' is defined but never used          no-unused-vars
+   328:48  warning  'data' is defined but never used                  no-unused-vars
+   726:15  warning  'nfDef' is assigned a value but never used        no-unused-vars
+   730:15  warning  'defaultName' is assigned a value but never used  no-unused-vars
+  1369:36  warning  'nfType' is defined but never used                no-unused-vars
+  2535:15  warning  'args' is assigned a value but never used         no-unused-vars
+  3580:15  warning  'cmd' is assigned a value but never used          no-unused-vars
+
+✖ 38 problems (0 errors, 38 warnings)
+
