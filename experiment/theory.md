@@ -1,5 +1,7 @@
-> **Audio Explanation:** For a comprehensive understanding of these theoretical concepts, you can listen on YouTube. 
-> [**Click here to listen the audio**](https://youtu.be/rSMhmb4qWfQ)
+> **Audio Explanations:** For a more comprehensive understanding of these theoretical concepts, supplementary audio guides are available on YouTube.
+> 
+> - [**Listen in English**](https://youtu.be/tcIm56b9kFw)
+> - [**Listen in Hindi**](https://youtu.be/rSMhmb4qWfQ)
 
 ## 1. Introduction
 The User Equipment (UE) registration procedure is one of the most fundamental processes in 5G Standalone (5G SA) networks. This document provides a detailed theoretical analysis of how a UE (such as a smartphone or IoT device) registers with the Access and Mobility Management Function (AMF) in a 5G Core Network. Understanding this process is critical for comprehending 5G network architecture, security mechanisms, and service delivery.
@@ -36,9 +38,10 @@ This document focuses on Initial Registration as the primary use case.
 
 The complete message flow during the UE registration process is illustrated in **Figure 1**, starting from the initial RRC connection establishment between the UE and the gNB, followed by the NAS signaling exchanges with the AMF for authentication, security mode setup, and finally the registration completion.
 
-<img src="images/fig-1.svg" alt="UE Registration Overall Message Sequence" width="45%">
-
-*Figure 1: UE Registration Overall Message Sequence*
+<div align="center">
+  <img src="images/fig-1.svg" alt="UE Registration Overall Message Sequence" width="45%">
+  <p><em>Figure 1: UE Registration Overall Message Sequence</em></p>
+</div>
 
 ### 3.1 Phase 1: RRC Connection Establishment
 
@@ -123,9 +126,10 @@ If AMF cannot identify the UE from provided identity:
 
 The mutual authentication between the UE and the network, alongside the secure negotiation of cryptographic algorithms to protect subsequent signaling and data, is detailed in **Figure 2**. 
 
-<img src="images/fig-2.svg" alt="Authentication and Security Mode Setup Detail" width="45%">
-
-*Figure 2: Authentication and Security Mode Setup Detail*
+<div align="center">
+  <img src="images/fig-2.svg" alt="Authentication and Security Mode Setup Detail" width="45%">
+  <p><em>Figure 2: Authentication and Security Mode Setup Detail</em></p>
+</div>
 
 After successful authentication, security is established as follows:
 
@@ -249,9 +253,10 @@ The SUCI (Subscription Concealed User Identity) protects user privacy:
 
 Throughout the registration lifecycle, a UE transitions between various states (such as deregistered, registered, and idle modes) based on network events and connectivity status. These state transitions are depicted in **Figure 3**.
 
-<img src="images/fig-3.svg" alt="UE Registration State Transitions" width="45%">
- 
-*Figure 3: UE Registration State Transitions*
+<div align="center">
+  <img src="images/fig-3.svg" alt="UE Registration State Transitions" width="45%">
+  <p><em>Figure 3: UE Registration State Transitions</em></p>
+</div>
 
 ### 4.3 Registration Area (TA List)
 * AMF assigns a Tracking Area Identity (TAI) List (also called RA - Registration Area)
@@ -271,9 +276,10 @@ Network slicing allows the UE to connect to specialized network instances. As ou
   * PDU session types (IPv4, IPv6, Ethernet)
   * Charging models
 
-<img src="images/fig-4.svg" alt="Network Slice Selection (NSSAI) Processing Flow" width="45%">
-
-*Figure 4: Network Slice Selection (NSSAI) Processing Flow*
+<div align="center">
+  <img src="images/fig-4.svg" alt="Network Slice Selection (NSSAI) Processing Flow" width="45%">
+  <p><em>Figure 4: Network Slice Selection (NSSAI) Processing Flow</em></p>
+</div>
 
 ### 4.5 Security Context Derivation
 After authentication, the UE and the network establish a hierarchical structure of cryptographic keys to protect signaling and data. As illustrated in **Figure 5**, the primary authentication keys are used to derive specific keys for NAS and RRC signaling encryption and integrity protection:
@@ -283,9 +289,10 @@ After authentication, the UE and the network establish a hierarchical structure 
 * K_NAS = KDF(Authentication Key, Server Function Name)
 * Separate keys for encryption and integrity protection ensure security separation
 
-<img src="images/fig-5.svg" alt="Security Context and Key Derivation Tree" width="45%">
-
-*Figure 5: Security Context and Key Derivation Tree*
+<div align="center">
+  <img src="images/fig-5.svg" alt="Security Context and Key Derivation Tree" width="45%">
+  <p><em>Figure 5: Security Context and Key Derivation Tree</em></p>
+</div>
 
 ### 4.6 Ciphering and Integrity Protection
 * **NAS Ciphering**: All NAS signaling messages encrypted after security mode setup
@@ -346,9 +353,10 @@ PCF controls access and mobility:
 
 The broader service-based interactions of the AMF with other core network functions—such as the UDM, AUSF, and PCF—are illustrated in **Figure 6**. These interactions utilize standardized APIs to retrieve authentication vectors, manage subscriptions, and apply network policies throughout the registration process.
 
-<img src="images/fig-6.svg" alt="AMF Network Function Interactions and APIs" width="45%">
-
-*Figure 6: AMF Network Function Interactions and APIs*
+<div align="center">
+  <img src="images/fig-6.svg" alt="AMF Network Function Interactions and APIs" width="45%">
+  <p><em>Figure 6: AMF Network Function Interactions and APIs</em></p>
+</div>
 
 ## 7. NGAP Procedure Details
  
